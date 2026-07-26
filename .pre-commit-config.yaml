@@ -1,0 +1,31 @@
+# Pre-commit hooks for hsailabs core. Install with:
+#   pre-commit install --install-hooks
+#   pre-commit install --hook-type commit-msg
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.3
+    hooks:
+      - id: gitleaks
+
+  - repo: local
+    hooks:
+      - id: pii-staged
+        name: policy - no PII in staged content
+        entry: tools/policy/check_pii.sh staged
+        language: script
+        pass_filenames: false
+        always_run: true
+      - id: pii-commit-msg
+        name: policy - no PII in commit message
+        entry: tools/policy/check_pii.sh commit-msg
+        language: script
+        stages: [commit-msg]
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-added-large-files
+        args: [--maxkb=1024]
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: trailing-whitespace

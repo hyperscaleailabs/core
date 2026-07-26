@@ -1,0 +1,48 @@
+name: policy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  pii-and-secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: gitleaks (full history)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: PII scan (working tree)
+        run: bash tools/policy/check_pii.sh tree
+
+      - name: PII scan (commit messages and authors)
+        run: |
+          set -euo pipefail
+          range="${{ github.event.pull_request.base.sha || github.event.before }}..${{ github.sha }}"
+          if ! git rev-list "$range" >/dev/null 2>&1; then
+            range="${{ github.sha }} -n 20"
+          fi
+          bad=0
+          while IFS= read -r c; do
+            msg=$(git log -1 --format='%B' "$c")
+            ident=$(git log -1 --format='%an <%ae>' "$c")
+            if printf '%s\n' "$msg" | grep -qiE 'co-authored-by:'; then
+              echo "Commit $c: co-author trailer is not allowed"; bad=1
+            fi
+            if printf '%s\n' "$msg" | grep -E '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}' | grep -vqE 'example\.(com|org|net)|users\.noreply\.github\.com'; then
+              echo "Commit $c: email address in commit message"; bad=1
+            fi
+            if printf '%s\n' "$ident" | grep -vqE '@users\.noreply\.github\.com|<noreply@github\.com>|@example\.(com|org|net)'; then
+              echo "Commit $c: author identity must use a noreply email"; bad=1
+            fi
+          done < <(git rev-list --no-merges $range)
+          exit $bad

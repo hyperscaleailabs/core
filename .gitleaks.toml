@@ -1,0 +1,58 @@
+# Gitleaks configuration for hsailabs core.
+# Extends the default secret rules with PII rules; this repo is public and must
+# contain no personal names, emails, home paths, or credentials of any kind.
+# Note: gitleaks uses Go RE2 regexes (no lookaheads); exceptions go in allowlists.
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "pii-email-address"
+description = "Email address (role-neutral noreply and example domains excepted)"
+regex = '''[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'''
+keywords = ["@"]
+
+[rules.allowlist]
+regexes = [
+  '''[a-zA-Z0-9._%+-]+@(example\.(com|org|net)|users\.noreply\.github\.com)''',
+]
+
+[[rules]]
+id = "pii-home-path-unix"
+description = "User home directory path (macOS/Linux)"
+# non-capturing group: gitleaks reports capture group 1 as the secret and
+# matches rule allowlists against it, which would bypass the allowlist below
+regex = '''(?:/Users|/home)/[A-Za-z0-9._-]+'''
+keywords = ["/Users/", "/home/"]
+
+[rules.allowlist]
+regexes = [
+  '''(/Users|/home)/(runner|worker|app|service|node|ci|ubuntu|user|example)\b''',
+  '''(/Users|/home)/\.\.\.''',
+]
+
+[[rules]]
+id = "pii-home-path-windows"
+description = "User home directory path (Windows)"
+regex = '''[Cc]:\\+Users\\+[A-Za-z0-9._-]+'''
+keywords = [":\\Users", ":\\\\Users"]
+
+[rules.allowlist]
+regexes = [
+  '''[Cc]:\\+Users\\+(Public|Default|example)\b''',
+  '''[Cc]:\\+Users\\+\.\.\.''',
+]
+
+[[rules]]
+id = "pii-coauthor-trailer"
+description = "Co-author or attribution trailer"
+regex = '''(?i)co-authored-by:'''
+keywords = ["co-authored-by"]
+
+[allowlist]
+description = "Repo-wide allowlist (enforcement files reference the patterns themselves)"
+paths = [
+  '''\.gitleaks\.toml$''',
+  '''tools/policy/check_pii\.sh$''',
+  '''\.github/workflows/policy\.yml$''',
+]
