@@ -35,8 +35,11 @@ jobs:
           while IFS= read -r c; do
             msg=$(git log -1 --format='%B' "$c")
             ident=$(git log -1 --format='%an <%ae>' "$c")
-            if printf '%s\n' "$msg" | grep -qiE 'co-authored-by:'; then
-              echo "Commit $c: co-author trailer is not allowed"; bad=1
+            # GitHub injects noreply co-author trailers on squash merges when the
+            # branch author differs from the merging account; only trailers with
+            # non-noreply identities are policy violations
+            if printf '%s\n' "$msg" | grep -iE 'co-authored-by:' | grep -vqiE '@users\.noreply\.github\.com|<noreply@github\.com>'; then
+              echo "Commit $c: co-author trailer with non-noreply identity"; bad=1
             fi
             if printf '%s\n' "$msg" | grep -E '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}' | grep -vqE 'example\.(com|org|net)|users\.noreply\.github\.com'; then
               echo "Commit $c: email address in commit message"; bad=1

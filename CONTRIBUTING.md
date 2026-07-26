@@ -23,9 +23,13 @@ repository rules. The short version: no PII ever, deliberate merges only.
 - Format: `<subproject>: <imperative summary>`, e.g. `dtwins: add pixel streaming stub`.
   Repo-wide changes use `repo:` as the prefix.
 - No `Co-Authored-By` or similar trailers. No tool or agent attributions.
+  (CI tolerates the noreply trailers GitHub itself injects on squash merges,
+  but the identity alignment below prevents them from appearing at all.)
 - No personal names, usernames, or email addresses in commit messages.
-- Git identity must be a neutral role identity. This repo sets a local
-  `user.name`/`user.email` for that purpose; do not override it with a personal one.
+- Git identity must be a neutral role identity matching the org GitHub
+  account's noreply identity, so server-side squash merges add no trailers.
+  This repo sets a local `user.name`/`user.email` for that purpose; do not
+  override it with a personal one.
 
 ## PII and secrets policy
 
