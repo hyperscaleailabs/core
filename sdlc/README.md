@@ -3,6 +3,11 @@
 Software development lifecycle for the whole monorepo. This subproject defines the
 top-level loops that every other subproject plugs into, plus the tooling that runs them.
 
+**The operative methodology is [LIFECYCLE.md](LIFECYCLE.md)**: current mode (one PR at
+a time) and the north star (parallel multi-PR projects). It is enforced by the PR
+template, the `sdlc / pr-discipline` CI check, and the repo skills
+(`pr-flow`, `pr-verify`, `lessons`).
+
 ## Development-to-production loops
 
 Highest level loops, each with its own sub-loops:
