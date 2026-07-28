@@ -33,8 +33,20 @@ deploy-local: ## Deploy the full stack to the local cluster
 	bash deploy/scripts/deploy-local.sh
 
 .PHONY: urls
-urls: ## Print operator-web / Grafana / Superset / Druid URLs
+urls: ## Print the reachable URLs of the deployed stack
 	bash deploy/scripts/print-urls.sh
+
+.PHONY: dashboards
+dashboards: ## Hold open port-forwards for Grafana / Superset / Flink / ClickHouse
+	bash deploy/scripts/port-forward-uis.sh
+
+.PHONY: evidence
+evidence: ## Run a fresh golden run and verify every hop of the deployed chain
+	bash deploy/scripts/collect-evidence.sh
+
+.PHONY: dashboards-import
+dashboards-import: ## Provision the Superset dashboards from dashboards/superset/
+	bash deploy/scripts/import-superset-dashboards.sh
 
 ## ---- Quality gates ----
 .PHONY: lint

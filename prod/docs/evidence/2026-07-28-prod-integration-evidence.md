@@ -26,8 +26,14 @@ explainable scorecard the product exists to produce.
 
 ![Operator console: Blocked release decision with the gate scorecard](2026-07-28-operator-console-blocked.png)
 
-Captured headlessly by driving the console itself - seed, select `basic_retry`, start
-run - so the screenshot is reproducible rather than hand-taken.
+![Operator console: Passed release decision under the safe harness](2026-07-28-operator-console-passed.png)
+
+Both captured headlessly by driving the console itself - seed, pick the harness,
+start the run - so the screenshots are reproducible rather than hand-taken.
+
+The control API behind it, served through the operator-web proxy at `/api/docs`:
+
+![Control API Swagger UI](2026-07-28-control-api-swagger.png)
 
 The v0.1.0 operator surface, re-rendered from the MVP markup in this change:
 
@@ -81,6 +87,11 @@ change a fresh run produces, not by the presence of old data.
 **8 passed, 0 failed.**
 
 ### Analytics and observability surfaces
+
+The Flink SQL session cluster running the failure-statistics job that feeds
+`sim.failure.stats.v1`:
+
+![Flink dashboard: failure_stats job RUNNING](2026-07-28-flink-failure-stats-job.png)
 
 The Superset dashboard, provisioned from
 [`dashboards/superset/failure-analytics/`](../../dashboards/superset/README.md) and

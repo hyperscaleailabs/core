@@ -94,6 +94,45 @@ cd prod
 make verify && make lint && make test && make e2e
 ```
 
+## Reviewing a running stack
+
+Everything a reviewer needs, in three commands:
+
+```bash
+cd prod
+make urls          # discovers the published port and prints what is reachable
+make dashboards    # holds Grafana / Superset / Flink / ClickHouse open (Ctrl-C to stop)
+make evidence      # fresh golden run, then verifies every hop of the chain
+```
+
+| Surface | Where | Credentials |
+|---------|-------|-------------|
+| Operator console | `http://operator.localhost:<lb-port>/` | none |
+| v0.1.0 MVP | `http://operator.localhost:<lb-port>/mvp/` | none |
+| Control API docs | `http://operator.localhost:<lb-port>/api/docs` | none |
+| Grafana (traces) | `http://127.0.0.1:3000` | `admin` / `admin` |
+| Superset (analytics) | `http://127.0.0.1:8088` | `admin` / `admin` |
+| Flink UI | `http://127.0.0.1:8081` | none |
+| ClickHouse | `http://127.0.0.1:8123` | `asc` / `asc` |
+
+`make urls` reads the load-balancer port from the cluster rather than assuming
+one, because k3d publishes whichever host port was free. Grafana, Superset,
+Flink, and ClickHouse are ClusterIP and only reachable while `make dashboards`
+is running; it restarts a forward that drops, since `kubectl port-forward` dies
+under the concurrent queries a dashboard fires and the charts then report
+"Unexpected error" as though the data were bad.
+
+The credentials above are the local demo defaults committed in the manifests. A
+real deployment overrides them from its secret store - see
+[Production configuration](../README.md) in the root README.
+
+To walk the golden path by hand: open the console, **Seed golden experiment**,
+pick `basic_retry (unsafe)` and **Start run** - expect **Blocked** with three
+failing gates - then switch to `transaction_safety (safe)` and re-run for
+**Passed**. The run's data reaches Superset within about a minute (Flink uses
+5-second processing-time windows; ClickHouse ingests from Kafka continuously),
+and its traces appear in Grafana once Tempo flushes its block.
+
 ## The golden workflow
 
 The **Purchase Ambiguity** workflow is the invariant across every environment: the same

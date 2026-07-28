@@ -5,7 +5,7 @@ merged its delivery system into the repository SDLC. Each lesson states the
 correction and where it is now codified.
 
 The theme running through all of them: **a component can look healthy while producing
-nothing.** Five of the nine findings below are silent failures - not crashes, not red
+nothing.** Five of the ten findings below are silent failures - not crashes, not red
 builds, but green surfaces over broken plumbing. That is the failure mode this module
 exists to catch in other people's systems, and it was catching us.
 
@@ -150,7 +150,36 @@ scanner switched off, which is L1 again in a different costume.
 reason inline. Verified by planting a decoy secret and confirming both scanners
 still fire.
 
-## L9. Screenshots carry identity the scanner cannot read
+## L9. A reviewer's path is a surface too, and nobody had walked it
+
+Preparing the running environment for architect review - not the tests, the
+*review* - turned up three defects that every automated check had passed over,
+because no check opens a browser and clicks around:
+
+- **Swagger was broken behind the proxy.** FastAPI's docs page loads its
+  definition from an absolute `/openapi.json`; nginx's `location /` fallback
+  answered that with the console's `index.html`, so Swagger rendered *"Unable to
+  render this definition"* while the API itself was perfectly healthy. Another
+  instance of L3 - two surfaces disagreeing, and the quiet one telling the truth.
+- **`print-urls.sh` printed URLs that did not answer**: a hardcoded port 8080
+  when k3d had published 8090, and ingress hostnames for Grafana, Superset, and
+  Druid that have no Ingress at all.
+- **`build-images.sh` could not push** on an ordinary laptop, because the k3d
+  registry hostname resolves inside the cluster network but not on the host.
+
+**Lesson:** the reviewer's path - open the app, read the API docs, find the
+dashboards - is part of the deliverable and needs walking before handoff. Scripts
+that *print* environment facts should discover them, never assume them; a URL
+printed but unreachable is worse than one not printed.
+
+**Codified:** the nginx `location = /openapi.json` proxy; `print-urls.sh` now
+reads the published load-balancer port and the real Ingress host from the
+cluster; `build-images.sh` falls back to `k3d image import`; and
+`deploy/scripts/port-forward-uis.sh` (`make dashboards`) holds every ClusterIP
+dashboard open and **restarts a forward that drops**, since a dropped forward
+makes Superset charts render "Unexpected error" as though the data were bad.
+
+## L10. Screenshots carry identity the scanner cannot read
 
 A committed product screenshot showed an operator avatar with a contributor's
 initials, hardcoded in the MVP markup as `<div class="operator">CG</div>`. No text
