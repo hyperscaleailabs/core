@@ -51,7 +51,8 @@ talk to every model the same way.
 ## Quick start (local K3s)
 
 Requirements: a K3s cluster (local or remote), `kubectl` pointed at it.
-GPU nodes need the NVIDIA device plugin; faster-whisper runs fine on CPU.
+GPU nodes need a working NVIDIA driver, NVIDIA Container Toolkit, and NVIDIA
+device plugin; faster-whisper and the JAX pipeline smoke run on CPU.
 
 ```bash
 # deploy everything into namespace "hyperswarm-models"

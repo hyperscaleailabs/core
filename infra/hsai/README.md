@@ -79,6 +79,14 @@ smoke performs deterministic training and held-out validation and reports its
 evidence tier as a simulation demo. It proves the execution pipeline, not
 model quality or physical-system behavior.
 
+GPU nodes must provide a working NVIDIA host driver and NVIDIA Container
+Toolkit before K3s starts. K3s detects the installed runtime and exposes the
+`nvidia` RuntimeClass; the vLLM manifests request that class explicitly.
+HSAI refuses GPU deployment until the NVIDIA device plugin has advertised an
+allocatable `nvidia.com/gpu` resource. Driver and toolkit installation remain
+an explicit host-administration step because supported versions vary by OS
+and kernel.
+
 ## Testing
 
 ```bash
