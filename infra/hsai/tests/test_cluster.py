@@ -4,6 +4,7 @@ from hsai.cluster import (
     ClusterError,
     _agent_install_command,
     _server_install_command,
+    fetch_kubeconfig,
     plan_cluster,
     provision_cluster,
 )
@@ -135,3 +136,30 @@ class ClusterTests(unittest.TestCase):
         self.assertIn("INSTALL_K3S_VERSION=", server)
         self.assertIn("--flannel-iface tailscale0", server)
         self.assertIn("--flannel-iface tailscale0", agent)
+
+    def test_kubeconfig_uses_overlay_address_and_private_mode(self) -> None:
+        import tempfile
+        from pathlib import Path
+
+        single = Cluster("models", (Node("server", "server"),))
+        inventory = Inventory(
+            targets={"server": Target("server", "server")},
+            clusters={"models": single},
+        )
+        transport = MockTransport(
+            {
+                "server": [
+                    Result(0, facts(ip="100.64.0.1"), ""),
+                    Result(
+                        0,
+                        "clusters:\n- cluster:\n    server: https://127.0.0.1:6443\n",
+                        "",
+                    ),
+                ]
+            }
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "models.yaml"
+            fetch_kubeconfig(inventory, single, transport, output)
+            self.assertIn("https://100.64.0.1:6443", output.read_text())
+            self.assertEqual(output.stat().st_mode & 0o777, 0o600)

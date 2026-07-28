@@ -9,6 +9,7 @@ from pathlib import Path
 from .cluster import (
     ClusterError,
     doctor_cluster,
+    fetch_kubeconfig,
     format_json,
     format_plan,
     inspect,
@@ -18,6 +19,14 @@ from .cluster import (
 )
 from .config import Cluster, ConfigError, Inventory, Node, Target, default_config_path
 from .remote import SshTransport
+from .workload import (
+    WorkloadError,
+    deploy_jax_smoke,
+    deploy_model,
+    smoke_jax,
+    smoke_model,
+    status_jax_smoke,
+)
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -49,6 +58,22 @@ def _parser() -> argparse.ArgumentParser:
     for name in ("plan", "provision", "status", "doctor"):
         operation = cluster_commands.add_parser(name)
         operation.add_argument("cluster")
+
+    model = groups.add_parser("model")
+    model_commands = model.add_subparsers(dest="command", required=True)
+    for name in ("deploy", "smoke"):
+        operation = model_commands.add_parser(name)
+        operation.add_argument("model")
+        operation.add_argument("--target", required=True)
+
+    train = groups.add_parser("train")
+    train_commands = train.add_subparsers(dest="command", required=True)
+    train_deploy = train_commands.add_parser("deploy")
+    train_deploy.add_argument("--target", required=True)
+    train_deploy.add_argument("--image", required=True)
+    for name in ("status", "smoke"):
+        operation = train_commands.add_parser(name)
+        operation.add_argument("--target", required=True)
     return parser
 
 
@@ -59,8 +84,10 @@ def main(argv: list[str] | None = None) -> int:
         transport = SshTransport()
         if args.group == "target":
             return _target(args, inventory, transport)
-        return _cluster(args, inventory, transport)
-    except (ConfigError, ClusterError, KeyError) as exc:
+        if args.group == "cluster":
+            return _cluster(args, inventory, transport)
+        return _workload(args, inventory)
+    except (ConfigError, ClusterError, WorkloadError, KeyError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
 
@@ -124,12 +151,39 @@ def _cluster(
         return 1 if any(step.action == "blocked" for step in steps) else 0
     elif args.command == "provision":
         print("\n".join(provision_cluster(inventory, cluster, transport)))
+        kubeconfig = args.config.parent / "kubeconfigs" / f"{cluster.name}.yaml"
+        fetch_kubeconfig(inventory, cluster, transport, kubeconfig)
+        print(f"wrote kubeconfig for {cluster.name}")
     elif args.command == "status":
         print(format_json(status_cluster(inventory, cluster, transport)))
     elif args.command == "doctor":
         healthy, findings = doctor_cluster(inventory, cluster, transport)
         print("\n".join(findings))
         return 0 if healthy else 1
+    return 0
+
+
+def _workload(args: argparse.Namespace, inventory: Inventory) -> int:
+    cluster = inventory.clusters[args.target]
+    kubeconfig = args.config.parent / "kubeconfigs" / f"{cluster.name}.yaml"
+    if not kubeconfig.is_file():
+        raise ConfigError(
+            f"kubeconfig for cluster {cluster.name!r} is missing; provision it first"
+        )
+    repo_root = Path(__file__).resolve().parents[4]
+    models_root = repo_root / "models"
+    if args.group == "model":
+        if args.command == "deploy":
+            print("".join(deploy_model(kubeconfig, models_root, args.model)))
+        else:
+            print(smoke_model(kubeconfig, models_root, args.model))
+    elif args.command == "deploy":
+        manifest = models_root / "deploy/k3s/train/jax-train-validation-smoke.yaml"
+        print(deploy_jax_smoke(kubeconfig, manifest, args.image))
+    elif args.command == "status":
+        print(status_jax_smoke(kubeconfig))
+    else:
+        print(smoke_jax(kubeconfig))
     return 0
 
 

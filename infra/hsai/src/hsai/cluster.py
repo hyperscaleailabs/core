@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import shlex
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Iterable
 
 from .config import Cluster, Inventory, Target
@@ -191,6 +192,30 @@ def provision_cluster(
         else:
             events.append(f"{target.name}: agent unchanged")
     return events
+
+
+def fetch_kubeconfig(
+    inventory: Inventory,
+    cluster: Cluster,
+    transport: Transport,
+    output: Path,
+) -> Path:
+    server = inventory.targets[cluster.server.target]
+    facts = inspect(server, transport)
+    if not facts.reachable or not facts.tailscale_ip:
+        raise ClusterError("server is unreachable or has no Tailscale IPv4 address")
+    result = transport.run(server, "sudo cat /etc/rancher/k3s/k3s.yaml")
+    _require_success(result, server.name, "read kubeconfig")
+    if "127.0.0.1" not in result.stdout:
+        raise ClusterError("server kubeconfig does not contain the expected loopback URL")
+    rendered = result.stdout.replace("127.0.0.1", facts.tailscale_ip)
+    output.parent.mkdir(parents=True, exist_ok=True)
+    temporary = output.with_suffix(".tmp")
+    temporary.write_text(rendered)
+    temporary.chmod(0o600)
+    temporary.replace(output)
+    output.chmod(0o600)
+    return output
 
 
 def status_cluster(
