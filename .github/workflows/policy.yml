@@ -49,3 +49,11 @@ jobs:
             fi
           done < <(git rev-list --no-merges $range)
           exit $bad
+
+  docs-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: relative markdown links and anchors resolve
+        run: bash tools/policy/check_links.sh
