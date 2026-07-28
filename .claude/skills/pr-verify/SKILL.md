@@ -18,10 +18,13 @@ Report a pass/fail table in chat; anything failed must be fixed before handoff.
    Checked boxes without evidence are a hard fail: uncheck or add evidence.
    Documentation criteria ("X states Y") are evidenced by artifact path plus a
    line anchor or quoted line - a file appearing in the diff proves existence,
-   not content.
+   not content. Line-anchored links must be pinned to a commit SHA
+   (`blob/<sha>/...`), never a branch - branch anchors rot with every push -
+   and must be re-verified after any review round that touches the cited files.
 3. **CI green**: `gh pr checks` - all checks pass, including required
    `pii-and-secrets` and `pr-discipline`.
-4. **Policy scan locally**: `bash tools/policy/check_pii.sh tree` on the branch.
+4. **Policy scan locally**: `bash tools/policy/check_pii.sh tree` and
+   `bash tools/policy/check_links.sh` on the branch.
 5. **Scope**: `gh pr diff --stat` - the diff matches the stated Tasks; flag
    unrelated changes.
 6. **Evidence artifacts**: files referenced under module docs/evidence/ directories exist in the
