@@ -180,6 +180,16 @@ human-gated apply. Tracked gaps, each with a follow-up ticket recorded in
 store, deterministic kernel rather than a live model gateway, Druid deferred to x86, and
 ephemeral local storage.
 
+**The observability surfaces are deployed but not wired into the console.** Every
+service serves real data and is reachable directly - and that is how the evidence in
+[docs/evidence/](docs/evidence/README.md) was collected - but the console's embedded
+Observability tabs and its per-run "Open in Grafana" / "Open in Superset" links point
+at `grafana.localhost:8080` and `superset.localhost:8080`, which resolve nowhere in
+this deployment, and at dashboard slugs that do not exist. Fixing it needs both halves:
+base URLs that resolve where the browser runs, and deep links that target real
+dashboards. The state of every surface, with screenshots, is inventoried in
+[docs/evidence/2026-07-28-running-surfaces.md](docs/evidence/2026-07-28-running-surfaces.md).
+
 ## License
 
 Apache 2.0 - see the root [LICENSE](../LICENSE) and this module's [NOTICE.md](NOTICE.md).
