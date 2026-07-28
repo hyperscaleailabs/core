@@ -1,0 +1,153 @@
+{
+  "variant": "unsafe",
+  "harness": "basic_retry",
+  "metrics": {
+    "planned": 1000,
+    "completed": 1000,
+    "successful": 966,
+    "recovered": 15,
+    "partial": 0,
+    "failed": 19,
+    "cancelled": 0,
+    "validation_success_rate": 0.981,
+    "terminal_failure_rate": 0.019,
+    "retry_rate": 0.034,
+    "retries_per_iteration": 0.034,
+    "policy_violations": 19,
+    "escalation_rate": 0.0,
+    "anomaly_count": 0,
+    "mean_cost_usd": 0.0717,
+    "cost_per_success_usd": 0.073089,
+    "cost_change_percent": -52.2,
+    "mean_latency_ms": 571.9,
+    "p50_latency_ms": 500.0,
+    "p95_latency_ms": 900.0,
+    "p99_latency_ms": 2500.0,
+    "latency_change_percent": 0.0
+  },
+  "decision": {
+    "status": "Blocked",
+    "explanations": [
+      "[blocking] validation_success_rate = 0.981 FAIL (threshold gte 0.995)",
+      "[blocking] terminal_failure_rate = 0.019 FAIL (threshold lte 0.005)",
+      "[manual_review] p95_latency_ms = 900 PASS (threshold lte 2500)",
+      "[manual_review] cost_change_percent = -52.2 PASS (threshold lte 15)",
+      "[warning] retry_rate = 0.034 PASS (threshold lte 0.1)",
+      "[blocking] policy_violations = 19 FAIL (threshold eq 0)"
+    ],
+    "blocking_gates": [
+      {
+        "gate_id": "validation",
+        "metric": "validation_success_rate",
+        "scope": "run",
+        "operator": "gte",
+        "actual_value": 0.981,
+        "threshold": 0.995,
+        "severity": "blocking",
+        "sample_size": 1000,
+        "passed": false,
+        "provisional": false,
+        "related_trajectory_ids": []
+      },
+      {
+        "gate_id": "terminal",
+        "metric": "terminal_failure_rate",
+        "scope": "run",
+        "operator": "lte",
+        "actual_value": 0.019,
+        "threshold": 0.005,
+        "severity": "blocking",
+        "sample_size": 1000,
+        "passed": false,
+        "provisional": false,
+        "related_trajectory_ids": []
+      },
+      {
+        "gate_id": "policy",
+        "metric": "policy_violations",
+        "scope": "run",
+        "operator": "eq",
+        "actual_value": 19.0,
+        "threshold": 0.0,
+        "severity": "blocking",
+        "sample_size": 1000,
+        "passed": false,
+        "provisional": false,
+        "related_trajectory_ids": [
+          "golden-unsafe-89",
+          "golden-unsafe-150",
+          "golden-unsafe-165",
+          "golden-unsafe-176",
+          "golden-unsafe-199",
+          "golden-unsafe-228",
+          "golden-unsafe-372",
+          "golden-unsafe-385",
+          "golden-unsafe-425",
+          "golden-unsafe-481",
+          "golden-unsafe-482",
+          "golden-unsafe-510",
+          "golden-unsafe-650",
+          "golden-unsafe-718",
+          "golden-unsafe-754",
+          "golden-unsafe-777",
+          "golden-unsafe-788",
+          "golden-unsafe-829",
+          "golden-unsafe-885"
+        ]
+      }
+    ],
+    "review_gates": [],
+    "warnings": [],
+    "passed_gates": [
+      {
+        "gate_id": "latency",
+        "metric": "p95_latency_ms",
+        "scope": "run",
+        "operator": "lte",
+        "actual_value": 900.0,
+        "threshold": 2500.0,
+        "severity": "manual_review",
+        "sample_size": 1000,
+        "passed": true,
+        "provisional": false,
+        "related_trajectory_ids": []
+      },
+      {
+        "gate_id": "cost",
+        "metric": "cost_change_percent",
+        "scope": "run",
+        "operator": "lte",
+        "actual_value": -52.2,
+        "threshold": 15.0,
+        "severity": "manual_review",
+        "sample_size": 1000,
+        "passed": true,
+        "provisional": false,
+        "related_trajectory_ids": []
+      },
+      {
+        "gate_id": "retry",
+        "metric": "retry_rate",
+        "scope": "run",
+        "operator": "lte",
+        "actual_value": 0.034,
+        "threshold": 0.1,
+        "severity": "warning",
+        "sample_size": 1000,
+        "passed": true,
+        "provisional": false,
+        "related_trajectory_ids": []
+      }
+    ],
+    "sample_size": 1000,
+    "version_identifiers": {
+      "experiment": "exp-purchase-v3",
+      "candidate": "purchase-agent-3.0",
+      "harness": "basic_retry"
+    },
+    "reproducibility": {
+      "iterations": "1000",
+      "seed_base": "1000"
+    }
+  }
+}

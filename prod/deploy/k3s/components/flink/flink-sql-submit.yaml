@@ -1,0 +1,37 @@
+# Submit the failure-stats SQL to the Flink session cluster (ASC-083). Substitutes the Kafka
+# bootstrap into the SQL, detaches (execution.attached=false) so the streaming INSERT job runs on
+# the cluster and the client exits, then submits via the SQL client.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: flink-sql-submit
+  namespace: data
+spec:
+  backoffLimit: 4
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: submit
+          image: k3d-agentsim-registry:5001/flink-sql:dev
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              set -e
+              # The Flink entrypoint only applies FLINK_PROPERTIES for jobmanager/taskmanager, so
+              # point the sql-client at the session cluster by writing the config ourselves.
+              CONF=/opt/flink/conf/flink-conf.yaml
+              {
+                echo "jobmanager.rpc.address: flink-jobmanager"
+                echo "rest.address: flink-jobmanager"
+                echo "rest.port: 8081"
+                echo "execution.target: remote"
+              } >> "$CONF"
+              until curl -sf http://flink-jobmanager:8081/overview >/dev/null 2>&1; do
+                echo "waiting for flink jobmanager..."; sleep 5;
+              done
+              echo "SET 'execution.attached' = 'false';" > /tmp/job.sql
+              sed 's|${KAFKA_BOOTSTRAP}|kafka.data.svc.cluster.local:9092|g' \
+                /opt/sql/failure_stats.sql >> /tmp/job.sql
+              /opt/flink/bin/sql-client.sh -f /tmp/job.sql
+              echo "submitted; jobs:"; curl -s http://flink-jobmanager:8081/jobs | head -c 400

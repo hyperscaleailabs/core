@@ -1,0 +1,36 @@
+# Flink application-mode deployment for the failure-statistics job (ASC-031).
+# Requires the Flink Kubernetes Operator (install via deploy/helm-values/flink-operator.yaml).
+apiVersion: flink.apache.org/v1beta1
+kind: FlinkDeployment
+metadata:
+  name: failure-stats
+  namespace: data
+spec:
+  image: k3d-agentsim-registry:5001/flink-job:dev
+  flinkVersion: v1_19
+  flinkConfiguration:
+    taskmanager.numberOfTaskSlots: "2"
+    state.backend: rocksdb
+    execution.checkpointing.interval: "10s"
+  serviceAccount: flink
+  jobManager:
+    resource:
+      memory: "1024m"
+      cpu: 0.5
+  taskManager:
+    resource:
+      memory: "2048m"
+      cpu: 1
+  job:
+    entryClass: org.apache.flink.client.python.PythonDriver
+    args: ["-py", "/opt/asc-flink/pyflink/job.py"]
+    parallelism: 2
+    upgradeMode: stateless
+    state: running
+  podTemplate:
+    spec:
+      containers:
+        - name: flink-main-container
+          env:
+            - name: KAFKA_BOOTSTRAP
+              value: "kafka.data.svc.cluster.local:9092"

@@ -1,0 +1,23 @@
+# Bitnami Kafka in KRaft mode, single combined controller+broker for local k3s (ADR-0002).
+#   helm install kafka oci://registry-1.docker.io/bitnamicharts/kafka -n data -f deploy/helm-values/kafka.yaml
+listeners:
+  client:
+    protocol: PLAINTEXT
+  controller:
+    protocol: PLAINTEXT
+  interbroker:
+    protocol: PLAINTEXT
+controller:
+  replicaCount: 1          # KRaft combined node acts as controller + broker
+  resourcesPreset: small
+  persistence:
+    size: 4Gi
+broker:
+  replicaCount: 0          # no dedicated brokers; the controller serves clients in combined mode
+kraft:
+  enabled: true
+extraConfig: |
+  auto.create.topics.enable=false
+  offsets.topic.replication.factor=1
+  transaction.state.log.replication.factor=1
+  default.replication.factor=1

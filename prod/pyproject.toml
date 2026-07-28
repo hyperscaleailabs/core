@@ -1,0 +1,38 @@
+# Root workspace configuration for the Agent Simulation Control Plane.
+# Individual services/packages carry their own pyproject.toml; this file holds the shared
+# tooling config (ruff, mypy, pytest) applied across the monorepo.
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = ["release", "app", "assets"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "C4"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.12"
+warn_unused_ignores = true
+warn_redundant_casts = true
+namespace_packages = true
+explicit_package_bases = true
+# Strict on shared packages; services can relax as they wire up.
+files = ["packages", "services", "stream", "tests"]
+
+[[tool.mypy.overrides]]
+module = "packages.*"
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests", "packages", "services"]
+python_files = ["test_*.py"]
+markers = [
+    "e2e: end-to-end tests (may require a running stack)",
+    "golden: golden-workflow acceptance tests",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["packages", "services"]

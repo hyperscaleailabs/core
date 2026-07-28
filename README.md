@@ -31,9 +31,11 @@ BUILDER implementation, QA with **regression testing** (extensive for the
 modified module, including the product screenshot and pipeline regression;
 lighter API-level regression across all modules), cleanup and refinement,
 acceptance review on the issue trail, article + post published from the owning
-module, MGMT final review, squash merge. Evidence or it didn't happen. Module
-READMEs carry the module-specific SDLC adjustments
-(e.g. [models/ACCEPTANCE.md](models/ACCEPTANCE.md)).
+module, MGMT final review, squash merge. Past the merge, [promotion and
+release](sdlc/PROMOTION.md) carries it to operated production. Evidence or it
+didn't happen. Module READMEs carry the module-specific SDLC adjustments
+(e.g. [models/ACCEPTANCE.md](models/ACCEPTANCE.md),
+[prod/ACCEPTANCE.md](prod/ACCEPTANCE.md)).
 
 ## Mission and direction
 
@@ -83,7 +85,7 @@ state, and method never drift into each other.
 | **Axis** | Where are we going, strategically and tactically, and how is effort weighted? | [AXIS.md](AXIS.md), long form in [MISSION.md](MISSION.md) and [docs/strategic/](docs/strategic/) |
 | **Agent behavior** | How do agents and contributors work here? | [AGENTS.md](AGENTS.md) (canonical), [CLAUDE.md](CLAUDE.md) (pointer) |
 | **Capability** | What can agents actually do, as executable procedure? | [`.claude/skills/`](.claude/skills/): `pr-flow`, `pr-verify`, `lessons` |
-| **Method** | How does work move from research to production? | [sdlc/LIFECYCLE.md](sdlc/LIFECYCLE.md): staged project flow with QA and **regression testing** gates, pre-release and production gates |
+| **Method** | How does work move from research to production? | [sdlc/LIFECYCLE.md](sdlc/LIFECYCLE.md): staged project flow with QA and **regression testing** gates; [sdlc/PROMOTION.md](sdlc/PROMOTION.md): the ladder from merge to operated production |
 | **State** | What are we doing, and where does it stand? | [docs/](docs/) and subproject READMEs: PRDs, ADRs, designs, plans, lessons |
 | **Oversight** | Is the repo sound, from the executive perspective? | [executive/](executive/): standing CEO and CTO validation agents, outlooks, repo monitoring |
 | **Value** | What does this all produce? | [apps/](apps/): the long-term value stream, evolving with core and aligned to the axis |
@@ -104,7 +106,7 @@ context by traversing the graph, not by scanning the tree.
 | [`apps/`](apps/) | Apps | Flagship applications built on the core platform. [AstraGrid](apps/astragrid/README.md), a voice-controlled lunar power and thermal maintenance rover, is the first; [NeuroDuet](apps/neuroduet/README.md), a language-aligned BCI simulation lab, is proposed. Apps consume core capabilities through contracts; core never imports app code |
 | [`sdlc/`](sdlc/) | SDLC | The four-level lifecycle and staged project flow (Human Architect + MGMT / BUILDER / QA / RESEARCHER-PUBLISHER agent groups), the repository graph, process lessons, delivery automation |
 | [`models/`](models/) | Models | Model training, benchmarking, optimization, and inference serving on golden datasets, with its own CI/CD DAG and regression baseline. Produced models are consumed by the other subprojects |
-| [`prod/`](prod/) | Prod | Simulation, evaluation, release, and observability. Split into `ui/`, `backend/`, and `platform/` (Kafka services, data plane with telemetry, ClickHouse, presentation via Superset and Grafana) |
+| [`prod/`](prod/README.md) | Prod | Simulation, evaluation, release, and observability: the **Agent Simulation Control Plane**, which runs non-deterministic agents under injected failures and returns an explainable release decision. Three planes - operator UI, control-plane backend, and the data/observability platform (Kafka, Flink, ClickHouse, Superset, OTel, Grafana). Its delivery system contributed the repo-wide [promotion gates](sdlc/PROMOTION.md) |
 | [`meet/`](meet/) | Meet | LiveKit / SFU based video conferencing system with pluggable LiveKit agents and pixel streaming integrated in the browser |
 | [`agents/`](agents/) | Agents | Agent services: APIs plus LiveKit agents. Starts with a text agent, extends to voice (Ultravox plus Kokoro direction), aiming at a generalist agent pipeline pluggable into Meet |
 | [`dtwins/`](dtwins/) | D-twins | Digital twins: seem-to-real and real-to-seem environments, 2D/3D/4D simulation engines, an engine-under-your-engine layer, demoable in Meet via pixel streaming |
@@ -147,7 +149,7 @@ of VMs. Public and gated surfaces:
 |---------|-----------|--------|
 | Atlas | `atlas/` | Public. Text and video posts: agents, simulations, lessons learned, experiment results, webinar recordings |
 | Meet | `meet/` | Public with approved sign-up. Conferencing with a plugged generalist voice agent and pixel streaming in the same browser |
-| Internal dashboards | `prod/` | Gated to internal use. Release-into-production controls |
+| Internal dashboards | [`prod/`](prod/README.md) | Gated to internal use. Operator console for simulation runs and release decisions, with the Grafana and Superset dashboards embedded as tabs; release-into-production controls |
 | APIs | `agents/`, `models/` | Requires API key |
 | D-twins | `dtwins/` | Gated environment spin-up; demoable via pixel streaming in Meet |
 
@@ -223,6 +225,7 @@ not a follow-up commit. Treat prevention as the only cheap option.
 | [docs/strategic/](docs/strategic/) | Strategic packages: market research, PRDs, reference architectures, plans, and handoffs per initiative |
 | [docs/adr/](docs/adr/) | Architecture decision records |
 | [docs/projects/](docs/projects/), [docs/weekly/](docs/weekly/) | Cross-module publications: project whitepapers; weekly digests as short books |
+| [sdlc/PROMOTION.md](sdlc/PROMOTION.md) | Promotion and release: the ladder past the merge, the release evidence packet, rollback classes, observability gates |
 | [sdlc/GRAPH.md](sdlc/GRAPH.md) | The repository graph: traversal, placement rules, compaction |
 | [sdlc/docs/lessons/](sdlc/docs/lessons/) | Process lessons; module lessons live in `<module>/docs/lessons/` |
 | [sdlc/](sdlc/) | Lifecycle, workflows, and delivery automation |

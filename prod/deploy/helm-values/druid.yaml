@@ -1,0 +1,26 @@
+# Apache Druid (near-real-time OLAP) — ASC-032 (ADR-0004).
+#   helm repo add druid-helm https://asdf2014.github.io/druid-helm/
+#   helm upgrade --install druid druid-helm/druid -n data -f deploy/helm-values/druid.yaml
+# Small single-tenant profile for local k3s; scale historicals/middlemanagers on the GCP overlay.
+configVars:
+  druid_extensions_loadList: '["druid-kafka-indexing-service","druid-datasketches","druid-histogram"]'
+  druid_indexer_logs_type: file
+
+historical:
+  replicaCount: 1
+  resources:
+    requests: { cpu: "250m", memory: "1Gi" }
+middleManager:
+  replicaCount: 1
+  resources:
+    requests: { cpu: "250m", memory: "1Gi" }
+broker:
+  replicaCount: 1
+coordinator:
+  replicaCount: 1
+router:
+  replicaCount: 1
+
+zookeeper:
+  replicaCount: 1
+# Uses the chart's bundled metadata store (Postgres) for local; point at the shared PG in GCP.

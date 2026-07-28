@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: control-api
+  namespace: platform
+  labels: { app: control-api }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: control-api }
+  template:
+    metadata:
+      labels: { app: control-api }
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+        - name: control-api
+          image: control-api
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - configMapRef: { name: asc-config }
+          readinessProbe:
+            httpGet: { path: /readyz, port: 8000 }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /healthz, port: 8000 }
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            timeoutSeconds: 5
+            failureThreshold: 6 # tolerate a busy synchronous run without a spurious kill
+          resources:
+            requests: { cpu: "100m", memory: "256Mi" }
+            limits: { cpu: "1", memory: "768Mi" }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: control-api
+  namespace: platform
+spec:
+  selector: { app: control-api }
+  ports:
+    - port: 8000
+      targetPort: 8000

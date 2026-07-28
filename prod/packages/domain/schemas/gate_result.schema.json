@@ -1,0 +1,85 @@
+{
+  "$defs": {
+    "GateOperator": {
+      "enum": [
+        "gte",
+        "lte",
+        "eq",
+        "lt",
+        "gt"
+      ],
+      "title": "GateOperator",
+      "type": "string"
+    },
+    "GateSeverity": {
+      "enum": [
+        "warning",
+        "manual_review",
+        "blocking"
+      ],
+      "title": "GateSeverity",
+      "type": "string"
+    }
+  },
+  "properties": {
+    "actual_value": {
+      "title": "Actual Value",
+      "type": "number"
+    },
+    "gate_id": {
+      "title": "Gate Id",
+      "type": "string"
+    },
+    "metric": {
+      "title": "Metric",
+      "type": "string"
+    },
+    "operator": {
+      "$ref": "#/$defs/GateOperator"
+    },
+    "passed": {
+      "title": "Passed",
+      "type": "boolean"
+    },
+    "provisional": {
+      "default": false,
+      "title": "Provisional",
+      "type": "boolean"
+    },
+    "related_trajectory_ids": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Related Trajectory Ids",
+      "type": "array"
+    },
+    "sample_size": {
+      "title": "Sample Size",
+      "type": "integer"
+    },
+    "scope": {
+      "default": "run",
+      "title": "Scope",
+      "type": "string"
+    },
+    "severity": {
+      "$ref": "#/$defs/GateSeverity"
+    },
+    "threshold": {
+      "title": "Threshold",
+      "type": "number"
+    }
+  },
+  "required": [
+    "gate_id",
+    "metric",
+    "operator",
+    "actual_value",
+    "threshold",
+    "severity",
+    "sample_size",
+    "passed"
+  ],
+  "title": "GateResult",
+  "type": "object"
+}

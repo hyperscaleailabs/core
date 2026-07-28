@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Base manifests for the Agent Simulation Control Plane's own services. Overlays set the image
+# registry/tag and per-environment resources (deploy/k3s/apps/overlays/*).
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - control-api.yaml
+  - mcp-proxy.yaml
+  - operator-web.yaml

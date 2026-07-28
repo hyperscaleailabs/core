@@ -199,6 +199,7 @@ multiple worktrees running in parallel, returned to `main` as a single reviewed 
    regardless.
 6. **Release** - merge to main triggers: staging (operational evidence, human gate) ->
    canary -> ramped production. The lifecycle ends at operated production, not at merge.
+   Written out in [PROMOTION.md](PROMOTION.md), which applies in both modes.
 
 ## Standing rules (both modes)
 

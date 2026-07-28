@@ -30,6 +30,25 @@ node_modules/
 !.env.example
 *.pem
 *.key
+secrets/
+
+# Terraform: state files routinely contain resolved secrets and resource identity,
+# and are never appropriate in a public repository. Variable files are per-deployment.
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+
+# Cluster credentials
+kubeconfig
+*.kubeconfig
+.kube/
+
+# Coverage
+.coverage
+htmlcov/
 
 # Logs and local data
 *.log

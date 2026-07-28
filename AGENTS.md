@@ -27,7 +27,7 @@ Use the skills: `pr-flow` to run the cycle, `pr-verify` before every handoff,
 | [MISSION.md](MISSION.md), [docs/strategic/](docs/strategic/) | Why, and the research behind the direction |
 | `AGENTS.md` (this file), `CLAUDE.md` | How agents behave |
 | [.claude/skills/](.claude/skills/) | What agents can do, as executable procedures |
-| [sdlc/](sdlc/) | The four-level SDLC; [LIFECYCLE.md](sdlc/LIFECYCLE.md) is the project level with release gates |
+| [sdlc/](sdlc/) | The four-level SDLC; [LIFECYCLE.md](sdlc/LIFECYCLE.md) is the project level, [PROMOTION.md](sdlc/PROMOTION.md) the ladder from merge to operated production |
 | [sdlc/GRAPH.md](sdlc/GRAPH.md) | The repository graph: how to traverse it and pull per-stage context, placement rules, compaction |
 | [executive/](executive/) | Standing CEO and CTO validation agents and repo monitoring |
 | [docs/](docs/), subproject `README.md` files | What we are doing: PRDs, ADRs, designs, state |

@@ -1,0 +1,24 @@
+slice_name: Failure types by events
+description: null
+certified_by: null
+certification_details: null
+viz_type: pie
+params:
+  datasource: 1__table
+  viz_type: pie
+  groupby:
+  - failureClassification
+  metric:
+    aggregate: SUM
+    column:
+      column_name: count
+    expressionType: SIMPLE
+    label: events
+  adhoc_filters: []
+  row_limit: 100
+  sort_by_metric: true
+query_context: '{"datasource":{"id":1,"type":"table"},"force":false,"queries":[{"filters":[],"extras":{"having":"","where":""},"applied_time_extras":{},"columns":["failureClassification"],"metrics":[{"aggregate":"SUM","column":{"column_name":"count"},"expressionType":"SIMPLE","label":"events"}],"orderby":[[{"aggregate":"SUM","column":{"column_name":"count"},"expressionType":"SIMPLE","label":"events"},false]],"annotation_layers":[],"row_limit":100,"series_limit":0,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{}}],"form_data":{"adhoc_filters":[],"datasource":"1__table","groupby":["failureClassification"],"metric":{"aggregate":"SUM","column":{"column_name":"count"},"expressionType":"SIMPLE","label":"events"},"row_limit":100,"slice_id":1,"sort_by_metric":true,"viz_type":"pie","force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: 83caaf7e-4537-47a8-988b-3043939d0299
+version: 1.0.0
+dataset_uuid: 7eadba1f-ebd7-4db9-9666-d9e2ffc636e2

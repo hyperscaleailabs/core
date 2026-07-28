@@ -1,0 +1,11 @@
+# Bitnami MinIO — S3-compatible object storage for trajectory artifacts + result exports (ASC-023).
+#   helm install minio oci://registry-1.docker.io/bitnamicharts/minio -n data -f deploy/helm-values/minio.yaml
+mode: standalone
+auth:
+  existingSecret: asc-secrets
+  rootUserSecretKey: MINIO_ROOT_USER
+  rootPasswordSecretKey: MINIO_ROOT_PASSWORD
+defaultBuckets: "asc-trajectories,asc-exports"
+persistence:
+  size: 8Gi
+resourcesPreset: small

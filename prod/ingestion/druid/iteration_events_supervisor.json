@@ -1,0 +1,42 @@
+{
+  "type": "kafka",
+  "spec": {
+    "dataSchema": {
+      "dataSource": "iteration_events",
+      "timestampSpec": { "column": "timestamp", "format": "iso" },
+      "dimensionsSpec": {
+        "dimensions": [
+          "experimentId", "experimentVersion", "runId",
+          { "name": "iteration", "type": "long" },
+          "trajectoryId", "traceId", "workflowStage", "component",
+          "eventType", "model", "promptVersion", "tool",
+          "validationStatus", "failureClassification", "outcome"
+        ]
+      },
+      "metricsSpec": [
+        { "name": "count", "type": "count" },
+        { "name": "sum_cost", "type": "doubleSum", "fieldName": "costUsd" },
+        { "name": "sum_latency", "type": "doubleSum", "fieldName": "latencyMs" },
+        { "name": "max_latency", "type": "doubleMax", "fieldName": "latencyMs" },
+        { "name": "sum_retries", "type": "longSum", "fieldName": "retryCount" }
+      ],
+      "granularitySpec": {
+        "type": "uniform",
+        "segmentGranularity": "hour",
+        "queryGranularity": "minute",
+        "rollup": true
+      }
+    },
+    "ioConfig": {
+      "topic": "sim.iteration.events.v1",
+      "inputFormat": { "type": "json" },
+      "consumerProperties": {
+        "bootstrap.servers": "kafka.data.svc.cluster.local:9092"
+      },
+      "taskCount": 1,
+      "replicas": 1,
+      "useEarliestOffset": true
+    },
+    "tuningConfig": { "type": "kafka", "maxRowsInMemory": 100000 }
+  }
+}

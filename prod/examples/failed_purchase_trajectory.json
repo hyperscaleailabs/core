@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "0.1",
+  "trajectoryId": "traj-run24-238",
+  "runId": "run-024",
+  "iteration": 238,
+  "seed": 840239,
+  "outcome": "failed",
+  "latencyMs": 6400,
+  "costUsd": 0.16,
+  "retryCount": 1,
+  "failureType": "duplicate_transaction_risk",
+  "events": [
+    {
+      "type": "persona_message",
+      "content": "Purchase two tickets for Friday."
+    },
+    {
+      "type": "tool_call",
+      "tool": "check_inventory",
+      "status": "success"
+    },
+    {
+      "type": "tool_call",
+      "tool": "make_purchase",
+      "status": "timeout"
+    },
+    {
+      "type": "failure_classification",
+      "classification": "temporary_tool_failure"
+    },
+    {
+      "type": "retry",
+      "tool": "make_purchase",
+      "idempotencyKeyReused": false
+    },
+    {
+      "type": "policy_violation",
+      "classification": "duplicate_transaction_risk"
+    },
+    {
+      "type": "iteration_result",
+      "status": "failed"
+    }
+  ]
+}

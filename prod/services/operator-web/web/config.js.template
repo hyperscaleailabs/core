@@ -1,0 +1,8 @@
+// Runtime configuration for operator-web. Values are injected at container start by
+// docker-entrypoint.sh (envsubst) so dashboard base URLs are not baked into the image.
+// The Observability tabs + per-run deep links (ASC-043) read window.ASC_CONFIG.
+window.ASC_CONFIG = {
+  controlApiBaseUrl: "${CONTROL_API_BASE_URL}",
+  grafanaBaseUrl: "${GRAFANA_BASE_URL}",
+  supersetBaseUrl: "${SUPERSET_BASE_URL}"
+};

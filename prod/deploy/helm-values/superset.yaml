@@ -1,0 +1,21 @@
+# Apache Superset (analytics UI over Druid) — ASC-033 (ADR-0004).
+#   helm repo add superset https://apache.github.io/superset
+#   helm upgrade --install superset superset/superset -n data -f deploy/helm-values/superset.yaml
+# Adds the Druid database connection on init; dashboards are imported by deploy-analytics.sh.
+extraSecretEnv:
+  SUPERSET_SECRET_KEY: "change-me-local-please-rotate"  # override from asc-secrets in the release
+bootstrapScript: |
+  #!/bin/bash
+  pip install pydruid >/dev/null 2>&1 || true
+init:
+  adminUser:
+    username: admin
+    password: admin  # override via asc-secrets
+  # Register the Druid SQL database so datasets/charts can be created/imported.
+  initscript: |
+    superset set-database-uri --database-name Druid \
+      --uri "druid://druid-router.data.svc.cluster.local:8888/druid/v2/sql/" || true
+resources:
+  requests: { cpu: "150m", memory: "512Mi" }
+supersetNode:
+  replicaCount: 1

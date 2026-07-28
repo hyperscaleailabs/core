@@ -1,0 +1,16 @@
+# Grafana Tempo (traces store) — ASC-041.
+#   helm repo add grafana https://grafana.github.io/helm-charts
+#   helm upgrade --install tempo grafana/tempo -n observability -f deploy/helm-values/tempo.yaml
+tempo:
+  retention: 24h
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+resources:
+  requests: { cpu: "100m", memory: "256Mi" }
+  limits: { cpu: "500m", memory: "512Mi" }
+persistence:
+  enabled: true
+  size: 4Gi

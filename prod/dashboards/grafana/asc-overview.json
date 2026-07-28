@@ -1,0 +1,57 @@
+{
+  "uid": "asc-overview",
+  "title": "ASC — Service Health & Telemetry",
+  "tags": ["agent-simulation"],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "10s",
+  "time": { "from": "now-1h", "to": "now" },
+  "templating": {
+    "list": [
+      { "name": "runId", "type": "textbox", "label": "Run ID", "query": "", "current": { "text": "", "value": "" } }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Targets up",
+      "gridPos": { "h": 6, "w": 6, "x": 0, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [{ "expr": "count(up == 1)", "refId": "A" }]
+    },
+    {
+      "id": 2,
+      "type": "timeseries",
+      "title": "OTel Collector — spans accepted/sec",
+      "gridPos": { "h": 6, "w": 18, "x": 6, "y": 0 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        { "expr": "rate(otelcol_receiver_accepted_spans_total[1m])", "refId": "A", "legendFormat": "{{receiver}}" }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "timeseries",
+      "title": "OTel Collector — metric points exported/sec",
+      "gridPos": { "h": 7, "w": 24, "x": 0, "y": 6 },
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "targets": [
+        { "expr": "rate(otelcol_exporter_sent_metric_points_total[1m])", "refId": "A", "legendFormat": "{{exporter}}" }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "traces",
+      "title": "Traces (filter by Run ID tag asc.run_id)",
+      "gridPos": { "h": 9, "w": 24, "x": 0, "y": 13 },
+      "datasource": { "type": "tempo", "uid": "tempo" },
+      "targets": [
+        { "queryType": "traceqlSearch", "refId": "A", "filters": [
+          { "id": "run", "tag": "asc.run_id", "operator": "=", "value": ["$runId"], "scope": "span" }
+        ] }
+      ]
+    }
+  ]
+}

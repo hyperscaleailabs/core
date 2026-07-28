@@ -1,0 +1,21 @@
+# Standalone Grafana for the lite path (ASC-084): Tempo traces only (Prometheus omitted to save
+# memory on constrained hosts). helm chart: grafana/grafana.
+#   helm upgrade --install grafana grafana/grafana -n observability -f deploy/helm-values/grafana-lite.yaml
+adminUser: admin
+adminPassword: admin # demo only; override from asc-secrets in real deployments
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Tempo
+        uid: tempo
+        type: tempo
+        access: proxy
+        # grafana/tempo serves the query API on 3200 (the "prom-metrics" port also hosts /api/*).
+        url: http://tempo.observability.svc.cluster.local:3200
+        isDefault: true
+service:
+  type: ClusterIP
+resources:
+  requests: { cpu: "50m", memory: "128Mi" }
+  limits: { cpu: "500m", memory: "256Mi" }

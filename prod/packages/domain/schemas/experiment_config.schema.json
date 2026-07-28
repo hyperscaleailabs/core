@@ -1,0 +1,349 @@
+{
+  "$defs": {
+    "AssistantAgent": {
+      "properties": {
+        "maxSteps": {
+          "default": 12,
+          "title": "Maxsteps",
+          "type": "integer"
+        },
+        "model": {
+          "title": "Model",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "promptVersion": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Promptversion"
+        },
+        "tools": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tools",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "model"
+      ],
+      "title": "AssistantAgent",
+      "type": "object"
+    },
+    "ExecutionSettings": {
+      "properties": {
+        "cachedResources": {
+          "default": true,
+          "title": "Cachedresources",
+          "type": "boolean"
+        },
+        "deterministicSeeds": {
+          "default": true,
+          "title": "Deterministicseeds",
+          "type": "boolean"
+        },
+        "iterations": {
+          "default": 100,
+          "title": "Iterations",
+          "type": "integer"
+        },
+        "parallelism": {
+          "default": 25,
+          "title": "Parallelism",
+          "type": "integer"
+        }
+      },
+      "title": "ExecutionSettings",
+      "type": "object"
+    },
+    "ExperimentMeta": {
+      "properties": {
+        "baselineVersion": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Baselineversion"
+        },
+        "candidateVersion": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Candidateversion"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "owner": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Owner"
+        },
+        "workflowTemplate": {
+          "$ref": "#/$defs/WorkflowTemplate"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "workflowTemplate"
+      ],
+      "title": "ExperimentMeta",
+      "type": "object"
+    },
+    "FailureProfile": {
+      "properties": {
+        "latency": {
+          "$ref": "#/$defs/LatencyProfile"
+        },
+        "outcomes": {
+          "additionalProperties": {
+            "type": "number"
+          },
+          "title": "Outcomes",
+          "type": "object"
+        },
+        "source": {
+          "default": "assumed",
+          "title": "Source",
+          "type": "string"
+        },
+        "tool": {
+          "title": "Tool",
+          "type": "string"
+        }
+      },
+      "required": [
+        "tool",
+        "outcomes"
+      ],
+      "title": "FailureProfile",
+      "type": "object"
+    },
+    "LatencyProfile": {
+      "properties": {
+        "fixedMs": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Fixedms"
+        },
+        "maxMs": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maxms"
+        },
+        "p50Ms": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P50Ms"
+        },
+        "p95Ms": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P95Ms"
+        },
+        "p99Ms": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "P99Ms"
+        },
+        "type": {
+          "default": "percentile",
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "title": "LatencyProfile",
+      "type": "object"
+    },
+    "Persona": {
+      "properties": {
+        "escalation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Escalation"
+        },
+        "initialMessage": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Initialmessage"
+        },
+        "maxTurns": {
+          "default": 8,
+          "title": "Maxturns",
+          "type": "integer"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "objective": {
+          "title": "Objective",
+          "type": "string"
+        },
+        "satisfaction": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Satisfaction",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "objective"
+      ],
+      "title": "Persona",
+      "type": "object"
+    },
+    "WorkflowTemplate": {
+      "enum": [
+        "linear_user_to_agent",
+        "hierarchical_depth_one",
+        "department_routing_depth_two",
+        "transactional_mcp"
+      ],
+      "title": "WorkflowTemplate",
+      "type": "string"
+    }
+  },
+  "description": "Versioned; immutable after a completed run (enforced at the control-api boundary).",
+  "properties": {
+    "assistant": {
+      "$ref": "#/$defs/AssistantAgent"
+    },
+    "execution": {
+      "$ref": "#/$defs/ExecutionSettings"
+    },
+    "experiment": {
+      "$ref": "#/$defs/ExperimentMeta"
+    },
+    "failureProfile": {
+      "$ref": "#/$defs/FailureProfile"
+    },
+    "gateSetRef": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Gatesetref"
+    },
+    "harnessRef": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Harnessref"
+    },
+    "persona": {
+      "$ref": "#/$defs/Persona"
+    },
+    "schemaVersion": {
+      "default": "0.1",
+      "title": "Schemaversion",
+      "type": "string"
+    }
+  },
+  "required": [
+    "experiment",
+    "persona",
+    "assistant",
+    "failureProfile"
+  ],
+  "title": "ExperimentConfig",
+  "type": "object"
+}

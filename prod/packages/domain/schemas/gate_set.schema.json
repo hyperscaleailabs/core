@@ -1,0 +1,84 @@
+{
+  "$defs": {
+    "Gate": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "metric": {
+          "title": "Metric",
+          "type": "string"
+        },
+        "operator": {
+          "$ref": "#/$defs/GateOperator"
+        },
+        "severity": {
+          "$ref": "#/$defs/GateSeverity"
+        },
+        "threshold": {
+          "title": "Threshold",
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "metric",
+        "operator",
+        "threshold",
+        "severity"
+      ],
+      "title": "Gate",
+      "type": "object"
+    },
+    "GateOperator": {
+      "enum": [
+        "gte",
+        "lte",
+        "eq",
+        "lt",
+        "gt"
+      ],
+      "title": "GateOperator",
+      "type": "string"
+    },
+    "GateSeverity": {
+      "enum": [
+        "warning",
+        "manual_review",
+        "blocking"
+      ],
+      "title": "GateSeverity",
+      "type": "string"
+    }
+  },
+  "properties": {
+    "gates": {
+      "items": {
+        "$ref": "#/$defs/Gate"
+      },
+      "title": "Gates",
+      "type": "array"
+    },
+    "id": {
+      "title": "Id",
+      "type": "string"
+    },
+    "name": {
+      "title": "Name",
+      "type": "string"
+    },
+    "schemaVersion": {
+      "default": "0.1",
+      "title": "Schemaversion",
+      "type": "string"
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "gates"
+  ],
+  "title": "GateSet",
+  "type": "object"
+}

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "0.1",
+  "id": "harness-transaction-safety-v2",
+  "name": "Transaction Safety",
+  "version": "2.0",
+  "validation": {
+    "input": true,
+    "schema": true,
+    "semantic": true,
+    "policy": true
+  },
+  "bounds": {
+    "maxStageRetries": 2,
+    "maxTrajectoryRetries": 4,
+    "maxSteps": 12,
+    "maxCostUsd": 0.25,
+    "maxDurationMs": 15000
+  },
+  "recoveryPolicies": [
+    {
+      "failureType": "timeout",
+      "classification": "ambiguous_transaction",
+      "action": "query_transaction_status",
+      "maxRetries": 0
+    },
+    {
+      "failureType": "ambiguous_completion",
+      "action": "query_transaction_status",
+      "maxRetries": 0
+    },
+    {
+      "failureType": "temporary_service_unavailable",
+      "action": "retry_with_same_idempotency_key",
+      "maxRetries": 1
+    },
+    {
+      "failureType": "insufficient_funds",
+      "action": "inform_user",
+      "maxRetries": 0
+    },
+    {
+      "failureType": "authorization_denied",
+      "action": "block_and_escalate",
+      "maxRetries": 0
+    }
+  ]
+}

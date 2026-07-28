@@ -1,0 +1,23 @@
+slice_name: Duplicate-transaction risk by run
+description: null
+certified_by: null
+certification_details: null
+viz_type: echarts_timeseries_bar
+params:
+  datasource: 1__table
+  viz_type: echarts_timeseries_bar
+  x_axis: runId
+  groupby: []
+  metrics:
+  - aggregate: SUM
+    column:
+      column_name: duplicateTransactionRisk
+    expressionType: SIMPLE
+    label: dup_risk
+  adhoc_filters: []
+  row_limit: 100
+query_context: '{"datasource":{"id":1,"type":"table"},"force":false,"queries":[{"filters":[],"extras":{"having":"","where":""},"applied_time_extras":{},"columns":["runId"],"metrics":[{"aggregate":"SUM","column":{"column_name":"duplicateTransactionRisk"},"expressionType":"SIMPLE","label":"dup_risk"}],"orderby":[[{"aggregate":"SUM","column":{"column_name":"duplicateTransactionRisk"},"expressionType":"SIMPLE","label":"dup_risk"},false]],"annotation_layers":[],"row_limit":100,"series_limit":0,"order_desc":true,"url_params":{},"custom_params":{},"custom_form_data":{}}],"form_data":{"adhoc_filters":[],"datasource":"1__table","x_axis":"runId","groupby":[],"metrics":[{"aggregate":"SUM","column":{"column_name":"duplicateTransactionRisk"},"expressionType":"SIMPLE","label":"dup_risk"}],"row_limit":100,"slice_id":2,"viz_type":"echarts_timeseries_bar","force":false,"result_format":"json","result_type":"full"},"result_format":"json","result_type":"full"}'
+cache_timeout: null
+uuid: fb301862-a5ab-4369-95b9-dbd13cd909b8
+version: 1.0.0
+dataset_uuid: 7eadba1f-ebd7-4db9-9666-d9e2ffc636e2

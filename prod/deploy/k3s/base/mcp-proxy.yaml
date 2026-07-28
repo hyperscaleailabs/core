@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-simulator-proxy
+  namespace: platform
+  labels: { app: mcp-simulator-proxy }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: mcp-simulator-proxy }
+  template:
+    metadata:
+      labels: { app: mcp-simulator-proxy }
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+      containers:
+        - name: mcp-simulator-proxy
+          image: mcp-simulator-proxy
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            httpGet: { path: /healthz, port: 8000 }
+            initialDelaySeconds: 5
+          resources:
+            requests: { cpu: "50m", memory: "128Mi" }
+            limits: { cpu: "500m", memory: "256Mi" }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mcp-simulator-proxy
+  namespace: platform
+spec:
+  selector: { app: mcp-simulator-proxy }
+  ports:
+    - port: 8000
+      targetPort: 8000

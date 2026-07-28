@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "0.1",
+  "id": "gate-set-transaction-release-v1",
+  "name": "Transaction Release Gates",
+  "gates": [
+    {
+      "id": "validation",
+      "metric": "validation_success_rate",
+      "operator": "gte",
+      "threshold": 0.995,
+      "severity": "blocking"
+    },
+    {
+      "id": "terminal",
+      "metric": "terminal_failure_rate",
+      "operator": "lte",
+      "threshold": 0.005,
+      "severity": "blocking"
+    },
+    {
+      "id": "latency",
+      "metric": "p95_latency_ms",
+      "operator": "lte",
+      "threshold": 2500,
+      "severity": "manual_review"
+    },
+    {
+      "id": "cost",
+      "metric": "cost_change_percent",
+      "operator": "lte",
+      "threshold": 15,
+      "severity": "manual_review"
+    },
+    {
+      "id": "retry",
+      "metric": "retry_rate",
+      "operator": "lte",
+      "threshold": 0.1,
+      "severity": "warning"
+    },
+    {
+      "id": "policy",
+      "metric": "policy_violations",
+      "operator": "eq",
+      "threshold": 0,
+      "severity": "blocking"
+    }
+  ]
+}

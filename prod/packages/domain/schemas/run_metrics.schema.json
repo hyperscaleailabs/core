@@ -1,0 +1,117 @@
+{
+  "description": "Aggregated metrics consumed by the gate engine. Metric ids match gate ``metric`` fields.",
+  "properties": {
+    "anomaly_count": {
+      "default": 0,
+      "title": "Anomaly Count",
+      "type": "integer"
+    },
+    "cancelled": {
+      "default": 0,
+      "title": "Cancelled",
+      "type": "integer"
+    },
+    "completed": {
+      "default": 0,
+      "title": "Completed",
+      "type": "integer"
+    },
+    "cost_change_percent": {
+      "default": 0.0,
+      "title": "Cost Change Percent",
+      "type": "number"
+    },
+    "cost_per_success_usd": {
+      "default": 0.0,
+      "title": "Cost Per Success Usd",
+      "type": "number"
+    },
+    "escalation_rate": {
+      "default": 0.0,
+      "title": "Escalation Rate",
+      "type": "number"
+    },
+    "failed": {
+      "default": 0,
+      "title": "Failed",
+      "type": "integer"
+    },
+    "latency_change_percent": {
+      "default": 0.0,
+      "title": "Latency Change Percent",
+      "type": "number"
+    },
+    "mean_cost_usd": {
+      "default": 0.0,
+      "title": "Mean Cost Usd",
+      "type": "number"
+    },
+    "mean_latency_ms": {
+      "default": 0.0,
+      "title": "Mean Latency Ms",
+      "type": "number"
+    },
+    "p50_latency_ms": {
+      "default": 0.0,
+      "title": "P50 Latency Ms",
+      "type": "number"
+    },
+    "p95_latency_ms": {
+      "default": 0.0,
+      "title": "P95 Latency Ms",
+      "type": "number"
+    },
+    "p99_latency_ms": {
+      "default": 0.0,
+      "title": "P99 Latency Ms",
+      "type": "number"
+    },
+    "partial": {
+      "default": 0,
+      "title": "Partial",
+      "type": "integer"
+    },
+    "planned": {
+      "default": 0,
+      "title": "Planned",
+      "type": "integer"
+    },
+    "policy_violations": {
+      "default": 0,
+      "title": "Policy Violations",
+      "type": "integer"
+    },
+    "recovered": {
+      "default": 0,
+      "title": "Recovered",
+      "type": "integer"
+    },
+    "retries_per_iteration": {
+      "default": 0.0,
+      "title": "Retries Per Iteration",
+      "type": "number"
+    },
+    "retry_rate": {
+      "default": 0.0,
+      "title": "Retry Rate",
+      "type": "number"
+    },
+    "successful": {
+      "default": 0,
+      "title": "Successful",
+      "type": "integer"
+    },
+    "terminal_failure_rate": {
+      "default": 0.0,
+      "title": "Terminal Failure Rate",
+      "type": "number"
+    },
+    "validation_success_rate": {
+      "default": 1.0,
+      "title": "Validation Success Rate",
+      "type": "number"
+    }
+  },
+  "title": "RunMetrics",
+  "type": "object"
+}
