@@ -13,7 +13,7 @@ neighbors is decoration.
 | [Strategic](STRATEGIC.md) | 1 / 3 / 6-12 months | The axis: mission, vision, method; short/mid/long horizons | Realignment log; AXIS and DIRECTION updates |
 | [Tactical](TACTICAL.md) | monthly, then weekly | Architecture lifecycle; epics broken down into weekly project backlogs | Monthly architecture review; weekly digest (daily decks and whitepapers + market research) to Webinars, Atlas weekly overview, and stakeholder mailing lists |
 | [Daily](DAILY.md) | daily | The day's backlog of 3-5 projects | Executive deck (CEO level) and whitepaper (CTO level), to Atlas |
-| [Project](LIFECYCLE.md) | per project (one or several PRs) | Intent from the Architect; PRD, ARD, plan, handoff; acceptance criteria, worktree/PR, evidence, CI/CD, architectural review | Article with lessons included (Architect and Builder levels), triggering Atlas updates |
+| [Project](LIFECYCLE.md) | per project (one or several PRs) | Intent from the human Architect; PRD, ARD, plan, handoff; acceptance criteria, worktree/PR, evidence, CI/CD, architectural review | Article with lessons included (Architect and Builder levels), triggering Atlas updates |
 
 ## Closing the loops
 

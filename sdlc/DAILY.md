@@ -28,9 +28,9 @@ them in turn.
 
 - **Down**: the daily backlog is the only entry point for projects; work that is
   not on it is not started.
-- **Up**: daily publications are the input to the weekly backlog ordering and the
-  monthly architecture review. Unfinished projects roll forward explicitly, never
-  silently.
+- **Up**: daily publications are the input to the weekly digest, the weekly
+  backlog ordering, and the monthly architecture review. Unfinished projects roll
+  forward explicitly, never silently.
 
 ## Status
 

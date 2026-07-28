@@ -21,7 +21,7 @@ form is [AXIS.md](../AXIS.md).
 
 | Checkpoint | Period | Activity |
 |------------|--------|----------|
-| **Alignment check** | 1 month | Read the month's architecture review and daily summaries against AXIS.md. Name drift between what was built and the declared horizons; push corrections to the tactical backlog. Direction is not rewritten here. |
+| **Alignment check** | 1 month | Read the month's architecture review and weekly digests against AXIS.md. Name drift between what was built and the declared horizons; push corrections to the tactical backlog. Direction is not rewritten here. |
 | **Horizon review** | 3 months | Re-examine horizon contents and the effort weighting mid-cycle; re-scope open strategic packages against what the quarter actually demanded. |
 | **Realignment** | 6-12 months | Full research cycle per [DIRECTION.md](../docs/strategic/DIRECTION.md#realignment-cycle): fresh market research, horizons adjusted or retired, AXIS.md regenerated, packages opened or closed, log entry recorded. |
 

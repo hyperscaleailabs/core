@@ -43,9 +43,9 @@ enforces the structure and CI verifies it (`sdlc / pr-discipline`).
 A project is **one or several PRs**, follow-ups included. Its full arc:
 
 ```text
-intent (from the Architect)
+intent (from the human Architect)
   -> project pack: prd.md, ard.md, plan.md, handoff.md
-  -> implementation PR(s), each Architect-reviewed
+  -> implementation PR(s), follow-ups included, each with human Architect review
   -> article
 ```
 
@@ -67,13 +67,15 @@ A **project** is one architect-approved iteration on `sdlc/<project>`, executed 
 multiple worktrees running in parallel, returned to `main` as a single reviewed merge.
 
 1. **Goal setting** - architect fixes scope, priorities, constraints. No code.
-2. **PR0: PRD + ADR + PLAN** - documents only; 5-10 PRs with dependency graph and
-   per-PR acceptance criteria. *Sizing: each PR under ~10 minutes of coding-model
-   execution; whole project fits a 1-2 hour runway.*
+2. **PR0: the project pack** (`prd.md`, `ard.md`, `plan.md`, `handoff.md`) -
+   documents only; 5-10 PRs with dependency graph and per-PR acceptance criteria.
+   *Sizing: each PR under ~10 minutes of coding-model execution; whole project
+   fits a 1-2 hour runway.*
 3. **Execution** - PRs in dependency order across parallel worktrees; each PR CI-gated
    and leaves the branch working. **Whole-project review every 1-2 hours against
-   PRD/ADR/plan; 4 planning/review sessions per day.** Drift corrected or plan amended.
-4. **Final PR: white paper** - goals, built, results, all PR links, lessons, deviations.
+   the pack; 4 planning/review sessions per day.** Drift corrected or plan amended.
+4. **Final PR: white paper** - goals, built, results, all PR links, lessons,
+   deviations. This is the long form behind the project article.
 5. **Merge acceptance via control surfaces** - merge PR accepted on the *running
    product*. The link targets below are the specific evidences required to approve:
 
