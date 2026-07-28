@@ -8,8 +8,13 @@ Direction comes from [AXIS.md](../AXIS.md); this document is only the method for
 moving along it. Every PR declares a horizon (short / mid / long) in its Purpose
 section. The mix across PRs holds 80% short, 15% mid, 5% long.
 
-Roles: **Architect** (goals, PRD/ADR review, acceptance LGTMs) and **AI implementers**.
-People are referred to by role, never by name.
+Roles: the **Human Architect** (intent, epic/project definitions, reviews,
+acceptance LGTMs) and four agent groups - **MGMT** (business analysis, product,
+review, alignment decisions), **BUILDER** (implementation), **QA**
+(verification and quality gates), **RESEARCHER/PUBLISHER** (summaries,
+articles, publications). Roles overlap, yet the flow stays consistent during
+project execution to establish the cadence. People are referred to by role,
+never by name.
 
 Two modes: the **current mode** (one PR at a time, in effect during initial setup) and
 the **north star** (parallel multi-PR projects) that every practice aims toward.
@@ -54,9 +59,38 @@ intent (from the human Architect), captured as a GitHub issue
      handed off as PRD and spec (prd.md, ard.md, plan.md, handoff.md)
   -> agent team: implement, verify against the definition of done,
      present results, commit, wait for acceptance
-  -> LGTM -> squash merge to main
+  -> acceptance review (trail on the issue and PR) -> LGTM
   -> article: analysis, summary, and the axis-alignment check
+  -> final review -> squash merge to main
 ```
+
+### Stages
+
+1. The **Human Architect** defines the epic or project description, high
+   level. It is captured as the project's GitHub issue.
+2. **MGMT** (business analysis, product, review, alignment decisions) forms
+   the structured suggested document group: `prd.md`, `ard.md`, and the spec
+   (`plan.md`, `handoff.md`).
+3. The **BUILDER** group of agents implements.
+4. **QA** runs the verification cycle at the **PRODUCT, ARCHITECTURE, CODE,
+   PRODUCTION, and DOCUMENTS** levels. Quality assurance is CI/CD at the
+   module level (e.g. the `models` workflow on `models/**`) and at the
+   overall monorepo integration level; the checks verify that every project
+   has its GitHub issue and its PR with evidences, and its article, before
+   merge into `main`.
+5. The **Human Architect and MGMT** review back and forth to accept the
+   project. Comments and notes are collected on the GitHub issue and PR: they
+   are the project's trail in the repository and part of the project history.
+6. **RESEARCHER/PUBLISHER** follows up: reviews what changed, summarizes, and
+   produces the **article** - MD format for the Architect and PM audiences,
+   plus a LinkedIn variant for the CTO / Architect / PM audiences. Special
+   project types produce their level's artifacts instead: the daily summary
+   produces the executive whitepaper (CTO) and the exec deck/brief (CEO); the
+   weekly summary produces the weekly digest in the form of a short book
+   (CTO and CEO).
+7. **MGMT final review**: project goals, implementation, QA results,
+   published materials, cross-module project checks, overall regression and
+   integrity - prior to the merge and its follow-ups.
 
 **Every project has a GitHub issue**, opened at initiation from the project
 template; it is the project's anchor, and every PR of the project references
@@ -88,14 +122,14 @@ A multi-PR project carries the pack as files; a single-PR project may carry the
 PRD/ARD content in the PR body, as today - only repo-shaping decisions get a
 standalone entry in [docs/adr/](../docs/adr/).
 
-Every project ends in an **article** at the Architect and Builder levels, and
-generating it triggers the [Atlas](../atlas/) update. The article contains the
-analysis and summary of the project, **includes the project's lessons**, and
-**checks that alignment with the axis remained** through implementation, at the
-strategic and tactical levels. Its other sources are the PR bodies, their
-evidence, and the [lessons](../docs/lessons/) entries. The
-[daily level](DAILY.md) aggregates the day's articles into its executive and
-whitepaper publications.
+Every project ends in an **article** (MD format, Architect and PM audiences,
+with a LinkedIn variant for CTO / Architect / PM), and generating it triggers
+the [Atlas](../atlas/) update. The article contains the analysis and summary
+of the project, **includes the project's lessons**, and **checks that
+alignment with the axis remained** through implementation, at the strategic
+and tactical levels. Its other sources are the PR bodies, their evidence, and
+the [lessons](../docs/lessons/) entries. The [daily level](DAILY.md)
+aggregates the day's articles into its executive and whitepaper publications.
 
 ## North star (direction, not yet in effect)
 

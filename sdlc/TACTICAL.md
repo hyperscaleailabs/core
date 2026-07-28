@@ -44,9 +44,9 @@ Reasoning over these against the active epics produces the review's outcome:
    [daily level](DAILY.md) its 3-5 projects.
 3. **Weekly digest**: combine the week's daily summaries (CEO decks and CTO
    whitepapers) with **external market updates and research** into the tactical
-   weekly digest. Published to **Webinars** and the **Atlas weekly overview**,
-   generating artifacts, and shared via mailing lists to notify external
-   stakeholders.
+   weekly digest, in the form of a **short book** (CTO and CEO audiences).
+   Published to **Webinars** and the **Atlas weekly overview**, generating
+   artifacts, and shared via mailing lists to notify external stakeholders.
 
 ## Artifacts
 
