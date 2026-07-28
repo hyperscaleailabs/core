@@ -96,77 +96,16 @@ jobs:
       - name: Every module article has a Lab Notes entry
         run: node scripts/intake-module-article.mjs --all --check
 
+  # The guards live in atlas/scripts/check-policy.sh, not inline here, so that
+  # `make policy` runs exactly what CI runs. The first version of this job was
+  # inline and failed on its own grep pattern matching its own source line -
+  # a defect no local check could have caught, because there was no local check.
   atlas-policy-guards:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      # The standalone repository this module came from still exists. A link to
-      # it in the built site sends readers to a tree that no longer moves.
-      - name: No references to the pre-integration repository
-        working-directory: .
-        run: |
-          # atlas/NOTICE.md is the one place the origin repository may be named:
-          # it is the provenance and licensing record, and a license audit needs
-          # to find where the content came from. Everywhere else, a link there
-          # sends a reader to a tree that no longer moves.
-          hits=$(grep -rn 'hyperscaleailabs/agentic-atlas' \
-                   --include='*.astro' --include='*.ts' --include='*.mjs' \
-                   --include='*.md' --include='*.json' --include='*.yaml' \
-                   --include='*.yml' --exclude=package-lock.json \
-                   --exclude-dir=.git --exclude-dir=node_modules . \
-                 | grep -v '^\./atlas/NOTICE\.md:' || true)
-          if [ -n "$hits" ]; then
-            printf '%s\n' "$hits"
-            echo "::error::reference to the pre-integration standalone repository; use atlas/src/lib/repo.ts"
-            exit 1
-          fi
-          echo "no stale repository references"
-
-      - name: Repository URLs come from src/lib/repo.ts only
-        run: |
-          if grep -rn 'github\.com/hyperscaleailabs/core' src/ --exclude=repo.ts; then
-            echo "::error::hardcoded repository URL in src/; import from src/lib/repo.ts"
-            exit 1
-          fi
-          echo "repository links centralized"
-
-      - name: No committed build output or dependencies
-        run: |
-          if git ls-files atlas | grep -E '^atlas/(dist|node_modules|\.astro|\.vercel)/|^atlas/pipeline/cache/[^.]'; then
-            echo "::error::build output, dependencies, or pipeline cache committed"
-            exit 1
-          fi
-          echo "clean"
-        working-directory: .
-
-      - name: No absolute home-directory paths (PII guard)
-        run: |
-          # repo-wide coverage exists in the policy workflow; kept here so the
-          # atlas tree carries its own guard when path filters skip the others
-          if grep -rnE '/(Users|home)/[a-z0-9_-]+/' \
-               --include='*.md' --include='*.astro' --include='*.ts' --include='*.mjs' \
-               --include='*.yaml' --include='*.json' --exclude=package-lock.json . ; then
-            echo "::error::absolute home-directory path committed; use module-relative paths"
-            exit 1
-          fi
-          echo "no home paths"
-
-      # Atlas summarizes and links; it never republishes. An article with no
-      # recorded source cannot be checked against the thing it describes.
-      - name: Every article records at least one source
-        run: |
-          fail=0
-          for f in src/content/*/*.md src/content/*/*.mdx; do
-            [ -e "$f" ] || continue
-            n=$(awk '/^sources:/{flag=1;next}/^[a-zA-Z]/{flag=0}flag&&/^  - /{c++}END{print c+0}' "$f")
-            if [ "$n" -eq 0 ]; then
-              echo "::error file=atlas/$f::no sources recorded; attribution is required"
-              fail=1
-            fi
-          done
-          [ "$fail" -eq 0 ] && echo "every article carries attribution"
-          exit "$fail"
+      - name: Module policy guards
+        run: bash scripts/check-policy.sh
 
   pipeline:
     runs-on: ubuntu-latest

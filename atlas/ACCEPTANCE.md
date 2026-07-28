@@ -6,10 +6,13 @@ instantiated for the specific change. Cross-project work includes the template o
 every subproject it touches.
 
 - [ ] **The site builds and the corpus validates**: `make verify` is green -
-      search index rebuilt, `astro check` reports zero errors, and
-      `astro build` passes, which means every article's frontmatter satisfies
-      the schema in `src/content/config.ts`. The build transcript is committed
-      as evidence.
+      search index rebuilt, collections registered consistently, `astro check`
+      reports zero errors, `astro build` passes (so every article's frontmatter
+      satisfies the schema in `src/content/config.ts`), and
+      `scripts/check-policy.sh` passes. The transcript is committed as evidence.
+      `make verify` runs exactly what the `atlas` workflow runs: a guard the
+      author cannot run before pushing is a guard first exercised on a hosted
+      runner.
 - [ ] **The committed search index matches a fresh rebuild**: `npm run index`
       leaves `public/search-index.json` unchanged. A generated file that is
       committed and never compared is a file, not a baseline.
@@ -67,9 +70,10 @@ Per the [generic process template](../sdlc/LIFECYCLE.md#stages), change detectio
 decides depth on every PR and merge:
 
 - **This module modified** -> full extensive verification: install, index
-  freshness, `astro check`, full build, the module-article intake guard, the
-  repository-link guard, content policy guards (attribution and license
-  frontmatter present), and the pipeline's static checks.
+  freshness, collection registration, `astro check`, full build, the
+  module-article intake guard, `scripts/check-policy.sh` (stale repository
+  references, centralized repository URLs, no committed build output, no home
+  paths, attribution on every article), and the pipeline's static checks.
 - **Module untouched** -> only the less extensive top-API-level regression that
   runs across all modules on every merge. Note the asymmetry this module
   introduces: a **module article added anywhere else in the repository** makes

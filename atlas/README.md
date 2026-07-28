@@ -34,6 +34,7 @@ run them from this directory (`cd atlas`), not the repo root.
 | `pipeline/` | The ingestion pipeline: diff `sources.yaml` against the registry, fetch (robots-aware), extract, plan, draft, index, open a PR. Nothing auto-publishes |
 | `scripts/build-search-index.mjs` | Rebuilds `public/search-index.json` from the corpus. Committed and CI-verified against a fresh rebuild |
 | `scripts/intake-module-article.mjs` | Module article -> Lab Notes entry; also the `--check` guard that CI runs |
+| `scripts/check-policy.sh`, `scripts/check-collections.mjs` | The module's guards, in scripts so `make verify` runs exactly what CI runs |
 | `docs/` | Content guide, site architecture, pipeline reference, deployment - plus this module's `articles/`, `evidence/`, and `lessons/` |
 
 ## Quick start

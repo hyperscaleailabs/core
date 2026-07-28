@@ -43,8 +43,12 @@ preview: ## Serve the production build locally
 check-collections: ## Fail if a collection is registered in only one of the two places
 	$(NODE) scripts/check-collections.mjs
 
+.PHONY: policy
+policy: ## Module policy guards - exactly what the atlas workflow runs
+	bash scripts/check-policy.sh
+
 .PHONY: verify
-verify: index check-collections check build ## Everything CI runs for the site, in CI's order
+verify: index check-collections check build policy ## Everything CI runs for the site, in CI's order
 
 ## ---- Publication intake ----
 .PHONY: intake-check

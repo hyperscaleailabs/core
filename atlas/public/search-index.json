@@ -485,6 +485,23 @@
     "draft": false
   },
   {
+    "title": "The stage that named an artifact and never checked for it",
+    "description": "Our lifecycle said every project ends in a published article. Nothing checked that it did, and two finished projects were sitting unpublished. Closing that gap, plus three defects no green build could see.",
+    "section": "lab",
+    "level": "advanced",
+    "tags": [
+      "lab-notes",
+      "atlas",
+      "ci",
+      "process",
+      "migration",
+      "publishing"
+    ],
+    "url": "/lab/2026-07-28-atlas-integration",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
     "title": "Tool Use: Designing an Action Space an Agent Can Actually Use",
     "description": "The single-agent pattern everything builds on. How to define, scope, and describe tools so the model calls the right one with the right arguments.",
     "section": "patterns",

@@ -7,9 +7,9 @@ correction and where it is now codified.
 
 The theme: **the third integration was the one where the prior lessons paid.**
 Two of the findings below were predicted by the models and prod lessons and cost
-minutes instead of hours because a checklist already existed. The two that were
-new are both about *derived state that no build error can see* - a wrong number
-on a page, and a link that resolves to the wrong repository.
+minutes instead of hours because a checklist already existed. The new ones are
+about *state no build error can see* - a wrong number on a page, a link that
+resolves to the wrong repository, and a guard with nowhere to run before CI.
 
 ## L1. A migrated site's links are a migration surface the build cannot check
 
@@ -132,7 +132,36 @@ fires on the PR that creates the debt rather than on some later atlas change.
 The graph now names Atlas the [exit node](../../../sdlc/GRAPH.md#the-exit-node),
 and both pre-existing articles were published as part of this project.
 
-## L6. An anchored exclude and a link guard, costing nothing this time
+## L6. A guard that exists only as workflow YAML is first exercised in CI
+
+The five module policy guards from L1 shipped as inline `run:` steps in
+`.github/workflows/atlas.yml`. Everything runnable locally was run before
+pushing - build, checks, both new guards, all three repository policy scripts -
+and the PR still came back red on the first CI run, because the guards
+themselves had never executed anywhere.
+
+Two defects, both caught by their own first run:
+
+- The stale-reference grep **matched its own source line**. `check_pii.sh`
+  already solves this with a `SELF_PATHS` exclusion; the new guard did not, and
+  no local step would have shown it.
+- The "repository URLs come from `repo.ts`" grep **over-matched content**. An
+  article's `sources` entries are absolute URLs by definition - that is what
+  attribution *is* - and a lab note links back to the module article it
+  publishes. The rule was about site code and had been written as if it were
+  about the whole tree.
+
+**Lesson:** a check belongs in a script the author can run, with the workflow
+calling it. Guards inline in YAML get their first execution on a hosted runner,
+after the handoff, which is the one place where finding a defect costs the most.
+
+**Codified:** [`scripts/check-policy.sh`](../../scripts/check-policy.sh) holds
+all five guards, excludes itself by path, and scopes the URL rule to site code;
+`make policy` runs it, `make verify` includes it, and the workflow job is one
+line that calls it. Verified by planting a reference to the origin repository in
+a doc and confirming the guard fires.
+
+## L7. An anchored exclude and a link guard, costing nothing this time
 
 The prod lesson L7 - `rsync --exclude 'README.md'` is not anchored and silently
 dropped 21 nested READMEs - was applied directly: the copy used
