@@ -16,6 +16,9 @@ Report a pass/fail table in chat; anything failed must be fixed before handoff.
 2. **Criteria vs evidence**: every checked `- [x]` criterion has a concrete
    matching item in Evidence (link, transcript, or committed artifact path).
    Checked boxes without evidence are a hard fail: uncheck or add evidence.
+   Documentation criteria ("X states Y") are evidenced by artifact path plus a
+   line anchor or quoted line - a file appearing in the diff proves existence,
+   not content.
 3. **CI green**: `gh pr checks` - all checks pass, including required
    `pii-and-secrets` and `pr-discipline`.
 4. **Policy scan locally**: `bash tools/policy/check_pii.sh tree` on the branch.

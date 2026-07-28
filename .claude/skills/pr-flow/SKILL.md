@@ -20,9 +20,20 @@ a second one before the first merges.
 2. **Create a worktree** so main stays clean:
    `git worktree add ../core-wt/<slug> -b pr/<slug> main`
    Work inside `../core-wt/<slug>`.
+   If the work already exists uncommitted in the primary tree (a change that grew
+   out of review rather than an agreed unit), branch in place with
+   `git checkout -b pr/<slug>` instead. The point of this step is that `main`
+   never carries the commit, not the worktree mechanics; step 1 is the one that
+   must not be skipped.
 3. **Implement.** Keep the diff scoped to the agreed criteria.
 4. **Verify locally before pushing**: run `pre-commit run --all-files` and
    `bash tools/policy/check_pii.sh tree`; run any tests the change touches.
+   If `pre-commit` is not installed, do not skip the step and do not install
+   tooling unasked: reproduce each hook from `.pre-commit-config.yaml` by hand
+   (gitleaks, staged PII scan, large files, merge-conflict markers, end-of-file,
+   trailing whitespace) and state in the PR Evidence which documented check did
+   not run as such. `check_pii.sh` alone is not a substitute for gitleaks - it is
+   the weaker of the two.
 5. **Open the PR**: push the branch, then create the PR with a body following
    .github/PULL_REQUEST_TEMPLATE.md - all five sections filled, criteria as
    checkboxes, evidence linked (artifacts committed under docs/evidence/).
