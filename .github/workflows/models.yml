@@ -1,0 +1,146 @@
+name: models
+
+on:
+  pull_request:
+    paths:
+      - "models/**"
+      - ".github/workflows/models.yml"
+  push:
+    branches: [main]
+    paths:
+      - "models/**"
+      - ".github/workflows/models.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install check dependencies
+        run: pip install --quiet pyyaml jsonschema
+
+      - name: Python syntax
+        run: |
+          dirs=""
+          for d in models/inference models/train models/benchmark models/goldens; do
+            [ -d "$d" ] && dirs="$dirs $d"
+          done
+          python -m compileall -q $dirs
+
+      - name: Shell syntax
+        run: |
+          for f in models/deploy/scripts/*.sh; do bash -n "$f"; done
+
+      - name: YAML validity
+        run: |
+          python - <<'PY'
+          import yaml
+          from pathlib import Path
+          for p in Path("models").rglob("*.yaml"):
+              list(yaml.safe_load_all(p.read_text()))
+              print("ok", p)
+          PY
+
+      - name: Golden configs match schema
+        run: |
+          python - <<'PY'
+          import json, yaml, jsonschema
+          from pathlib import Path
+          schema = json.load(open("models/goldens/golden.schema.json"))
+          for p in Path("models/goldens/registry").glob("*.yaml"):
+              jsonschema.validate(yaml.safe_load(p.read_text()), schema)
+              print("valid:", p.name)
+          PY
+
+  # Auto-evidence: every PR run pulls tiny golden smoke slices and publishes
+  # the transcript + sample records to the run summary, per SDLC evidence
+  # policy ("generated, not narrated").
+  golden-smoke-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Pull golden smoke slices
+        run: |
+          pip install --quiet -r models/goldens/requirements.txt
+          set -o pipefail
+          {
+            python models/goldens/pull.py --golden coding-mbpp --split eval --limit 3
+            python models/goldens/pull.py --golden ecommerce-ecinstruct --split train --limit 3
+            python models/goldens/pull.py --golden voice-librispeech --split eval --limit 2 --smoke
+          } 2>&1 | tee evidence.txt
+      - name: Attach evidence to run summary
+        if: always()
+        run: |
+          {
+            echo "## Golden smoke evidence"
+            echo '```'
+            cat evidence.txt 2>/dev/null || echo "no evidence produced"
+            echo '```'
+            if [ -f models/goldens/cache/coding-mbpp.eval.jsonl ]; then
+              echo "### Sample record (coding-mbpp)"
+              echo '```json'
+              head -n 1 models/goldens/cache/coding-mbpp.eval.jsonl | cut -c1-500
+              echo '```'
+            fi
+            if [ -f models/goldens/cache/ecommerce-ecinstruct.train.jsonl ]; then
+              echo "### Sample record (ecommerce-ecinstruct)"
+              echo '```json'
+              head -n 1 models/goldens/cache/ecommerce-ecinstruct.train.jsonl | cut -c1-500
+              echo '```'
+            fi
+            if [ -d models/goldens/cache/voice-librispeech.eval.smoke.audio ]; then
+              echo "### Voice smoke wavs"
+              echo '```'
+              ls models/goldens/cache/voice-librispeech.eval.smoke.audio
+              echo '```'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload evidence artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-smoke-evidence
+          path: models/goldens/cache/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  models-policy-guards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: No hardcoded org container registries
+        run: |
+          # registry references must stay configurable; allow only the
+          # neutral registry.local default
+          if grep -rn --include='*.yaml' --include='*.py' --include='*.sh' --include='*.md' \
+               -e 'ghcr\.io/' -e '[a-z0-9-]*\.pkg\.dev/' -e 'docker\.io/hyperscale' models/; then
+            echo "::error::hardcoded container registry reference found; use registry.local + override"
+            exit 1
+          fi
+          echo "no hardcoded registries"
+      - name: No committed weights, checkpoints, run artifacts, or kubeconfigs
+        run: |
+          if git ls-files models | grep -E '\.(safetensors|gguf|bin|ckpt|pt|pth)$|/\.kube/|^models/runs/|^models/out/|^models/goldens/cache/'; then
+            echo "::error::weights, checkpoints, run artifacts, or kubeconfig committed"
+            exit 1
+          fi
+          echo "clean"
+      - name: No absolute home-directory paths (PII guard)
+        run: |
+          # superset coverage exists repo-wide (pii-and-secrets); kept here so
+          # the models tree carries its own guard when path filters skip others
+          if grep -rnE '/(Users|home)/[a-z0-9_-]+/' \
+               --include='*.md' --include='*.yaml' --include='*.py' --include='*.sh' --include='*.json' models/; then
+            echo "::error::absolute home-directory path committed; use repo-relative paths"
+            exit 1
+          fi
+          echo "no home paths"

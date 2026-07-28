@@ -1,0 +1,28 @@
+name: ecommerce-ecinstruct
+domain: ecommerce
+modality: text
+license: cc-by-4.0
+description: >
+  ECInstruct (ICML 2024): 10 e-commerce tasks including product
+  classification, answerability prediction, product relation prediction,
+  and answer generation. The HF dataset is a single physical split; the
+  `split` column separates logical train/test rows.
+source:
+  hf_id: NingLab/ECInstruct
+  config: default
+  splits:
+    train: train
+    eval: train
+  row_filter:
+    train:
+      column: split
+      equals: train
+    eval:
+      column: split
+      equals: test
+fields:
+  input_template: "{instruction}\n\n{input}"
+  reference: output
+  extra:
+    - task
+    - options

@@ -45,9 +45,11 @@ hours of work** for the Architect with the AI agentic coding system. Every
 project is **templated**; its full arc:
 
 ```text
-intent (from the human Architect), captured in the project template:
-  header with the goal and the specific challenge,
-  referencing the strategic and tactical context
+intent (from the human Architect), captured as a GitHub issue
+  from the project template:
+  links to mission, vision, and the strategic axis (links only)
+  + the goal and the specific challenge
+  + the acceptance template of every subproject touched
   -> Architect review: product and architecture solution,
      handed off as PRD and spec (prd.md, ard.md, plan.md, handoff.md)
   -> agent team: implement, verify against the definition of done,
@@ -56,18 +58,31 @@ intent (from the human Architect), captured in the project template:
   -> article: analysis, summary, and the axis-alignment check
 ```
 
-The template header stays light: the goal and the specific challenge this
-project answers, referencing the strategic and tactical context rather than
-restating mission and vision per project. The alignment lives at the end
-instead: the article carries the check that alignment with the axis held during
-implementation, at the strategic and tactical levels. The Architect reviews the
-templated project and produces the product and architecture solution as the
-handoff pack: `prd.md` (requirements), `ard.md` (architecture decisions and
-trade-offs), `plan.md` (execution plan), `handoff.md` (implementation handoff).
-That initial spec goes to the agents for implementation and verification:
-agents work **as a team**, verify against the definition of done, present the
-results with evidence, commit, and wait for acceptance; the Architect's LGTM
-merges to `main`.
+**Every project has a GitHub issue**, opened at initiation from the project
+template; it is the project's anchor, and every PR of the project references
+it (`Issue: #<number>` in Purpose - the `sdlc / pr-discipline` check enforces
+the field).
+
+The template header stays light: **links only** to mission, vision, and the
+strategic axis - never restated statements - plus the goal and the specific
+challenge this project answers. The alignment lives at the end instead: the
+article carries the check that alignment with the axis held during
+implementation, at the strategic and tactical levels.
+
+**Subproject acceptance templates**: each subproject (each top-level
+directory) carries an `ACCEPTANCE.md` - its acceptance criteria template. The
+project template includes the instantiated criteria of every subproject the
+project touches; cross-project work spanning several subdirectories includes
+each touched subproject's template. First instance:
+[models/ACCEPTANCE.md](../models/ACCEPTANCE.md).
+
+The Architect reviews the templated project and produces the product and
+architecture solution as the handoff pack: `prd.md` (requirements), `ard.md`
+(architecture decisions and trade-offs), `plan.md` (execution plan),
+`handoff.md` (implementation handoff). That initial spec goes to the agents
+for implementation and verification: agents work **as a team**, verify against
+the definition of done, present the results with evidence, commit, and wait
+for acceptance; the Architect's LGTM merges to `main`.
 
 A multi-PR project carries the pack as files; a single-PR project may carry the
 PRD/ARD content in the PR body, as today - only repo-shaping decisions get a
