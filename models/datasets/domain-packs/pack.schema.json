@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Hyperswarm domain pack (pack.yaml)",
+  "type": "object",
+  "required": ["domain", "version", "modalities", "files"],
+  "properties": {
+    "domain": {
+      "type": "string",
+      "description": "Domain identifier, matches the directory name"
+    },
+    "version": { "type": "string" },
+    "description": { "type": "string" },
+    "modalities": {
+      "type": "array",
+      "items": { "enum": ["text", "audio-text", "audio-asr"] },
+      "minItems": 1
+    },
+    "files": {
+      "type": "object",
+      "required": ["typical_inputs", "failure_modes"],
+      "properties": {
+        "typical_inputs": { "type": "string" },
+        "failure_modes": { "type": "string" }
+      }
+    },
+    "maintainer": { "type": "string" }
+  }
+}

@@ -1,0 +1,9 @@
+# Local golden-pull transcript, 2026-07-28 (evidence tier: smoke - proves the pipeline)
+$ python models/goldens/pull.py --golden coding-mbpp --split eval --limit 3
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+streaming google-research-datasets/mbpp (sanitized/test)
+wrote 3 records to <repo>/models/goldens/cache/coding-mbpp.eval.jsonl
+$ python models/goldens/pull.py --golden ecommerce-ecinstruct --split train --limit 3
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+streaming NingLab/ECInstruct (default/train)
+wrote 3 records to <repo>/models/goldens/cache/ecommerce-ecinstruct.train.jsonl

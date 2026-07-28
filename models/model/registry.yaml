@@ -1,0 +1,35 @@
+# Model registry: single source of truth for models this repo can train,
+# benchmark, and serve. Deploy manifests and the benchmark runner key off
+# the `name` field.
+models:
+  - name: gemma-2-2b-it
+    hf_id: google/gemma-2-2b-it
+    modality: text
+    runtime: vllm
+    served_model_name: gemma-2-2b-it
+    node_port: 30800
+    gpu: true
+    notes: >
+      Gated on Hugging Face; requires HF_TOKEN with accepted license.
+
+  - name: ultravox-v0_5-llama-3_2-1b
+    hf_id: fixie-ai/ultravox-v0_5-llama-3_2-1b
+    modality: audio-text
+    runtime: vllm
+    served_model_name: ultravox
+    node_port: 30801
+    gpu: true
+    notes: >
+      Audio+text multimodal; vLLM serves it natively. Send audio via
+      OpenAI-style chat messages with audio content parts.
+
+  - name: faster-whisper-small
+    hf_id: Systran/faster-whisper-small
+    modality: audio-asr
+    runtime: custom
+    image: faster-whisper-server  # registry prefix is deploy-time config
+    node_port: 30802
+    gpu: false
+    notes: >
+      CTranslate2 backend, runs well on CPU. OpenAI-compatible
+      /v1/audio/transcriptions endpoint from inference/faster-whisper.

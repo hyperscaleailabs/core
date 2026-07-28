@@ -1,0 +1,22 @@
+name: coding-mbpp
+domain: coding
+modality: text
+license: cc-by-4.0
+description: >
+  Mostly Basic Python Problems (sanitized subset): entry-level Python tasks
+  with reference solutions and executable unit tests.
+source:
+  hf_id: google-research-datasets/mbpp
+  config: sanitized
+  splits:
+    train: train
+    eval: test
+fields:
+  id: task_id
+  input: prompt
+  reference: code
+  extra:
+    - test_list
+prompt_prefix: |
+  Write a Python function for the following task. Reply with only the code.
+

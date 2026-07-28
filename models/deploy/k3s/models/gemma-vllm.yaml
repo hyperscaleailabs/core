@@ -1,0 +1,70 @@
+# Gemma 2 2B (instruction-tuned) served by vLLM.
+# Needs: NVIDIA device plugin on the node, and a Secret with an HF token
+# that has accepted the Gemma license:
+#   kubectl -n hyperswarm-models create secret generic hf-token --from-literal=token=hf_xxx
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gemma-vllm
+  namespace: hyperswarm-models
+  labels:
+    app: gemma-vllm
+    hyperswarm.ai/model: gemma-2-2b-it
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gemma-vllm
+  template:
+    metadata:
+      labels:
+        app: gemma-vllm
+    spec:
+      containers:
+        - name: vllm
+          image: vllm/vllm-openai:v0.8.5
+          args:
+            - --model=google/gemma-2-2b-it
+            - --served-model-name=gemma-2-2b-it
+            - --max-model-len=4096
+            - --gpu-memory-utilization=0.90
+          env:
+            - name: HF_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: hf-token
+                  key: token
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            failureThreshold: 60
+          volumeMounts:
+            - name: hf-cache
+              mountPath: /root/.cache/huggingface
+      volumes:
+        - name: hf-cache
+          hostPath:
+            path: /var/lib/hyperswarm/hf-cache
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gemma-vllm
+  namespace: hyperswarm-models
+spec:
+  type: NodePort
+  selector:
+    app: gemma-vllm
+  ports:
+    - port: 8000
+      targetPort: 8000
+      nodePort: 30800

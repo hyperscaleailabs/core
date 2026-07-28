@@ -5,9 +5,11 @@
 
 <!-- Why this PR exists; which discussion or plan item it implements.
      State the horizon this work serves: short / mid / long (see AXIS.md).
-     Ambiguous work is short. -->
+     Ambiguous work is short. Every PR belongs to a project and references
+     the project's GitHub issue. -->
 
 Horizon: <!-- short | mid | long -->
+Issue: <!-- #<number> of the project issue -->
 
 ## Tasks
 

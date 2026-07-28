@@ -1,0 +1,21 @@
+# local kubeconfigs fetched from remote boxes
+.kube/
+
+# model weights, checkpoints, and caches (also CI-guarded)
+*.safetensors
+*.gguf
+*.bin
+*.pt
+*.pth
+*.ckpt
+hf-cache/
+
+# pulled golden slices and extracted audio
+goldens/cache/
+
+# run artifacts (config.yaml and report.md are force-added by publish)
+runs/
+out/
+
+# benchmark outputs
+benchmark/results/

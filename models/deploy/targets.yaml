@@ -1,0 +1,27 @@
+# Deployment targets for `hsm --target <name>` and deploy scripts.
+# Phase 1: only `local` is real. Remote entries are placeholders until real
+# GPU boxes are provided (see docs/PLAN.md phase gate).
+targets:
+  local:
+    kind: k3d
+    context: k3d-hyperswarm
+    notes: CPU-only; pipeline smoke scale. See docs/local-k3s-macbook.md.
+
+  gpu-box-1:
+    kind: ssh
+    host: PLACEHOLDER.example.com
+    user: PLACEHOLDER
+    port: 22
+    gpu: true
+    provision: deploy/scripts/provision-k3s-ssh.sh
+    notes: single cloud GPU VM, spun up per task. To be provided in phase 2.
+
+  gpu-pool:
+    kind: ssh-list
+    hosts:
+      - PLACEHOLDER-a.example.com
+      - PLACEHOLDER-b.example.com
+    user: PLACEHOLDER
+    gpu: true
+    notes: multi-node K3s (first host = server, rest join as agents) for the
+      JAX multi-host track. To be provided in phase 2.
