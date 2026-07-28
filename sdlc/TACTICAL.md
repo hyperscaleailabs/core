@@ -42,9 +42,9 @@ Reasoning over these against the active epics produces the review's outcome:
    by the graph as a whole, not by any single project.
 2. The top of the graph - highest priority, dependencies satisfied - feeds the
    [daily level](DAILY.md) its 3-5 projects.
-3. **Weekly digest**: aggregate the week's daily whitepapers and decks and
-   combine them with the week's **market research** into the tactical weekly
-   digest. Published to **Webinars** and the **Atlas weekly overview**,
+3. **Weekly digest**: combine the week's daily summaries (CEO decks and CTO
+   whitepapers) with **external market updates and research** into the tactical
+   weekly digest. Published to **Webinars** and the **Atlas weekly overview**,
    generating artifacts, and shared via mailing lists to notify external
    stakeholders.
 

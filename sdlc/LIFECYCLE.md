@@ -46,35 +46,41 @@ project is **templated**; its full arc:
 
 ```text
 intent (from the human Architect), captured in the project template:
-  header restating mission, vision, and goal
-  (the strategic touch and tactical outlook) + the specific challenge
+  header with the goal and the specific challenge,
+  referencing the strategic and tactical context
   -> Architect review: product and architecture solution,
      handed off as PRD and spec (prd.md, ard.md, plan.md, handoff.md)
   -> agent team: implement, verify against the definition of done,
      present results, commit, wait for acceptance
   -> LGTM -> squash merge to main
-  -> article
+  -> article: analysis, summary, and the axis-alignment check
 ```
 
-The template header carries the alignment down: mission, vision, and goal
-restated from the strategic and tactical context, then the specific challenge
-this project answers. The Architect reviews the templated project and produces
-the product and architecture solution as the handoff pack: `prd.md`
-(requirements), `ard.md` (architecture decisions and trade-offs), `plan.md`
-(execution plan), `handoff.md` (implementation handoff). That initial spec goes
-to the agents for implementation and verification: agents work **as a team**,
-verify against the definition of done, present the results with evidence,
-commit, and wait for acceptance; the Architect's LGTM merges to `main`.
+The template header stays light: the goal and the specific challenge this
+project answers, referencing the strategic and tactical context rather than
+restating mission and vision per project. The alignment lives at the end
+instead: the article carries the check that alignment with the axis held during
+implementation, at the strategic and tactical levels. The Architect reviews the
+templated project and produces the product and architecture solution as the
+handoff pack: `prd.md` (requirements), `ard.md` (architecture decisions and
+trade-offs), `plan.md` (execution plan), `handoff.md` (implementation handoff).
+That initial spec goes to the agents for implementation and verification:
+agents work **as a team**, verify against the definition of done, present the
+results with evidence, commit, and wait for acceptance; the Architect's LGTM
+merges to `main`.
 
 A multi-PR project carries the pack as files; a single-PR project may carry the
 PRD/ARD content in the PR body, as today - only repo-shaping decisions get a
 standalone entry in [docs/adr/](../docs/adr/).
 
 Every project ends in an **article** at the Architect and Builder levels, and
-generating it triggers the [Atlas](../atlas/) update. The article **includes the
-project's lessons**; its other sources are the PR bodies, their evidence, and the
-[lessons](../docs/lessons/) entries. The [daily level](DAILY.md) aggregates the
-day's articles into its executive and whitepaper publications.
+generating it triggers the [Atlas](../atlas/) update. The article contains the
+analysis and summary of the project, **includes the project's lessons**, and
+**checks that alignment with the axis remained** through implementation, at the
+strategic and tactical levels. Its other sources are the PR bodies, their
+evidence, and the [lessons](../docs/lessons/) entries. The
+[daily level](DAILY.md) aggregates the day's articles into its executive and
+whitepaper publications.
 
 ## North star (direction, not yet in effect)
 

@@ -20,7 +20,7 @@ project runs the [project lifecycle](LIFECYCLE.md).
 | Publication | Audience level | Content |
 |-------------|----------------|---------|
 | Executive deck | CEO | The day's goals, what shipped, the headline lesson, tomorrow's intent |
-| Whitepaper | CTO | Executive overview aggregating the day's project articles, combined with the tactical directionality: how the 3-5 delivered projects moved core and the apps in the intended direction |
+| Whitepaper | CTO | Executive overview aggregating the day's project articles, combined with the tactical directionality: how the 3-5 delivered projects moved core and the apps in the intended direction. Evaluates strategic and tactical alignment - how the day's work balanced the short/mid/long horizons against their proportional weighting, and whether any drift from the axis appeared |
 
 Both are scheduled parts of the daily update and are derived from the project
 articles, never written from memory: a claim that is not in an article backed by
