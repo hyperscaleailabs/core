@@ -1,5 +1,9 @@
 # SDLC lifecycle
 
+Direction comes from [AXIS.md](../AXIS.md); this document is only the method for
+moving along it. Every PR declares a horizon (short / mid / long) in its Purpose
+section. The mix across PRs holds 80% short, 15% mid, 5% long.
+
 Roles: **Architect** (goals, PRD/ADR review, acceptance LGTMs) and **AI implementers**.
 People are referred to by role, never by name.
 
@@ -52,6 +56,8 @@ multiple worktrees running in parallel, returned to `main` as a single reviewed 
 
 ## Standing rules (both modes)
 
+- **Declare the horizon** - every PR states short, mid, or long in Purpose. Ambiguous
+  work is short. Mid-horizon work without its short-horizon foundation is deferred.
 - **No PII, ever** - CI-guarded, not just stated (docs, machine artifacts, tool output).
 - **Evidence or it didn't happen.** Smoke scale fine; fabrication is not.
 - **Review the review loop** - every mechanical review finding becomes a CI guard in

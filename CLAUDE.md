@@ -1,20 +1,18 @@
 # Agent instructions for hsailabs core
 
-Read `sdlc/LIFECYCLE.md` first - it defines how ALL work here is organized.
-Current mode: one PR at a time. Use the skills: `pr-flow` to run the cycle,
-`pr-verify` before every handoff, `lessons` after every merge or review round.
+**[AGENTS.md](AGENTS.md) is the canonical agent contract. Read it first, in full.**
+It is vendor-neutral and kept in one place so instructions cannot drift between
+harnesses. Nothing Claude-specific overrides it.
 
-Hard rules:
+Two things it will send you to, before any work starts:
 
-- This repo is public. **Never commit PII**: no personal names, usernames,
-  emails, home paths, credentials, or co-author trailers - in files, commit
-  messages, or branch names. People are referred to by role (Architect,
-  Implementer). Machine-generated artifacts embed usernames in paths; never
-  commit them. Run `bash tools/policy/check_pii.sh tree` before pushing.
-- Never push directly to `main`; all changes go through a PR with the template
-  fully filled (CI enforces it). Squash merge only.
-- Check an acceptance criterion only when Evidence proves it. Evidence or it
-  didn't happen; fabrication is a hard failure.
-- Nothing deployment-specific, environment-specific, or commercial belongs
-  here; that goes to the private companion repo (see sdlc/notes.md).
-- Every mechanical review finding becomes a CI guard in the same PR.
+1. **[AXIS.md](AXIS.md)** - direction and effort weighting. Every unit of work
+   declares a horizon: short 80%, mid 15%, long 5%. Ambiguous work defaults to
+   short.
+2. **[sdlc/LIFECYCLE.md](sdlc/LIFECYCLE.md)** - one PR at a time. Use the skills
+   `pr-flow`, `pr-verify`, and `lessons`.
+
+Hardest rules, repeated here because the cost of missing them is highest: this
+repo is public, so **never commit PII** (`bash tools/policy/check_pii.sh tree`
+before pushing); never push directly to `main`; and check an acceptance criterion
+only when Evidence proves it.

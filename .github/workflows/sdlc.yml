@@ -29,6 +29,9 @@ jobs:
           if grep -qE '^\s*- \[ \] \.\.\.' <<<"$BODY"; then
             echo "Placeholder acceptance criterion '- [ ] ...' must be replaced"; fail=1
           fi
+          if ! grep -qiE '^\s*Horizon:\s*(short|mid|long)\s*$' <<<"$BODY"; then
+            echo "Purpose must declare 'Horizon: short|mid|long' (see AXIS.md)"; fail=1
+          fi
           if [ "$fail" -ne 0 ]; then
             echo ""
             echo "PR bodies must follow .github/PULL_REQUEST_TEMPLATE.md (see sdlc/LIFECYCLE.md)."
