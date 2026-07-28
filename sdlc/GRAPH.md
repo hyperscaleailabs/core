@@ -29,14 +29,31 @@ root README.md  (entrance)
   -> projects: GitHub issues                  (one issue per project)
        <-> PRs (Issue: #N, module-bounded)    (implementation + review trail)
        -> evidence (SHA-pinned links)
-       -> article + post                      (<module>/docs/articles/<date>-<project>/,
-                                               triggers Atlas)
+       -> article + post                      (<module>/docs/articles/<date>-<project>/)
+            -> atlas/src/content/lab/         (the published entry; the exit node)
 docs/  (cross-module only: strategic/, adr/, projects/ whitepapers, weekly/ digests)
 ```
 
 Edges are ordinary markdown links and the `Issue: #N` field on PRs. Both are
 guarded: `tools/policy/check_links.sh` (files and anchors) and
 `sdlc / pr-discipline` (issue linkage).
+
+## The exit node
+
+The root README is the entrance; [atlas/](../atlas/README.md) is the **exit**.
+Every project's article leaves the graph through it as a published Lab Notes
+entry carrying the module, the issue, the PR, the evidence tier, and the path
+back to the source article.
+
+That edge is a mechanism, not an intention:
+`atlas/scripts/intake-module-article.mjs` creates the entry, and its `--check`
+mode - run by the `atlas` workflow on every PR that touches any module's
+`docs/articles/` - fails when a module article has no entry, or when an entry's
+`articlePath` stops resolving. The procedure is
+[atlas/README.md#from-module-article-to-atlas-entry](../atlas/README.md#from-module-article-to-atlas-entry).
+
+A module article without a published entry is an unfinished project, in the same
+way a PR without evidence is an unfinished PR.
 
 ## Placement rules
 
@@ -49,6 +66,12 @@ guarded: `tools/policy/check_links.sh` (files and anchors) and
   (`docs/strategic/`), repo-shaping ADRs (`docs/adr/`), cross-module project
   whitepapers (`docs/projects/`), and weekly publications (`docs/weekly/`).
   Process lessons live with the process in `sdlc/docs/lessons/`.
+- **Published prose lives in `atlas/src/content/`, and only there.** The module
+  article is the record; the Atlas entry is the publication, rewritten for a
+  reader with no repository context. Atlas aggregates and publishes - it never
+  becomes the only copy of something, and a module never renders its own site.
+  Cross-module publications keep their own homes (`docs/projects/`,
+  `docs/weekly/`) and do not pass through the module-article intake.
 - A misplaced artifact is a broken edge: it will not be found from the node
   that needs it. Placement is reviewed in the cleanup-and-refinement stage of
   every project.
@@ -65,7 +88,7 @@ task and read outward only as needed:
 | 3 BUILDER | handoff pack | module code + docs; module lessons |
 | 4 QA | PR | module ACCEPTANCE.md, CI definitions, evidence placement rules |
 | 5 Acceptance review | issue + PR trail | evidence tables, prior review comments |
-| 6 RESEARCHER/PUBLISHER | merged PR | issue trail, evidence, lessons |
+| 6 RESEARCHER/PUBLISHER | merged PR | issue trail, evidence, lessons; [atlas/README.md](../atlas/README.md#from-module-article-to-atlas-entry) for the intake and the corpus it publishes into |
 | 7 MGMT final review | issue | everything above, aggregated |
 
 Pulling the whole tree into context is a graph failure, not thoroughness.

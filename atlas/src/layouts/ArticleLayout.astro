@@ -1,0 +1,121 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { minutesFor, SECTION_META, type AnyEntry } from '../lib/content';
+import { editUrlFor } from '../lib/repo';
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+  entry: AnyEntry;
+  headings: MarkdownHeading[];
+}
+const { entry, headings } = Astro.props;
+const data = entry.data as any;
+const minutes = minutesFor(entry);
+const section = SECTION_META[entry.collection];
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+// Render in UTC so a date-only frontmatter value (parsed as UTC midnight) isn't
+// shifted a day backwards in negative-offset timezones.
+const fmtDate = (d: Date | string) => new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
+const updated = fmtDate(data.updated);
+const created = data.created ? fmtDate(data.created) : null;
+---
+
+<BaseLayout title={data.title} description={data.description} ogType="article">
+  <div class="mx-auto max-w-6xl px-5 py-10">
+    <nav class="mb-6 flex items-center gap-2 text-sm text-[var(--color-fog-400)]">
+      <a href="/" class="hover:text-[var(--color-fog-100)]">Home</a>
+      <span>/</span>
+      <a href={`/${entry.collection}`} class="hover:text-[var(--color-fog-100)]">{section?.label ?? entry.collection}</a>
+    </nav>
+
+    <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_16rem]">
+      <article>
+        <header class="border-b border-[var(--color-line)] pb-6">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class:list={['chip', `level-${data.level}`]}>{data.level}</span>
+            <span class="chip">{minutes} min read</span>
+            {data.aiGenerated && (
+              <span class="chip" style="color:var(--color-violet)">⚙ machine-drafted</span>
+            )}
+            <span class="ml-auto font-mono text-xs text-[var(--color-fog-400)]">{created ? `created ${created} · ` : ''}updated {updated}</span>
+          </div>
+          <h1 class="mt-4 text-3xl font-bold tracking-tight text-[var(--color-fog-100)] md:text-4xl">{data.title}</h1>
+          <p class="mt-3 text-lg text-[var(--color-fog-300)]">{data.description}</p>
+
+          {data.tags?.length > 0 && (
+            <div class="mt-4 flex flex-wrap gap-1.5">
+              {data.tags.map((t: string) => (
+                <span class="rounded border border-[var(--color-line)] px-1.5 py-0.5 font-mono text-[0.65rem] text-[var(--color-fog-400)]">#{t}</span>
+              ))}
+            </div>
+          )}
+        </header>
+
+        {data.aiGenerated && (
+          <div class="mt-6 rounded-lg border border-[color-mix(in_srgb,var(--color-violet)_35%,var(--color-line))] bg-[var(--color-ink-850)] p-4 text-sm text-[var(--color-fog-300)]">
+            <strong class="text-[var(--color-violet)]">Machine-assisted draft.</strong>
+            This article was drafted by the Agentic Atlas ingestion pipeline from the sources
+            listed below and may not yet be human-reviewed. Verify claims against the primary sources.
+          </div>
+        )}
+
+        <div class="prose-atlas prose prose-invert mt-8 max-w-none">
+          <slot />
+        </div>
+
+        {data.sources?.length > 0 && (
+          <section class="mt-12 border-t border-[var(--color-line)] pt-6">
+            <h2 class="text-sm font-semibold uppercase tracking-wider text-[var(--color-fog-300)]">Sources &amp; attribution</h2>
+            <ul class="mt-4 space-y-3">
+              {data.sources.map((s: any) => (
+                <li class="text-sm">
+                  <a href={s.url} class="link-accent font-medium">{s.title}</a>
+                  <span class="text-[var(--color-fog-400)]">
+                    {s.publisher ? ` — ${s.publisher}` : ''}
+                    {s.license ? ` · ${s.license}` : ''}
+                    {s.accessed ? ` · accessed ${s.accessed}` : ''}
+                  </span>
+                </li>
+              ))}
+            </ul>
+            <p class="mt-4 text-xs text-[var(--color-fog-400)]">
+              This article ({data.license}) summarizes and links to the works above. Referenced
+              material remains under its original license and copyright.
+            </p>
+          </section>
+        )}
+      </article>
+
+      <aside class="hidden lg:block">
+        <div class="sticky top-24">
+          {toc.length > 0 && (
+            <>
+              <h4 class="text-xs font-semibold uppercase tracking-wider text-[var(--color-fog-400)]">On this page</h4>
+              <ul class="mt-3 space-y-2 border-l border-[var(--color-line)] text-sm">
+                {toc.map((h) => (
+                  <li>
+                    <a
+                      href={`#${h.slug}`}
+                      class:list={[
+                        '-ml-px block border-l border-transparent py-0.5 text-[var(--color-fog-400)] hover:border-[var(--color-cyan)] hover:text-[var(--color-fog-100)]',
+                        h.depth === 3 ? 'pl-6' : 'pl-4',
+                      ]}
+                    >
+                      {h.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          <a
+            href={editUrlFor(entry.collection, entry.id)}
+            class="mt-6 inline-block text-xs text-[var(--color-fog-400)] hover:text-[var(--color-cyan)]"
+          >
+            ✎ Edit this page
+          </a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</BaseLayout>

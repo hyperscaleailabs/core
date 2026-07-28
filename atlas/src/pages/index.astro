@@ -1,0 +1,126 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { getAllArticles, getPublished, SECTION_META } from '../lib/content';
+
+const all = await getAllArticles();
+const latest = all.slice(0, 6);
+const frameworks = await getPublished('frameworks');
+
+const sections = ['foundations', 'frameworks', 'patterns', 'production', 'comparisons', 'case-studies', 'lab'];
+const counts: Record<string, number> = {};
+for (const s of sections) counts[s] = (await getPublished(s as any)).length;
+
+const stats = [
+  { value: all.length, label: 'articles' },
+  { value: frameworks.length, label: 'frameworks cataloged' },
+  { value: '5–15', label: 'min per read' },
+  { value: 'CI', label: 'auto-updated' },
+];
+---
+
+<BaseLayout>
+  <!-- Hero -->
+  <section class="relative overflow-hidden border-b border-[var(--color-line)]">
+    <div class="grid-texture absolute inset-0"></div>
+    <div class="relative mx-auto max-w-6xl px-5 py-20 md:py-28">
+      <div class="inline-flex items-center gap-2 rounded-full border border-[var(--color-line)] bg-[var(--color-ink-850)] px-3 py-1 font-mono text-xs text-[var(--color-fog-300)]">
+        <span class="h-1.5 w-1.5 rounded-full bg-[var(--color-cyan)]"></span>
+        A field guide for engineers shipping agents to production
+      </div>
+      <h1 class="mt-6 max-w-3xl text-4xl font-bold leading-[1.05] tracking-tight text-[var(--color-fog-100)] md:text-6xl">
+        The technical atlas of
+        <span class="bg-gradient-to-r from-[var(--color-cyan)] to-[var(--color-violet)] bg-clip-text text-transparent"> AI agents</span>.
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg text-[var(--color-fog-300)]">
+        From the pre-agentic era to swarms and long-running harnesses. Frameworks,
+        architectural patterns, failure modes, tradeoffs, and real production case
+        studies — curated for engineers and architects, from first principles to
+        the deep end.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/foundations" class="rounded-lg bg-[var(--color-cyan)] px-5 py-2.5 font-medium text-[var(--color-ink-950)] transition-opacity hover:opacity-90">
+          Start with the foundations
+        </a>
+        <a href="/learning-paths" class="rounded-lg border border-[var(--color-line)] px-5 py-2.5 font-medium text-[var(--color-fog-200)] transition-colors hover:border-[var(--color-cyan-dim)]">
+          Pick a learning path →
+        </a>
+      </div>
+
+      <dl class="mt-14 grid max-w-2xl grid-cols-2 gap-6 sm:grid-cols-4">
+        {stats.map((s) => (
+          <div>
+            <dt class="font-mono text-2xl font-bold text-[var(--color-fog-100)]">{s.value}</dt>
+            <dd class="text-xs uppercase tracking-wider text-[var(--color-fog-400)]">{s.label}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <!-- Sections grid -->
+  <section class="mx-auto max-w-6xl px-5 py-16">
+    <h2 class="text-sm font-semibold uppercase tracking-wider text-[var(--color-fog-400)]">Browse the atlas</h2>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {sections.map((s) => {
+        const meta = SECTION_META[s];
+        return (
+          <a href={`/${s}`} class="card group flex flex-col p-6">
+            <div class="flex items-center justify-between">
+              <span class="text-2xl" style={`color:${meta.accent}`}>{meta.icon}</span>
+              <span class="font-mono text-xs text-[var(--color-fog-400)]">{counts[s]} →</span>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold text-[var(--color-fog-100)] group-hover:text-[var(--color-cyan)]">{meta.label}</h3>
+            <p class="mt-1.5 text-sm text-[var(--color-fog-400)]">{meta.blurb}</p>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- Latest -->
+  <section class="mx-auto max-w-6xl px-5 py-6">
+    <div class="flex items-center justify-between">
+      <h2 class="text-sm font-semibold uppercase tracking-wider text-[var(--color-fog-400)]">Latest &amp; updated</h2>
+      <a href="/news" class="text-sm text-[var(--color-cyan)] hover:underline">News feed →</a>
+    </div>
+    <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {latest.map((entry) => <ArticleCard entry={entry} showSection />)}
+    </div>
+  </section>
+
+  <!-- How it stays fresh -->
+  <section class="mx-auto mt-16 max-w-6xl px-5">
+    <div class="card p-8 md:p-10">
+      <div class="grid gap-8 md:grid-cols-2 md:items-center">
+        <div>
+          <p class="font-mono text-sm text-[var(--color-violet)]">⚙ continuously ingested</p>
+          <h2 class="mt-2 text-2xl font-bold text-[var(--color-fog-100)]">A knowledge base that updates itself</h2>
+          <p class="mt-3 text-[var(--color-fog-300)]">
+            Point the ingestion pipeline at a list of references. On every CI run it
+            diffs the sources it hasn't seen, pulls what changed, plans new articles,
+            drafts them with attribution, and rebuilds the search index — all as
+            versioned Markdown you can review in a pull request.
+          </p>
+          <a href="/about" class="mt-5 inline-block text-sm text-[var(--color-cyan)] hover:underline">How the pipeline works →</a>
+        </div>
+        <ol class="space-y-3 font-mono text-sm">
+          {[
+            ['sources.yaml', 'curated reference links + versions'],
+            ['diff', 'skip anything already processed'],
+            ['fetch + extract', 'pull and clean new/changed pages'],
+            ['plan + draft', 'outline → 5–15 min Markdown article'],
+            ['index + PR', 'rebuild index, open a review PR'],
+          ].map(([k, v], i) => (
+            <li class="flex gap-3 rounded-lg border border-[var(--color-line)] bg-[var(--color-ink-850)] p-3">
+              <span class="text-[var(--color-cyan)]">{String(i + 1).padStart(2, '0')}</span>
+              <span><span class="text-[var(--color-fog-100)]">{k}</span> <span class="text-[var(--color-fog-400)]">— {v}</span></span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <div class="h-10"></div>
+</BaseLayout>

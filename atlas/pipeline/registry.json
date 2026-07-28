@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "description": "Processed-state registry. The pipeline diffs sources.yaml against this file so already-ingested material is skipped. Keyed by source URL. Committed to Git so state is shared across CI runs.",
+  "generated_by": "pipeline/ingest.py",
+  "entries": {
+    "https://anthropic.skilljar.com/claude-with-the-anthropic-api/": {
+      "content_hash": "065fb337d46cd76e17c1f00f8c0597eb66edb7ce80d1b111f467febfec1067a0",
+      "etag": null,
+      "last_modified": null,
+      "version": 1,
+      "section": "foundations",
+      "slug": "building-with-the-claude-api",
+      "title": "Building with the Claude API (Anthropic Academy)",
+      "processed_at": "2026-07-01T22:43:03.287062+00:00",
+      "drafted_by_model": false,
+      "note": "robots-allowed but JS-rendered/thin extract; hand-authored via WebFetch"
+    }
+  }
+}

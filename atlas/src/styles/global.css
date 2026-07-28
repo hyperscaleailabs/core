@@ -1,0 +1,170 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/*
+ * Agentic Atlas design system.
+ * Dark-first, engineering-focused. Ink background, cyan/violet accents,
+ * generous mono usage for a "technical reference" feel.
+ */
+
+@theme {
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', 'Cascadia Code', monospace;
+
+  --color-ink-950: #070a12;
+  --color-ink-900: #0b0f1a;
+  --color-ink-850: #10141f;
+  --color-ink-800: #141a28;
+  --color-ink-700: #1e2536;
+  --color-ink-600: #2a3345;
+  --color-line: #232b3d;
+
+  --color-fog-400: #8b95ad;
+  --color-fog-300: #aab3c7;
+  --color-fog-200: #ced4e0;
+  --color-fog-100: #e8ebf2;
+
+  --color-cyan: #38e0cf;
+  --color-cyan-dim: #1aa79a;
+  --color-violet: #9d7bff;
+  --color-amber: #ffb84d;
+  --color-rose: #ff6b81;
+  --color-lime: #a3e635;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  background-color: var(--color-ink-950);
+  background-image:
+    radial-gradient(60rem 60rem at 85% -10%, rgba(157, 123, 255, 0.08), transparent 60%),
+    radial-gradient(50rem 50rem at -10% 10%, rgba(56, 224, 207, 0.06), transparent 55%);
+  color: var(--color-fog-200);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Subtle grid texture behind hero sections */
+.grid-texture {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 40%, transparent 100%);
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: rgba(56, 224, 207, 0.25);
+}
+
+/* ---------- Prose (article body) ---------- */
+.prose-atlas {
+  --tw-prose-body: var(--color-fog-200);
+  --tw-prose-headings: var(--color-fog-100);
+  --tw-prose-links: var(--color-cyan);
+  --tw-prose-bold: var(--color-fog-100);
+  --tw-prose-counters: var(--color-fog-400);
+  --tw-prose-bullets: var(--color-ink-600);
+  --tw-prose-hr: var(--color-line);
+  --tw-prose-quotes: var(--color-fog-300);
+  --tw-prose-quote-borders: var(--color-cyan-dim);
+  --tw-prose-captions: var(--color-fog-400);
+  --tw-prose-code: var(--color-fog-100);
+  --tw-prose-pre-code: #c9d1d9;
+  --tw-prose-pre-bg: var(--color-ink-900);
+  --tw-prose-th-borders: var(--color-line);
+  --tw-prose-td-borders: var(--color-line);
+}
+
+.prose-atlas :where(code):not(pre code) {
+  background: var(--color-ink-800);
+  border: 1px solid var(--color-line);
+  border-radius: 0.3rem;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+.prose-atlas :where(code):not(pre code)::before,
+.prose-atlas :where(code):not(pre code)::after {
+  content: none;
+}
+
+.prose-atlas :where(h2) {
+  scroll-margin-top: 5rem;
+  border-top: 1px solid var(--color-line);
+  padding-top: 2rem;
+  margin-top: 2.5rem;
+}
+
+.prose-atlas :where(h3) {
+  scroll-margin-top: 5rem;
+}
+
+.prose-atlas :where(table) {
+  font-size: 0.9rem;
+}
+
+.prose-atlas :where(pre) {
+  border: 1px solid var(--color-line);
+  border-radius: 0.75rem;
+}
+
+.prose-atlas :where(blockquote) {
+  font-style: normal;
+  background: var(--color-ink-850);
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding: 0.25rem 1.25rem;
+}
+
+/* ---------- Reusable component classes ---------- */
+.card {
+  background: linear-gradient(180deg, var(--color-ink-850), var(--color-ink-900));
+  border: 1px solid var(--color-line);
+  border-radius: 1rem;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+}
+.card:hover {
+  border-color: color-mix(in srgb, var(--color-cyan) 45%, var(--color-line));
+  transform: translateY(-2px);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.55rem;
+  border-radius: 0.4rem;
+  border: 1px solid var(--color-line);
+  background: var(--color-ink-800);
+  color: var(--color-fog-300);
+}
+
+.level-beginner { color: var(--color-lime); border-color: color-mix(in srgb, var(--color-lime) 35%, transparent); }
+.level-intermediate { color: var(--color-amber); border-color: color-mix(in srgb, var(--color-amber) 35%, transparent); }
+.level-advanced { color: var(--color-rose); border-color: color-mix(in srgb, var(--color-rose) 35%, transparent); }
+
+.link-accent {
+  color: var(--color-cyan);
+  text-decoration: none;
+}
+.link-accent:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}

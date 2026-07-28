@@ -1,0 +1,194 @@
+name: atlas
+
+on:
+  pull_request:
+    paths:
+      - "atlas/**"
+      - ".github/workflows/atlas.yml"
+      # A module article published anywhere in the repository owes Atlas a Lab
+      # Notes entry, so the intake guard has to see those changes too.
+      - "*/docs/articles/**"
+      - "apps/*/docs/articles/**"
+  push:
+    branches: [main]
+    paths:
+      - "atlas/**"
+      - ".github/workflows/atlas.yml"
+      - "*/docs/articles/**"
+      - "apps/*/docs/articles/**"
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: atlas
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: atlas/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # The committed index is what `astro dev` serves, so it is real state, not
+      # a build artifact. A generated file that is committed and never compared
+      # drifts silently - the same shape as a regression baseline nothing diffs.
+      - name: Search index matches a fresh rebuild
+        run: |
+          npm run index
+          if ! git diff --quiet -- public/search-index.json; then
+            echo "::error::public/search-index.json is stale; run 'make index' and commit it"
+            git diff -- public/search-index.json
+            exit 1
+          fi
+          echo "search index is current"
+
+      # A collection registered in only one of its two places builds green and
+      # renders nothing, or renders and is counted nowhere. Neither is visible
+      # in a build log.
+      - name: Collections registered consistently
+        run: node scripts/check-collections.mjs
+
+      - name: Type and content-schema check
+        run: npm run check
+
+      - name: Build the site (validates every article's frontmatter)
+        run: npm run build | tee build.txt
+
+      - name: Job summary
+        if: always()
+        run: |
+          {
+            echo "### Atlas site build"
+            echo '```'
+            tail -n 12 build.txt 2>/dev/null || echo "no build output"
+            echo '```'
+            echo "Indexed documents: $(python3 -c 'import json;print(len(json.load(open("public/search-index.json"))))')"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload build output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: atlas-dist
+          path: atlas/dist/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  # The graph edge `module article -> Atlas entry`, enforced. Without this the
+  # lifecycle's publication stage is prose: a stage that names an artifact must
+  # also create - and check - the place the artifact lands.
+  publication-intake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Every module article has a Lab Notes entry
+        run: node scripts/intake-module-article.mjs --all --check
+
+  atlas-policy-guards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # The standalone repository this module came from still exists. A link to
+      # it in the built site sends readers to a tree that no longer moves.
+      - name: No references to the pre-integration repository
+        working-directory: .
+        run: |
+          # atlas/NOTICE.md is the one place the origin repository may be named:
+          # it is the provenance and licensing record, and a license audit needs
+          # to find where the content came from. Everywhere else, a link there
+          # sends a reader to a tree that no longer moves.
+          hits=$(grep -rn 'hyperscaleailabs/agentic-atlas' \
+                   --include='*.astro' --include='*.ts' --include='*.mjs' \
+                   --include='*.md' --include='*.json' --include='*.yaml' \
+                   --include='*.yml' --exclude=package-lock.json \
+                   --exclude-dir=.git --exclude-dir=node_modules . \
+                 | grep -v '^\./atlas/NOTICE\.md:' || true)
+          if [ -n "$hits" ]; then
+            printf '%s\n' "$hits"
+            echo "::error::reference to the pre-integration standalone repository; use atlas/src/lib/repo.ts"
+            exit 1
+          fi
+          echo "no stale repository references"
+
+      - name: Repository URLs come from src/lib/repo.ts only
+        run: |
+          if grep -rn 'github\.com/hyperscaleailabs/core' src/ --exclude=repo.ts; then
+            echo "::error::hardcoded repository URL in src/; import from src/lib/repo.ts"
+            exit 1
+          fi
+          echo "repository links centralized"
+
+      - name: No committed build output or dependencies
+        run: |
+          if git ls-files atlas | grep -E '^atlas/(dist|node_modules|\.astro|\.vercel)/|^atlas/pipeline/cache/[^.]'; then
+            echo "::error::build output, dependencies, or pipeline cache committed"
+            exit 1
+          fi
+          echo "clean"
+        working-directory: .
+
+      - name: No absolute home-directory paths (PII guard)
+        run: |
+          # repo-wide coverage exists in the policy workflow; kept here so the
+          # atlas tree carries its own guard when path filters skip the others
+          if grep -rnE '/(Users|home)/[a-z0-9_-]+/' \
+               --include='*.md' --include='*.astro' --include='*.ts' --include='*.mjs' \
+               --include='*.yaml' --include='*.json' --exclude=package-lock.json . ; then
+            echo "::error::absolute home-directory path committed; use module-relative paths"
+            exit 1
+          fi
+          echo "no home paths"
+
+      # Atlas summarizes and links; it never republishes. An article with no
+      # recorded source cannot be checked against the thing it describes.
+      - name: Every article records at least one source
+        run: |
+          fail=0
+          for f in src/content/*/*.md src/content/*/*.mdx; do
+            [ -e "$f" ] || continue
+            n=$(awk '/^sources:/{flag=1;next}/^[a-zA-Z]/{flag=0}flag&&/^  - /{c++}END{print c+0}' "$f")
+            if [ "$n" -eq 0 ]; then
+              echo "::error file=atlas/$f::no sources recorded; attribution is required"
+              fail=1
+            fi
+          done
+          [ "$fail" -eq 0 ] && echo "every article carries attribution"
+          exit "$fail"
+
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet pyyaml
+
+      - name: Python syntax
+        run: python -m compileall -q pipeline
+
+      - name: Pipeline configuration is valid YAML
+        run: |
+          python - <<'PY'
+          import yaml
+          from pathlib import Path
+          for p in sorted(Path("pipeline").rglob("*.yaml")):
+              list(yaml.safe_load_all(p.read_text()))
+              print("ok", p)
+          PY
+
+      - name: Registry is valid JSON
+        run: python -c "import json;json.load(open('pipeline/registry.json'));print('registry ok')"

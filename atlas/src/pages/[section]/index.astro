@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getPublished, SECTION_META, LEVEL_ORDER, minutesFor } from '../../lib/content';
+import type { CollectionKey } from 'astro:content';
+
+export async function getStaticPaths() {
+  const sections = Object.keys(SECTION_META);
+  return sections.map((section) => ({ params: { section } }));
+}
+
+const { section } = Astro.params;
+const meta = SECTION_META[section];
+const entries = await getPublished(section as CollectionKey);
+
+// Sort by level then reading time for a gentle learning gradient.
+entries.sort((a, b) => {
+  const la = LEVEL_ORDER[(a.data as any).level] ?? 9;
+  const lb = LEVEL_ORDER[(b.data as any).level] ?? 9;
+  if (la !== lb) return la - lb;
+  return minutesFor(a) - minutesFor(b);
+});
+
+const levels = ['beginner', 'intermediate', 'advanced'] as const;
+---
+
+<BaseLayout title={meta.label} description={meta.blurb}>
+  <section class="relative overflow-hidden border-b border-[var(--color-line)]">
+    <div class="grid-texture absolute inset-0"></div>
+    <div class="relative mx-auto max-w-6xl px-5 py-14">
+      <p class="font-mono text-sm" style={`color:${meta.accent}`}>{meta.icon} {section}</p>
+      <h1 class="mt-2 text-4xl font-bold tracking-tight text-[var(--color-fog-100)]">{meta.label}</h1>
+      <p class="mt-3 max-w-2xl text-lg text-[var(--color-fog-300)]">{meta.blurb}</p>
+      <p class="mt-4 font-mono text-xs text-[var(--color-fog-400)]">{entries.length} article{entries.length === 1 ? '' : 's'}</p>
+    </div>
+  </section>
+
+  <div class="mx-auto max-w-6xl px-5 py-10">
+    {entries.length === 0 ? (
+      <div class="card p-8 text-center text-[var(--color-fog-400)]">
+        <p>No published articles here yet.</p>
+        <p class="mt-2 text-sm">The ingestion pipeline plans new content on each run — check back soon.</p>
+      </div>
+    ) : (
+      <div class="space-y-10">
+        {levels.map((lvl) => {
+          const group = entries.filter((e) => (e.data as any).level === lvl);
+          if (group.length === 0) return null;
+          return (
+            <div>
+              <h2 class:list={['chip', `level-${lvl}`, 'text-sm']}>{lvl}</h2>
+              <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {group.map((entry) => <ArticleCard entry={entry} />)}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    )}
+  </div>
+</BaseLayout>

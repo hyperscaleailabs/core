@@ -1,0 +1,23 @@
+---
+import { getCollection, type CollectionEntry, type CollectionKey } from 'astro:content';
+import ArticleLayout from '../../layouts/ArticleLayout.astro';
+import { SECTION_META } from '../../lib/content';
+
+export async function getStaticPaths() {
+  const sections = Object.keys(SECTION_META) as CollectionKey[];
+  const grouped = await Promise.all(sections.map((s) => getCollection(s)));
+  const entries = grouped.flat() as CollectionEntry<CollectionKey>[];
+  return entries.map((entry) => ({
+    params: { section: entry.collection, slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+type Props = { entry: CollectionEntry<CollectionKey> };
+const { entry } = Astro.props as Props;
+const { Content, headings } = await entry.render();
+---
+
+<ArticleLayout entry={entry} headings={headings}>
+  <Content />
+</ArticleLayout>

@@ -24,6 +24,15 @@ node_modules/
 .npm/
 *.tsbuildinfo
 
+# Astro / Vercel build state (atlas). `dist/` is covered above; these are the
+# generated caches and deploy scratch that must never reach a public tree.
+.astro/
+.vercel/
+
+# Atlas ingestion cache: snapshots of fetched sources, regenerated each run.
+atlas/pipeline/cache/*
+!atlas/pipeline/cache/.gitkeep
+
 # Env and local secrets (never committed, also caught by policy checks)
 .env
 .env.*
