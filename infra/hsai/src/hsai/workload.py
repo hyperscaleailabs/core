@@ -43,6 +43,8 @@ def deploy_model(
         run_kubectl(kubeconfig, ["apply", "-k", str(models_root / "deploy/k3s/base")])
     ]
     if model in GPU_MODELS:
+        _require_gpu(kubeconfig)
+        _require_secret(kubeconfig, "hyperswarm-models", "hf-token")
         for other in sorted(GPU_MODELS - {model}):
             try:
                 run_kubectl(
@@ -81,6 +83,24 @@ def deploy_model(
         )
     )
     return events
+
+
+def _require_gpu(kubeconfig: Path) -> None:
+    output = run_kubectl(kubeconfig, ["get", "nodes", "-o", "json"])
+    payload = json.loads(output)
+    capacity = sum(
+        int(node.get("status", {}).get("allocatable", {}).get("nvidia.com/gpu", 0))
+        for node in payload.get("items", [])
+    )
+    if capacity < 1:
+        raise WorkloadError(
+            "cluster has no allocatable nvidia.com/gpu resource; "
+            "repair the driver, container toolkit, and device plugin"
+        )
+
+
+def _require_secret(kubeconfig: Path, namespace: str, name: str) -> None:
+    run_kubectl(kubeconfig, ["-n", namespace, "get", f"secret/{name}"])
 
 
 def smoke_model(kubeconfig: Path, models_root: Path, model: str) -> str:
