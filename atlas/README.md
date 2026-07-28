@@ -9,5 +9,14 @@ learned, experiment results, and webinar recordings.
   later migrated into the shared k3d deployment where it makes sense.
 - Incorporated work is referenced with careful attention to its original license.
 
-Status: placeholder. Structure and code migrate here in upcoming iterations.
+## Article intake
+
+Per-project articles land in `articles/<YYYY-MM-DD>-<project>/` as `article.md`
+(Architect and PM audiences) plus `linkedin.md` (CTO / Architect / PM variant),
+produced by the RESEARCHER/PUBLISHER stage of the
+[project lifecycle](../sdlc/LIFECYCLE.md#stages). Daily and weekly publications
+(whitepapers, decks, digests) join here as their cadences activate. First
+article: [2026-07-28-models-integration](articles/2026-07-28-models-integration/article.md).
+
+Status: article intake active; app structure and code migrate here in upcoming iterations.
 See the root [README](../README.md) for repository rules (public repo: no PII, squash merges, policy checks required).
