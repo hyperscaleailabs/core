@@ -6,21 +6,31 @@ every artifact links back toward its anchors. Agents do not scan the tree;
 they **traverse the graph** and pull only the context the current project
 phase requires.
 
+**Always start at the root README** - for reading and for writing. Its
+[Start here](../README.md#start-here) block fetches the graph, the axis, the
+strategic directions, the relevant agents, and the relevant skills, and gives
+the SDLC guidance in one paragraph. Any change to documentation begins there
+too: before committing, confirm the documents you touched still trace from
+the root README and that nothing in it became inconsistent with them.
+
 ## Nodes and edges
 
 ```text
 root README.md  (entrance)
   -> AXIS.md / MISSION.md / docs/strategic/   (direction)
-  -> sdlc/                                    (method: levels, stages, this file)
+  -> sdlc/                                    (method: levels, stages, this file;
+                                               process lessons in sdlc/docs/lessons/)
   -> executive/                               (CEO / CTO standing validation)
   -> <module>/README.md                       (one per top-level directory)
-       -> <module>/ACCEPTANCE.md              (acceptance criteria template)
-       -> <module>/docs/                      (module docs, evidence, lessons)
+       -> <module>/ACCEPTANCE.md              (acceptance criteria template
+                                               + module-specific adjustments)
+       -> <module>/docs/                      (articles, evidence, lessons)
   -> projects: GitHub issues                  (one issue per project)
-       <-> PRs (Issue: #N)                    (implementation + review trail)
+       <-> PRs (Issue: #N, module-bounded)    (implementation + review trail)
        -> evidence (SHA-pinned links)
-       -> article                             (published to Atlas)
-docs/lessons/  (repo-wide lessons; module lessons live in the module)
+       -> article + post                      (<module>/docs/articles/<date>-<project>/,
+                                               triggers Atlas)
+docs/  (cross-module only: strategic/, adr/, projects/ whitepapers, weekly/ digests)
 ```
 
 Edges are ordinary markdown links and the `Issue: #N` field on PRs. Both are
@@ -30,11 +40,14 @@ guarded: `tools/policy/check_links.sh` (files and anchors) and
 ## Placement rules
 
 - **Module-specific artifacts live in the module.** Evidence about a module's
-  behavior (a training run, a benchmark, a module CI run) goes to
-  `<module>/docs/evidence/`; module lessons to `<module>/docs/lessons/`.
-- **Repo-level artifacts live at the top.** Evidence about the process or
-  spanning modules (policy runs, PR discipline, cross-module integration)
-  goes to `docs/evidence/`; process lessons to `docs/lessons/`.
+  behavior or its projects (a training run, a benchmark, a module CI run, the
+  project's process evidence) goes to `<module>/docs/evidence/`; module
+  lessons to `<module>/docs/lessons/`; project articles to
+  `<module>/docs/articles/<date>-<project>/` (`article.md` + `post.md`).
+- **Top-level `docs/` holds only cross-module content**: strategy
+  (`docs/strategic/`), repo-shaping ADRs (`docs/adr/`), cross-module project
+  whitepapers (`docs/projects/`), and weekly publications (`docs/weekly/`).
+  Process lessons live with the process in `sdlc/docs/lessons/`.
 - A misplaced artifact is a broken edge: it will not be found from the node
   that needs it. Placement is reviewed in the cleanup-and-refinement stage of
   every project.

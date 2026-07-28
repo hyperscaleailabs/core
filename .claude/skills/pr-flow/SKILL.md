@@ -36,7 +36,7 @@ a second one before the first merges.
    the weaker of the two.
 5. **Open the PR**: push the branch, then create the PR with a body following
    .github/PULL_REQUEST_TEMPLATE.md - all five sections filled, criteria as
-   checkboxes, evidence linked (artifacts committed under docs/evidence/).
+   checkboxes, evidence linked (artifacts committed under the touched module's docs/evidence/).
 6. **Get CI green**: both required checks (`pii-and-secrets`, `pr-discipline`)
    plus any others. Fix and push until green; never hand a red PR to the Architect.
 7. **Hand off to the Architect**: post a short review request summarizing which

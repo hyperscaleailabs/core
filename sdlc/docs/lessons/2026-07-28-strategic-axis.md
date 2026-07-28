@@ -23,7 +23,7 @@ case-folding, whitespace collapsing - is part of the rule. The documented
 pre-push check must be at least as strict as the CI gate, never merely similar.
 
 **Codified:** `email-address-urlencoded` pattern in
-[tools/policy/check_pii.sh](../../tools/policy/check_pii.sh), landed in the same
+[tools/policy/check_pii.sh](../../../tools/policy/check_pii.sh), landed in the same
 PR that found it, with a negative test showing it fires on `%40` content.
 
 ## L2. Documentation criteria need artifact evidence, not prose
@@ -38,7 +38,7 @@ diff" is an assertion until something points at where.
 anchor or quoted line, the same standard a behavioral criterion meets with a
 command transcript. Existence is not evidence of content.
 
-**Codified:** [.claude/skills/pr-verify/SKILL.md](../../.claude/skills/pr-verify/SKILL.md)
+**Codified:** [.claude/skills/pr-verify/SKILL.md](../../../.claude/skills/pr-verify/SKILL.md)
 check 2 now names the artifact-plus-anchor form for documentation criteria.
 
 ## L3. The flow assumes branch-then-implement
@@ -53,7 +53,7 @@ produced an empty branch beside the real changes.
 serves that purpose equally when the work already exists. The step to never skip
 is the Architect framing, not the worktree mechanics.
 
-**Codified:** [.claude/skills/pr-flow/SKILL.md](../../.claude/skills/pr-flow/SKILL.md)
+**Codified:** [.claude/skills/pr-flow/SKILL.md](../../../.claude/skills/pr-flow/SKILL.md)
 step 2 now covers adopting pre-existing working-tree changes.
 
 ## L4. Mandatory local tooling was absent, and the flow had no fallback
@@ -69,7 +69,7 @@ tool is missing. Silently skipping is a fabricated pass; installing tooling
 unasked is a side effect the contributor did not request. Reproducing the hooks
 and disclosing which documented check did not run is the honest third option.
 
-**Codified:** [.claude/skills/pr-flow/SKILL.md](../../.claude/skills/pr-flow/SKILL.md)
+**Codified:** [.claude/skills/pr-flow/SKILL.md](../../../.claude/skills/pr-flow/SKILL.md)
 step 4 now states the fallback and the disclosure requirement.
 
 ## L5. Imported research carries third-party PII
@@ -99,6 +99,6 @@ gate it can attach to in the same change. A policy landing without an enforcemen
 point should be treated as unlanded.
 
 **Codified:** `Horizon:` field in
-[.github/PULL_REQUEST_TEMPLATE.md](../../.github/PULL_REQUEST_TEMPLATE.md), guard
-in [.github/workflows/sdlc.yml](../../.github/workflows/sdlc.yml), standing rule in
-[sdlc/LIFECYCLE.md](../../sdlc/LIFECYCLE.md), framing step in `pr-flow`.
+[.github/PULL_REQUEST_TEMPLATE.md](../../../.github/PULL_REQUEST_TEMPLATE.md), guard
+in [.github/workflows/sdlc.yml](../../../.github/workflows/sdlc.yml), standing rule in
+[sdlc/LIFECYCLE.md](../../../sdlc/LIFECYCLE.md), framing step in `pr-flow`.

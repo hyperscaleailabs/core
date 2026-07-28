@@ -46,7 +46,7 @@ A checkpoint that changes nothing is a finding worth recording, not a skipped st
   that cannot be traced is not started.
 - **Up**: the strategic level never reads raw PRs. It consumes the aggregate -
   daily whitepapers, weekly digests, the monthly architecture review, and the
-  [lessons](../docs/lessons/) carried in project articles - so realignment is
+  [lessons](docs/lessons/) carried in project articles - so realignment is
   informed by what was actually built and learned, not by what was planned.
 - If work repeatedly fights the axis, that is a signal to realign the axis, not to
   quietly ignore it.

@@ -8,6 +8,33 @@ governance, shared tooling, and strict hygiene rules suitable for a public repos
 
 License: Apache-2.0 by default (see [Licensing](#licensing) for subproject specifics).
 
+## Start here
+
+This README is the **entrance node of the repository graph**: every document
+traces from here, and every update to the repository starts here - confirm the
+changed nodes are reachable from this file and introduce no inconsistency.
+Before any work, fetch in this order:
+
+| Fetch | Where | What it gives you |
+|-------|-------|-------------------|
+| **The graph** | [sdlc/GRAPH.md](sdlc/GRAPH.md) | How to traverse the repo and pull per-stage context; placement rules; compaction |
+| **The axis** | [AXIS.md](AXIS.md) | Compressed direction and the 80/15/5 effort weighting |
+| **Strategic directions** | [docs/strategic/DIRECTION.md](docs/strategic/DIRECTION.md), [docs/strategic/](docs/strategic/) | Horizons, research evidence, strategic packages |
+| **Relevant agents** | [AGENTS.md](AGENTS.md) (contract), [executive/](executive/) (CEO/CTO validation), role groups in [sdlc/LIFECYCLE.md](sdlc/LIFECYCLE.md) | Who does what, by role |
+| **Relevant skills** | [`.claude/skills/`](.claude/skills/): `pr-flow`, `pr-verify`, `lessons` | Executable procedures for the cycle |
+
+**SDLC in one paragraph**: work runs on the [four-level lifecycle](sdlc/README.md)
+(strategic / tactical / daily / project). A project is a GitHub issue with a
+links-only alignment header, executed as module-bounded PRs through the
+[staged flow](sdlc/LIFECYCLE.md#stages) - Architect intent, MGMT documents,
+BUILDER implementation, QA with **regression testing** (extensive for the
+modified module, including the product screenshot and pipeline regression;
+lighter API-level regression across all modules), cleanup and refinement,
+acceptance review on the issue trail, article + post published from the owning
+module, MGMT final review, squash merge. Evidence or it didn't happen. Module
+READMEs carry the module-specific SDLC adjustments
+(e.g. [models/ACCEPTANCE.md](models/ACCEPTANCE.md)).
+
 ## Mission and direction
 
 > **Biological and synthetic intelligence expanding together toward the stars.**
@@ -65,21 +92,18 @@ Everything realigns to the axis, including the axis itself: it is re-derived fro
 market research roughly every six months and logged in
 [DIRECTION.md](docs/strategic/DIRECTION.md#realignment-log).
 
-This README is the **entrance node of the repository graph**
-([sdlc/GRAPH.md](sdlc/GRAPH.md)): from here, links trace into each module's
-`README.md` and `ACCEPTANCE.md`, from modules into projects (GitHub issues),
-and from projects into PRs, evidence, and articles. Agents pull context by
-traversing this graph, not by scanning the tree. Every project passes QA with
-a compact **regression test** at module-appropriate scale before merge; the
-regression output is attached as evidence.
+From this entrance node ([Start here](#start-here)), links trace into each
+module's `README.md` and `ACCEPTANCE.md`, from modules into projects (GitHub
+issues), and from projects into PRs, evidence, and articles. Agents pull
+context by traversing the graph, not by scanning the tree.
 
 ## Subprojects
 
 | Directory | Project | Focus |
 |-----------|---------|-------|
 | [`apps/`](apps/) | Apps | Flagship applications built on the core platform. [AstraGrid](apps/astragrid/README.md), a voice-controlled lunar power and thermal maintenance rover, is the first; [NeuroDuet](apps/neuroduet/README.md), a language-aligned BCI simulation lab, is proposed. Apps consume core capabilities through contracts; core never imports app code |
-| [`sdlc/`](sdlc/) | SDLC | Software development lifecycle: top-level loops for all subprojects, agentic engineering workflows, rotating AI Architect PR reviews, delivery automation |
-| [`models/`](models/) | Models | Model training, benchmarking, optimization, and inference serving. Produced models are consumed by the other subprojects |
+| [`sdlc/`](sdlc/) | SDLC | The four-level lifecycle and staged project flow (Human Architect + MGMT / BUILDER / QA / RESEARCHER-PUBLISHER agent groups), the repository graph, process lessons, delivery automation |
+| [`models/`](models/) | Models | Model training, benchmarking, optimization, and inference serving on golden datasets, with its own CI/CD DAG and regression baseline. Produced models are consumed by the other subprojects |
 | [`prod/`](prod/) | Prod | Simulation, evaluation, release, and observability. Split into `ui/`, `backend/`, and `platform/` (Kafka services, data plane with telemetry, ClickHouse, presentation via Superset and Grafana) |
 | [`meet/`](meet/) | Meet | LiveKit / SFU based video conferencing system with pluggable LiveKit agents and pixel streaming integrated in the browser |
 | [`agents/`](agents/) | Agents | Agent services: APIs plus LiveKit agents. Starts with a text agent, extends to voice (Ultravox plus Kokoro direction), aiming at a generalist agent pipeline pluggable into Meet |
@@ -88,8 +112,10 @@ regression output is attached as evidence.
 | [`infra/`](infra/) | Infra | Cloud-agnostic deployment: Terraform, Kubernetes manifests, integrated k3d environments. Subprojects own their Dockerfiles and compose files; infra owns the integrated picture |
 | [`executive/`](executive/) | Executive | Standing CEO and CTO validation agents, strategic and tactical outlook material, repo-monitoring tooling |
 
-Each subproject keeps its own `README.md` and, where it deviates from the repo default,
-its own license and notice files.
+Each subproject keeps its own `README.md` - which may carry module-specific
+SDLC adjustments on top of the [generic process template](sdlc/LIFECYCLE.md)
+(its `ACCEPTANCE.md` criteria, CI/CD DAG, regression definition) - and, where
+it deviates from the repo default, its own license and notice files.
 
 ## Tech stack
 
@@ -172,8 +198,9 @@ not a follow-up commit. Treat prevention as the only cheap option.
 - `main` is protected. No direct pushes; all changes arrive via pull request.
 - Squash merge only. History on `main` stays linear, one commit per PR.
 - Required checks (policy scan, lint, tests) must pass before merge.
-- PRs should be scoped to one subproject where possible. Cross-cutting changes state
-  their blast radius explicitly in the description.
+- PRs are **module-bounded** (one subproject or app per PR) to keep boundaries
+  clear and avoid coupling; genuinely cross-module changes state their blast
+  radius explicitly and publish to [docs/projects/](docs/projects/).
 - No merge commits from long-lived divergent branches; rebase before merging.
 
 ## Licensing
@@ -195,8 +222,11 @@ not a follow-up commit. Treat prevention as the only cheap option.
 | [docs/strategic/DIRECTION.md](docs/strategic/DIRECTION.md) | Directional axis: mission, vision, and the short/mid/long horizons, realigned each research cycle |
 | [docs/strategic/](docs/strategic/) | Strategic packages: market research, PRDs, reference architectures, plans, and handoffs per initiative |
 | [docs/adr/](docs/adr/) | Architecture decision records |
-| [docs/lessons/](docs/lessons/) | Lessons learned per review round or merge |
+| [docs/projects/](docs/projects/), [docs/weekly/](docs/weekly/) | Cross-module publications: project whitepapers; weekly digests as short books |
+| [sdlc/GRAPH.md](sdlc/GRAPH.md) | The repository graph: traversal, placement rules, compaction |
+| [sdlc/docs/lessons/](sdlc/docs/lessons/) | Process lessons; module lessons live in `<module>/docs/lessons/` |
 | [sdlc/](sdlc/) | Lifecycle, workflows, and delivery automation |
+| [executive/](executive/) | CEO and CTO standing validation charters and repo monitoring |
 
 ## Getting started
 

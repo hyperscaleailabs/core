@@ -5,11 +5,14 @@ Canonical agent contract for this repository, vendor-neutral.
 
 ## Read first, in order
 
-1. **[AXIS.md](AXIS.md)** - direction and effort weighting. Every unit of work
+1. **[README.md](README.md#start-here)** - the entrance node of the
+   repository graph. Always start here, for reading and writing: fetch the
+   graph, the axis, the strategic directions, the relevant agents and skills.
+2. **[AXIS.md](AXIS.md)** - direction and effort weighting. Every unit of work
    declares a horizon (short 80% / mid 15% / long 5%). Ambiguous work defaults to
    short. Mid-horizon work without its short-horizon foundation is deferred, not
    started.
-2. **[sdlc/LIFECYCLE.md](sdlc/LIFECYCLE.md)** - how ALL work here is organized.
+3. **[sdlc/LIFECYCLE.md](sdlc/LIFECYCLE.md)** - how ALL work here is organized.
    Current mode: one PR at a time. It is the project level of the four-level
    SDLC (strategic / tactical / daily / project, [sdlc/README.md](sdlc/README.md)).
 
