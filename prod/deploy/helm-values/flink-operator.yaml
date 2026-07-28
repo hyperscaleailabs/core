@@ -1,0 +1,19 @@
+# Values for the Flink Kubernetes Operator (helm chart: flink-operator-repo/flink-kubernetes-operator).
+# Install:
+#   helm repo add flink-operator-repo https://downloads.apache.org/flink/flink-kubernetes-operator-1.9.0/
+#   helm upgrade --install flink-operator flink-operator-repo/flink-kubernetes-operator \
+#     -n data --create-namespace -f deploy/helm-values/flink-operator.yaml
+# The operator then reconciles deploy/k3s/components/flink/flinkdeployment.yaml.
+watchNamespaces:
+  - data
+defaultConfiguration:
+  create: true
+  append: true
+  flink-conf.yaml: |
+    kubernetes.operator.reconcile.interval: 15 s
+    kubernetes.operator.observer.progress-check.interval: 5 s
+operatorPod:
+  resources:
+    requests:
+      cpu: "250m"
+      memory: "512Mi"

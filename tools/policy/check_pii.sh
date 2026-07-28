@@ -9,7 +9,12 @@
 
 set -euo pipefail
 
-ALLOW_RE='example\.(com|org|net)|users\.noreply\.github\.com|/(Users|home)/(runner|worker|app|service|node|ci|ubuntu|user|example)\b|/(Users|home)/\.\.\.|[Cc]:\\+Users\\+\.\.\.'
+# In-cluster Kubernetes service DNS (<svc>.<ns>.svc.cluster.local) appears inside
+# connection URIs of the form scheme://user:password@host, which the email pattern
+# cannot distinguish from an address. The suffix is reserved by Kubernetes and can
+# never be a real mail domain, so allowing it costs no coverage. Credentials in such
+# URIs are caught by gitleaks, not by the email rule.
+ALLOW_RE='example\.(com|org|net)|users\.noreply\.github\.com|\.svc\.cluster\.local|/(Users|home)/(runner|worker|app|service|node|ci|ubuntu|user|example)\b|/(Users|home)/\.\.\.|[Cc]:\\+Users\\+\.\.\.'
 
 # pattern id : regex
 PATTERNS=(
@@ -55,13 +60,15 @@ scan_file_list() {
   while IFS= read -r f; do
     [ -z "$f" ] && continue
     if printf '%s' "$f" | grep -qE "$SELF_PATHS"; then continue; fi
+    [ "$source" = "staged" ] || [ -f "$f" ] || continue
+    # Test for binary before reading: slurping a binary into a shell variable emits
+    # "ignored null byte" warnings that bury real violations in the output.
+    if is_binary "$source" "$f"; then continue; fi
     if [ "$source" = "staged" ]; then
       content=$(git show ":$f" 2>/dev/null || true)
     else
-      [ -f "$f" ] || continue
       content=$(cat "$f")
     fi
-    if is_binary "$source" "$f"; then continue; fi
     scan_text "$f" "$content"
   done
 }

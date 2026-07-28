@@ -1,0 +1,28 @@
+# Idempotently create the four event-backbone topics (ASC-020). Run after Kafka is ready.
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kafka-topic-bootstrap
+  namespace: data
+spec:
+  backoffLimit: 6
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: create-topics
+          image: apache/kafka:3.8.1
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              set -e
+              TT=/opt/kafka/bin/kafka-topics.sh
+              BS="kafka.data.svc.cluster.local:9092"
+              until "$TT" --bootstrap-server "$BS" --list >/dev/null 2>&1; do
+                echo "waiting for kafka..."; sleep 5;
+              done
+              for t in sim.iteration.events.v1 sim.run.control.v1 sim.failure.stats.v1 sim.deadletter.v1; do
+                "$TT" --bootstrap-server "$BS" --create --if-not-exists \
+                  --topic "$t" --partitions 3 --replication-factor 1
+              done
+              echo "topics ready:"; "$TT" --bootstrap-server "$BS" --list

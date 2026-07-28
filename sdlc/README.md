@@ -19,6 +19,12 @@ Every level is **templated**: the initial templates are extracted from documents
 already in the repository (starting with the strategic packages) and improved
 with each iteration.
 
+The project level ends at a squash merge; [PROMOTION.md](PROMOTION.md) covers what
+happens after it - the environment ladder, the release evidence packet, deployment
+and rollback classes, and the observability gates every module inherits. It is
+cross-cutting rather than a fifth level: each of the four levels can trigger it, and
+every module instantiates its gates in its own `ACCEPTANCE.md`.
+
 The repository itself is navigated as a graph with the root README as the
 entrance node: [GRAPH.md](GRAPH.md) defines the nodes, placement rules,
 per-stage context pulling, and the compaction cadence.
@@ -58,8 +64,13 @@ Highest level loops, each with its own sub-loops:
 2. **Models**: a group of agents training, benchmarking, and optimizing models, with
    explicit work planning, execution, and acceptance criteria at the end. Accepted
    models are published for use by the other subprojects.
-3. **Prod**: pre-release simulation with internal dashboard and configuration,
-   promotion to canary, then ramped-up production.
+3. **Prod** ([prod/](../prod/README.md)): the Agent Simulation Control Plane -
+   pre-release simulation of non-deterministic agents under injected failures,
+   returning an explainable release decision, with the internal operator console
+   and the Kafka/Flink/ClickHouse/Superset/OTel/Grafana data and observability
+   planes. Promotion to canary and ramped production follows
+   [PROMOTION.md](PROMOTION.md); acceptance criteria in
+   [prod/ACCEPTANCE.md](../prod/ACCEPTANCE.md).
 4. **Agents**: run as APIs and LiveKit agents, pluggable and configurable into Meet.
 5. **D-twins**: containerized service with autoscale and startup/shutdown orchestration
    via API and command line, operable by agents.

@@ -1,0 +1,255 @@
+name: prod
+
+on:
+  pull_request:
+    paths:
+      - "prod/**"
+      - ".github/workflows/prod.yml"
+  push:
+    branches: [main]
+    paths:
+      - "prod/**"
+      - ".github/workflows/prod.yml"
+  schedule:
+    # Deployed evidence on an ephemeral cluster: too heavy per-PR, run nightly.
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: prod
+
+jobs:
+  static-checks:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install check dependencies
+        run: pip install --quiet ruff pyyaml
+
+      - name: Ruff format
+        run: ruff format --check packages services stream tests conftest.py scripts
+
+      - name: Ruff lint
+        run: ruff check packages services stream tests conftest.py scripts
+
+      - name: Shell syntax
+        run: |
+          for f in deploy/scripts/*.sh; do bash -n "$f"; done
+
+      # Was a Makefile target only, and had been failing unnoticed against a docs
+      # layout that changed under it. A check nobody runs is not a check.
+      - name: Handoff package intact
+        run: python scripts/verify_package.py
+
+      - name: YAML validity
+        run: |
+          python - <<'PY'
+          import sys
+          from pathlib import Path
+          import yaml
+          bad = 0
+          for p in sorted(Path(".").rglob("*.yaml")):
+              if "dashboards/superset" in str(p):
+                  continue  # Superset exports embed JSON blobs; validated by the import job
+              try:
+                  list(yaml.safe_load_all(p.read_text()))
+              except yaml.YAMLError as exc:
+                  print(f"::error file={p}::{exc}")
+                  bad = 1
+          sys.exit(bad)
+          PY
+
+  contracts:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet pydantic
+      - name: Domain schemas match the checked-in contracts
+        run: python scripts/check_schemas.py
+
+  unit-tests:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet pytest pytest-cov pydantic fastapi httpx opentelemetry-sdk
+      - name: Unit tests
+        run: |
+          pytest packages services stream -q \
+            --cov=asc_domain --cov=asc_gate_engine --cov=asc_kernel --cov=asc_telemetry \
+            --cov=asc_worker --cov=asc_orchestrator --cov=asc_control_api --cov=asc_mcp_proxy \
+            --cov=asc_aggregation --cov=asc_flink --cov-report=term-missing
+      - name: In-process golden e2e
+        run: pytest tests/e2e -q
+
+  # The self-gate: the release-gating simulator runs in its own pipeline
+  # (sdlc/PROMOTION.md). The decision is evidence, and drift against the accepted
+  # baseline fails the build - a baseline nothing compares against is not a baseline.
+  golden-workflow:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet pydantic
+
+      - name: Run the golden Purchase Ambiguity workflow
+        run: python tests/e2e/golden_runner.py --iterations 1000 --out artifacts/golden | tee golden.txt
+
+      - name: Release decisions match the accepted baseline
+        run: |
+          if ! git diff --quiet -- artifacts/golden; then
+            echo "::error::the golden release decisions drifted from the committed baseline"
+            git diff -- artifacts/golden
+            echo ""
+            echo "If the change is intended, commit the regenerated decisions and say why in the PR."
+            exit 1
+          fi
+          echo "release decisions reproduce the accepted baseline exactly"
+
+      - name: Job summary
+        if: always()
+        run: |
+          {
+            echo "### Golden Purchase Ambiguity release decision"
+            echo '```'
+            cat golden.txt 2>/dev/null || echo "no output"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload release decisions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-decisions
+          path: prod/artifacts/golden/*.json
+          if-no-files-found: error
+
+  prod-policy-guards:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: No hardcoded org container registries
+        run: |
+          # registry references stay configurable; the k3d-local registry is the
+          # only concrete name allowed, and only in deploy scripts and manifests
+          if grep -rn --include='*.yaml' --include='*.py' --include='*.sh' --include='*.md' \
+               -e 'ghcr\.io/' -e '[a-z0-9-]*\.pkg\.dev/' -e 'docker\.io/hyperscale' . ; then
+            echo "::error::hardcoded container registry reference found; use a configurable registry"
+            exit 1
+          fi
+          echo "no hardcoded registries"
+
+      - name: No committed run artifacts, kubeconfigs, or archives
+        working-directory: .
+        run: |
+          if git ls-files prod | grep -E '\.(zip|tar|tgz|safetensors|ckpt|pt|pth)$|/\.kube/|^prod/\.venv/'; then
+            echo "::error::archive, checkpoint, or kubeconfig committed under prod/"
+            exit 1
+          fi
+          echo "clean"
+
+      - name: No absolute home-directory paths (PII guard)
+        run: |
+          if grep -rnE '/(Users|home)/[a-z0-9_-]+/' \
+               --include='*.md' --include='*.yaml' --include='*.py' --include='*.sh' --include='*.json' . ; then
+            echo "::error::absolute home-directory path committed; use repo-relative paths"
+            exit 1
+          fi
+          echo "no home paths"
+
+      - name: Exported dashboards carry no unmasked database password
+        run: |
+          # grep -E has no negative lookahead: match every credentialed URI, then drop
+          # the ones whose password is Superset's export mask.
+          if grep -rnE 'sqlalchemy_uri:.*://[^:/]+:[^@]+@' dashboards/ 2>/dev/null \
+               | grep -v ':XXXXXXXXXX@'; then
+            echo "::error::unmasked credential in an exported dashboard; re-export (Superset masks it)"
+            exit 1
+          fi
+          echo "dashboard credentials masked"
+
+  terraform-validate:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+      - name: Format and validate (never apply - apply is human-gated)
+        working-directory: prod/infra/terraform/gcp
+        run: |
+          terraform fmt -check -recursive
+          terraform init -backend=false
+          terraform validate
+
+  # Nightly and on demand: the full chain on an ephemeral cluster. See
+  # docs/design/CICD_STRATEGY.md for why this is not a per-PR job.
+  deployed-evidence:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install k3d
+        run: curl -s https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+
+      - name: Create cluster
+        run: bash deploy/scripts/cluster-up.sh e2e
+
+      - name: Build and import service images
+        run: bash deploy/scripts/build-images.sh
+
+      - name: Deploy the stack (lite overlay)
+        run: |
+          kubectl apply -k deploy/k3s/apps/overlays/lite
+          kubectl -n platform rollout status deploy/control-api --timeout=300s
+          bash deploy/scripts/deploy-lite.sh
+
+      - name: Provision Superset dashboards from the repo
+        run: bash deploy/scripts/import-superset-dashboards.sh || true
+
+      - name: Collect per-hop evidence
+        env:
+          CTX: k3d-e2e
+        run: bash deploy/scripts/collect-evidence.sh --out /tmp/deployed-evidence.md
+
+      - name: Job summary
+        if: always()
+        run: cat /tmp/deployed-evidence.md >> "$GITHUB_STEP_SUMMARY" || true
+
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: deployed-evidence
+          path: /tmp/deployed-evidence.md
+          if-no-files-found: warn
+
+      - name: Teardown
+        if: always()
+        run: k3d cluster delete e2e || true

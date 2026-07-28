@@ -1,0 +1,70 @@
+# ClickHouse (arm64-native) as the OLAP store for Superset (ADR-0004 alternative to Druid, which
+# ships no arm64 image). A Kafka-engine table + materialized view ingest the Flink failure-stats
+# stream (sim.failure.stats.v1) into a queryable MergeTree table.
+apiVersion: v1
+kind: ConfigMap
+metadata: { name: clickhouse-init, namespace: data }
+data:
+  init.sql: |
+    CREATE TABLE IF NOT EXISTS default.failure_stats_queue (
+      runId String, failureClassification String, windowStart String, windowEnd String,
+      `count` UInt64, p95LatencyMs Float64, retryRate Float64, duplicateTransactionRisk UInt64
+    ) ENGINE = Kafka SETTINGS
+      kafka_broker_list = 'kafka.data.svc.cluster.local:9092',
+      kafka_topic_list = 'sim.failure.stats.v1',
+      kafka_group_name = 'clickhouse-failure-stats',
+      kafka_format = 'JSONEachRow',
+      kafka_skip_broken_messages = 1000,
+      input_format_skip_unknown_fields = 1;
+
+    CREATE TABLE IF NOT EXISTS default.failure_stats (
+      runId String, failureClassification String, windowStart String, windowEnd String,
+      `count` UInt64, p95LatencyMs Float64, retryRate Float64, duplicateTransactionRisk UInt64,
+      ingested_at DateTime DEFAULT now()
+    ) ENGINE = MergeTree ORDER BY (runId, failureClassification, windowStart);
+
+    CREATE MATERIALIZED VIEW IF NOT EXISTS default.failure_stats_mv TO default.failure_stats AS
+    SELECT runId, failureClassification, windowStart, windowEnd,
+           `count`, p95LatencyMs, retryRate, duplicateTransactionRisk
+    FROM default.failure_stats_queue;
+---
+apiVersion: v1
+kind: Service
+metadata: { name: clickhouse, namespace: data, labels: { app: clickhouse } }
+spec:
+  selector: { app: clickhouse }
+  ports:
+    - { name: http, port: 8123, targetPort: 8123 }
+    - { name: native, port: 9000, targetPort: 9000 }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: clickhouse, namespace: data, labels: { app: clickhouse } }
+spec:
+  replicas: 1
+  strategy: { type: Recreate }
+  selector: { matchLabels: { app: clickhouse } }
+  template:
+    metadata: { labels: { app: clickhouse } }
+    spec:
+      containers:
+        - name: clickhouse
+          image: clickhouse/clickhouse-server:24.8-alpine
+          ports: [ { containerPort: 8123 }, { containerPort: 9000 } ]
+          env:
+            - { name: CLICKHOUSE_DB, value: default }
+            - { name: CLICKHOUSE_USER, value: asc }
+            - { name: CLICKHOUSE_PASSWORD, value: asc }
+            - { name: CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT, value: "1" }
+          volumeMounts:
+            - { name: init, mountPath: /docker-entrypoint-initdb.d }
+          readinessProbe:
+            httpGet: { path: /ping, port: 8123 }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests: { cpu: "150m", memory: "512Mi" }
+            limits: { cpu: "2", memory: "1500Mi" }
+      volumes:
+        - name: init
+          configMap: { name: clickhouse-init }

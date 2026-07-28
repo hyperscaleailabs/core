@@ -1,0 +1,44 @@
+# kube-prometheus-stack (Prometheus + Grafana) — ASC-041/042.
+#   helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+#   helm upgrade --install kps prometheus-community/kube-prometheus-stack -n observability \
+#     -f deploy/helm-values/kube-prometheus-stack.yaml
+# Grafana dashboards + datasources are provisioned from dashboards/grafana (mounted as sidecars).
+prometheus:
+  prometheusSpec:
+    retention: 6h
+    resources:
+      requests: { cpu: "150m", memory: "512Mi" }
+    # Scrape the OTel Collector's Prometheus exporter.
+    additionalScrapeConfigs:
+      - job_name: otel-collector
+        static_configs:
+          - targets: ["otel-collector.observability.svc.cluster.local:8889"]
+
+grafana:
+  adminUser: admin
+  admin:
+    existingSecret: asc-secrets
+    userKey: GRAFANA_ADMIN_USER
+    passwordKey: GRAFANA_ADMIN_PASSWORD
+  # Discover provisioned dashboards/datasources from ConfigMaps labeled grafana_dashboard/datasource.
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      searchNamespace: observability
+    datasources:
+      enabled: true
+      label: grafana_datasource
+      searchNamespace: observability
+  additionalDataSources:
+    - name: Tempo
+      type: tempo
+      access: proxy
+      url: http://tempo.observability.svc.cluster.local:3100
+  service:
+    type: ClusterIP
+
+# k3s already ships kube-state; trim the parts that clash / aren't needed locally.
+kubeEtcd: { enabled: false }
+kubeControllerManager: { enabled: false }
+kubeScheduler: { enabled: false }

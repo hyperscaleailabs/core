@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "0.1",
+  "trajectoryId": "traj-run25-238",
+  "runId": "run-025",
+  "iteration": 238,
+  "seed": 840239,
+  "outcome": "recovered",
+  "latencyMs": 5800,
+  "costUsd": 0.14,
+  "retryCount": 0,
+  "failureType": "ambiguous_transaction",
+  "events": [
+    {
+      "type": "persona_message",
+      "content": "Purchase two tickets for Friday."
+    },
+    {
+      "type": "tool_call",
+      "tool": "check_inventory",
+      "status": "success"
+    },
+    {
+      "type": "tool_call",
+      "tool": "make_purchase",
+      "status": "timeout"
+    },
+    {
+      "type": "failure_classification",
+      "classification": "ambiguous_transaction"
+    },
+    {
+      "type": "recovery",
+      "strategy": "query_transaction_status"
+    },
+    {
+      "type": "tool_call",
+      "tool": "transaction_status",
+      "status": "purchase_confirmed"
+    },
+    {
+      "type": "final_validation",
+      "status": "passed"
+    },
+    {
+      "type": "iteration_result",
+      "status": "recovered"
+    }
+  ]
+}

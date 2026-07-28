@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: asc-config
+  namespace: platform
+data:
+  KAFKA_BOOTSTRAP: kafka.data.svc.cluster.local:9092
+  # MinIO endpoint for trajectory artifacts (ASC-023); creds come from the asc-secrets Secret.
+  MINIO_ENDPOINT: http://minio.data.svc.cluster.local:9000
+  OTEL_EXPORTER_OTLP_ENDPOINT: http://otel-collector.observability.svc.cluster.local:4317
+  OTEL_EXPORTER_OTLP_PROTOCOL: grpc
+  GRAFANA_BASE_URL: http://grafana.localhost:8080
+  SUPERSET_BASE_URL: http://superset.localhost:8080
+  # operator-web console calls control-api same-origin via the nginx /api proxy (avoids CORS and
+  # keeps the in-cluster DNS out of the browser).
+  CONTROL_API_BASE_URL: /api

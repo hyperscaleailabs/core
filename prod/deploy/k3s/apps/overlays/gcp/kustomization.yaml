@@ -1,0 +1,34 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Cloud overlay (phase 2, ASC-072). Applied only after a human enables the target
+# project and provides credentials.
+#
+# The registry is deliberately a placeholder. This repository is public and
+# cloud-agnostic: a concrete registry host is deployment-specific configuration and
+# is injected at deploy time, not committed. Point it at a real registry with
+#
+#   kustomize edit set image control-api=<registry>/control-api:<tag>
+#
+# or by layering an environment overlay that lives outside this repository (see the
+# production configuration section of the root README).
+resources:
+  - ../../../base
+
+images:
+  - name: control-api
+    newName: registry.local/control-api
+    newTag: latest
+  - name: mcp-simulator-proxy
+    newName: registry.local/mcp-simulator-proxy
+    newTag: latest
+  - name: operator-web
+    newName: registry.local/operator-web
+    newTag: latest
+
+patches:
+  - target: { kind: Ingress, name: operator-web }
+    patch: |
+      - op: replace
+        path: /spec/rules/0/host
+        value: operator.asc.example.com

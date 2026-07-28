@@ -19,6 +19,7 @@ the root README and that nothing in it became inconsistent with them.
 root README.md  (entrance)
   -> AXIS.md / MISSION.md / docs/strategic/   (direction)
   -> sdlc/                                    (method: levels, stages, this file;
+                                               PROMOTION.md past the merge;
                                                process lessons in sdlc/docs/lessons/)
   -> executive/                               (CEO / CTO standing validation)
   -> <module>/README.md                       (one per top-level directory)

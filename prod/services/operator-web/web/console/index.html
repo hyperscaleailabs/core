@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agent Simulation — Live Console</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Runtime config injected by operator-web (Grafana/Superset/control-api base URLs). -->
+  <script src="/config.js" onerror="window.ASC_CONFIG=window.ASC_CONFIG||{}"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">AS</span> Agent Simulation Control Plane <span class="tag">LIVE CONSOLE</span></div>
+    <div id="apiStatus" class="status">connecting…</div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="runs">Runs</button>
+    <button class="tab" data-tab="observability">Observability</button>
+    <a class="tab link" href="/mvp/" title="v0.1.0 design reference">Operator UI (MVP) ↗</a>
+  </nav>
+
+  <main>
+    <!-- RUNS -->
+    <section id="tab-runs" class="panel active">
+      <div class="card">
+        <h2>Run the Purchase Ambiguity workflow</h2>
+        <p class="muted">Seeds the golden experiment, runs it through the deterministic engine, and shows the explainable release decision.</p>
+        <div class="row">
+          <button id="seedBtn" class="btn">1 · Seed golden experiment</button>
+          <span id="expLabel" class="pill hidden"></span>
+        </div>
+        <div class="row controls">
+          <label>Harness
+            <select id="harness">
+              <option value="basic_retry">basic_retry (unsafe)</option>
+              <option value="transaction_safety" selected>transaction_safety (safe)</option>
+            </select>
+          </label>
+          <label>Iterations
+            <input id="iterations" type="number" value="500" min="10" max="2000" step="10" />
+          </label>
+          <button id="runBtn" class="btn primary" disabled>2 · Start run</button>
+        </div>
+      </div>
+
+      <div id="result" class="card hidden">
+        <div class="result-head">
+          <h2>Release decision</h2>
+          <span id="decisionBadge" class="badge"></span>
+        </div>
+        <div id="metrics" class="metrics"></div>
+        <table id="scorecard" class="scorecard"></table>
+        <div class="row">
+          <a id="grafanaLink" class="btn ghost" target="_blank" rel="noopener">Open in Grafana ↗</a>
+          <a id="supersetLink" class="btn ghost" target="_blank" rel="noopener">Open in Superset ↗</a>
+          <a id="exportLink" class="btn ghost" target="_blank" rel="noopener">Export result JSON ↓</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Runs this session</h2>
+        <table id="runsTable" class="scorecard"><tbody></tbody></table>
+      </div>
+    </section>
+
+    <!-- OBSERVABILITY -->
+    <section id="tab-observability" class="panel">
+      <div class="card">
+        <div class="subtabs">
+          <button class="subtab active" data-frame="grafana">Grafana</button>
+          <button class="subtab" data-frame="superset">Superset</button>
+        </div>
+        <div id="obsNote" class="muted">Dashboards load once the observability/analytics stack is deployed (Grafana/Superset). Base URLs come from operator-web config.</div>
+        <iframe id="obsFrame" class="obsframe" title="observability dashboard"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

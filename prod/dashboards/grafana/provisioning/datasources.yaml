@@ -1,0 +1,16 @@
+# Grafana datasource provisioning (ASC-042). Applied as a ConfigMap labeled grafana_datasource so
+# the kube-prometheus-stack Grafana sidecar picks it up. Prometheus + Tempo are the primary sources;
+# Druid is added for cross-panel analytical queries alongside Superset.
+apiVersion: 1
+datasources:
+  - name: Prometheus
+    uid: prometheus
+    type: prometheus
+    access: proxy
+    url: http://kps-kube-prometheus-stack-prometheus.observability.svc.cluster.local:9090
+    isDefault: true
+  - name: Tempo
+    uid: tempo
+    type: tempo
+    access: proxy
+    url: http://tempo.observability.svc.cluster.local:3100

@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "0.1",
+  "experiment": {
+    "id": "exp-purchase-v3",
+    "name": "Purchase Agent Reliability",
+    "workflowTemplate": "transactional_mcp",
+    "baselineVersion": "purchase-agent-2.4",
+    "candidateVersion": "purchase-agent-3.0",
+    "owner": "Alex Rivera"
+  },
+  "persona": {
+    "name": "Retail Customer",
+    "objective": "Purchase two tickets for Friday",
+    "initialMessage": "Purchase two tickets for Friday.",
+    "maxTurns": 8,
+    "escalation": "on_transactional_ambiguity",
+    "satisfaction": [
+      "transaction_confirmed",
+      "correct_total_returned"
+    ]
+  },
+  "assistant": {
+    "name": "Purchase Agent",
+    "model": "simulation-small-v2",
+    "promptVersion": "purchase-v3",
+    "maxSteps": 12,
+    "tools": [
+      "check_inventory",
+      "check_balance",
+      "make_purchase",
+      "transaction_status"
+    ]
+  },
+  "failureProfile": {
+    "source": "assumed",
+    "tool": "make_purchase",
+    "outcomes": {
+      "success": 0.88,
+      "insufficient_funds": 0.05,
+      "processing_delay": 0.03,
+      "service_unavailable": 0.01,
+      "timeout": 0.01,
+      "ambiguous_completion": 0.01,
+      "malformed_response": 0.01
+    },
+    "latency": {
+      "type": "percentile",
+      "p50Ms": 350,
+      "p95Ms": 2500,
+      "p99Ms": 5400,
+      "maxMs": 8000
+    }
+  },
+  "execution": {
+    "iterations": 1000,
+    "parallelism": 25,
+    "deterministicSeeds": true,
+    "cachedResources": true
+  },
+  "harnessRef": "harness-basic-retry-v1",
+  "gateSetRef": "gate-set-transaction-release-v1"
+}

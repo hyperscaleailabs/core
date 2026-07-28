@@ -1,0 +1,55 @@
+# Single-pod Apache Superset (arm64) with SQLite metadata (ephemeral) + clickhouse-connect,
+# auto-registering the ClickHouse database. Avoids the Bitnami postgres/redis subcharts. For real
+# use, the Superset Helm chart with external Postgres/Redis is the path.
+apiVersion: v1
+kind: ConfigMap
+metadata: { name: superset-boot, namespace: data }
+data:
+  boot.sh: |
+    set -e
+    pip install --no-cache-dir clickhouse-connect >/dev/null 2>&1 || pip install clickhouse-connect
+    export SUPERSET_SECRET_KEY="${SUPERSET_SECRET_KEY:-asc-demo-key-please-rotate}"
+    superset db upgrade
+    superset fab create-admin --username admin --firstname a --lastname b --email admin@example.com --password admin || true
+    superset init
+    superset set-database-uri -d ClickHouse -u "clickhousedb://asc:asc@clickhouse.data.svc.cluster.local:8123/default" || true
+    exec gunicorn -b 0.0.0.0:8088 -w 2 -k gthread --timeout 120 "superset.app:create_app()"
+---
+apiVersion: v1
+kind: Service
+metadata: { name: superset, namespace: data, labels: { app: superset } }
+spec:
+  selector: { app: superset }
+  ports: [ { name: http, port: 8088, targetPort: 8088 } ]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: { name: superset, namespace: data, labels: { app: superset } }
+spec:
+  replicas: 1
+  strategy: { type: Recreate }
+  selector: { matchLabels: { app: superset } }
+  template:
+    metadata: { labels: { app: superset } }
+    spec:
+      containers:
+        - name: superset
+          image: apache/superset:4.1.1
+          command: ["/bin/bash", "/boot/boot.sh"]
+          env:
+            - { name: SUPERSET_SECRET_KEY, value: "asc-demo-key-please-rotate" }
+            - { name: SUPERSET_LOAD_EXAMPLES, value: "no" }
+          ports: [ { containerPort: 8088 } ]
+          volumeMounts:
+            - { name: boot, mountPath: /boot }
+          readinessProbe:
+            httpGet: { path: /health, port: 8088 }
+            initialDelaySeconds: 45
+            periodSeconds: 15
+            failureThreshold: 20
+          resources:
+            requests: { cpu: "150m", memory: "512Mi" }
+            limits: { cpu: "2", memory: "1536Mi" }
+      volumes:
+        - name: boot
+          configMap: { name: superset-boot }

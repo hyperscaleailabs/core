@@ -1,0 +1,34 @@
+# Grafana alert rules (ASC-042): telemetry-pipeline health. App-level alerts (stuck runs,
+# gate-engine errors) are added as the services export custom metrics. Provisioned as a ConfigMap
+# labeled grafana_alert for the sidecar.
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: asc-telemetry
+    folder: ASC
+    interval: 1m
+    rules:
+      - uid: otel-collector-down
+        title: OTel Collector down
+        condition: A
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            model:
+              expr: absent(up{job="otel-collector"} == 1)
+              instant: true
+        for: 2m
+        labels: { severity: critical }
+        annotations: { summary: "OpenTelemetry Collector is not up — traces/metrics are being lost." }
+      - uid: no-telemetry-received
+        title: No telemetry received
+        condition: A
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            model:
+              expr: sum(rate(otelcol_receiver_accepted_spans_total[5m])) == 0
+              instant: true
+        for: 10m
+        labels: { severity: warning }
+        annotations: { summary: "No spans received in 10m — workers idle or telemetry path broken." }

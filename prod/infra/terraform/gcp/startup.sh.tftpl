@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# VM startup: mount the data disk, install k3s + helm + tooling, clone the repo, and deploy the
+# stack via the gcp overlay. Rendered by Terraform (repo_url/repo_ref injected).
+set -euxo pipefail
+
+# --- data disk at /var/lib/rancher (k3s state) ---
+DISK=/dev/disk/by-id/google-asc-data
+if ! blkid "$DISK"; then mkfs.ext4 -F "$DISK"; fi
+mkdir -p /var/lib/rancher
+echo "$DISK /var/lib/rancher ext4 defaults,nofail 0 2" >> /etc/fstab
+mount -a
+
+export DEBIAN_FRONTEND=noninteractive
+apt-get update -y
+apt-get install -y git curl ca-certificates
+
+# --- k3s (single node) ---
+curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--write-kubeconfig-mode=644" sh -
+export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
+
+# --- helm ---
+curl -fsSL https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+# --- clone + deploy ---
+git clone --branch "${repo_ref}" "${repo_url}" /opt/asc
+cd /opt/asc
+# Secrets are sourced from GCP Secret Manager by a systemd unit / the deploy step (ASC-072);
+# for the first bring-up, drop a .env fetched from Secret Manager before running deploy-local.
+OVERLAY=gcp bash deploy/scripts/deploy-local.sh || echo "deploy-local exited non-zero (inspect logs)"

@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Local k3d overlay: images come from the in-cluster k3d registry (see deploy/scripts/cluster-up.sh).
+resources:
+  - ../../../base
+
+images:
+  - name: control-api
+    newName: k3d-agentsim-registry:5001/control-api
+    newTag: dev
+  - name: mcp-simulator-proxy
+    newName: k3d-agentsim-registry:5001/mcp-simulator-proxy
+    newTag: dev
+  - name: operator-web
+    newName: k3d-agentsim-registry:5001/operator-web
+    newTag: dev

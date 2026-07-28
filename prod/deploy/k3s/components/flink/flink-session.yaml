@@ -1,0 +1,82 @@
+# Flink session cluster (JVM-native, arm64-friendly) for the failure-stats SQL job (ASC-083).
+# JobManager + one TaskManager sized for a constrained host. The SQL is submitted by
+# flink-sql-submit.yaml. (The operator-based flinkdeployment.yaml remains the path for larger,
+# x86 clusters where PyFlink wheels are available.)
+apiVersion: v1
+kind: Service
+metadata:
+  name: flink-jobmanager
+  namespace: data
+  labels: { app: flink-jobmanager }
+spec:
+  selector: { app: flink-jobmanager }
+  ports:
+    - { name: rpc, port: 6123 }
+    - { name: blob, port: 6124 }
+    - { name: ui, port: 8081 }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-jobmanager
+  namespace: data
+  labels: { app: flink-jobmanager }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: flink-jobmanager }
+  template:
+    metadata:
+      labels: { app: flink-jobmanager }
+    spec:
+      containers:
+        - name: jobmanager
+          image: k3d-agentsim-registry:5001/flink-sql:dev
+          args: ["jobmanager"]
+          ports:
+            - { containerPort: 6123 }
+            - { containerPort: 6124 }
+            - { containerPort: 8081 }
+          env:
+            - name: FLINK_PROPERTIES
+              value: |
+                jobmanager.rpc.address: flink-jobmanager
+                jobmanager.memory.process.size: 900m
+                taskmanager.numberOfTaskSlots: 2
+                rest.address: flink-jobmanager
+                rest.bind-address: 0.0.0.0
+          readinessProbe:
+            httpGet: { path: /, port: 8081 }
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          resources:
+            requests: { cpu: "150m", memory: "700Mi" }
+            limits: { cpu: "1", memory: "1024Mi" }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flink-taskmanager
+  namespace: data
+  labels: { app: flink-taskmanager }
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: flink-taskmanager }
+  template:
+    metadata:
+      labels: { app: flink-taskmanager }
+    spec:
+      containers:
+        - name: taskmanager
+          image: k3d-agentsim-registry:5001/flink-sql:dev
+          args: ["taskmanager"]
+          env:
+            - name: FLINK_PROPERTIES
+              value: |
+                jobmanager.rpc.address: flink-jobmanager
+                taskmanager.numberOfTaskSlots: 2
+                taskmanager.memory.process.size: 1400m
+          resources:
+            requests: { cpu: "250m", memory: "1200Mi" }
+            limits: { cpu: "1500m", memory: "1600Mi" }

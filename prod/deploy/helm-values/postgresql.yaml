@@ -1,0 +1,15 @@
+# Bitnami PostgreSQL — control-plane config, run metadata, gates, audit (ADR-0004 companion).
+#   helm install postgres oci://registry-1.docker.io/bitnamicharts/postgresql -n data -f deploy/helm-values/postgresql.yaml
+auth:
+  # Credentials are supplied at deploy time from the asc-secrets Secret (see deploy-local.sh);
+  # never commit real values.
+  existingSecret: asc-secrets
+  secretKeys:
+    adminPasswordKey: POSTGRES_PASSWORD
+    userPasswordKey: POSTGRES_PASSWORD
+  username: asc
+  database: agentsim
+primary:
+  resourcesPreset: small
+  persistence:
+    size: 4Gi
