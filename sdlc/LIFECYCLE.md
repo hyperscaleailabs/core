@@ -38,11 +38,28 @@ Every PR carries: Purpose, Tasks, Acceptance criteria (checkboxes), Evidence
 (committed artifacts under `docs/evidence/`), Lessons learned. The PR template
 enforces the structure and CI verifies it (`sdlc / pr-discipline`).
 
-Every project ends in an **article** at the Architect and Builder levels,
-published through [Atlas](../atlas/). In current mode the article's sources are
-the PR body, its evidence, and the [lessons](../docs/lessons/) entry; the
-[daily level](DAILY.md) combines the day's articles into its executive and
-whitepaper publications.
+## Project shape
+
+A project is **one or several PRs**, follow-ups included. Its full arc:
+
+```text
+intent (from the Architect)
+  -> project pack: prd.md, ard.md, plan.md, handoff.md
+  -> implementation PR(s), each Architect-reviewed
+  -> article
+```
+
+The pack: `prd.md` (requirements), `ard.md` (architecture decisions and
+trade-offs), `plan.md` (execution plan), `handoff.md` (implementation handoff).
+A multi-PR project carries the pack as files; a single-PR project may carry the
+PRD/ARD content in the PR body, as today - only repo-shaping decisions get a
+standalone entry in [docs/adr/](../docs/adr/).
+
+Every project ends in an **article** at the Architect and Builder levels, and
+generating it triggers the [Atlas](../atlas/) update. The article **includes the
+project's lessons**; its other sources are the PR bodies, their evidence, and the
+[lessons](../docs/lessons/) entries. The [daily level](DAILY.md) aggregates the
+day's articles into its executive and whitepaper publications.
 
 ## North star (direction, not yet in effect)
 

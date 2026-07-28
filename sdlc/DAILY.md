@@ -2,7 +2,7 @@
 
 Cadence: **daily**. The daily level frames the day's execution and publishes its
 results. It holds a backlog of **3-5 projects** drawn from the
-[weekly backlog](TACTICAL.md#weekly---project-backlog); each project runs the
+[weekly backlog](TACTICAL.md#weekly---project-backlog-and-digest); each project runs the
 [project lifecycle](LIFECYCLE.md).
 
 ## The day
@@ -16,11 +16,13 @@ results. It holds a backlog of **3-5 projects** drawn from the
 
 | Publication | Audience level | Content |
 |-------------|----------------|---------|
-| Executive deck slide | CEO | One slide: the day's goals, what shipped, the headline lesson, tomorrow's intent |
-| Whitepaper summary | CTO | Combined goals, implementations, and lessons synthesized from the day's project articles |
+| Executive deck | CEO | The day's goals, what shipped, the headline lesson, tomorrow's intent |
+| Whitepaper | CTO | Executive overview aggregating the day's project articles: combined goals, implementations, and lessons, with overview and summary |
 
 Both are derived from the project articles, never written from memory: a claim
-that is not in an article backed by evidence does not appear in a summary.
+that is not in an article backed by evidence does not appear in a publication.
+The [weekly digest](TACTICAL.md#weekly---project-backlog-and-digest) aggregates
+them in turn.
 
 ## Integration
 

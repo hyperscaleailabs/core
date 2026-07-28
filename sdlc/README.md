@@ -11,23 +11,25 @@ neighbors is decoration.
 | Level | Cadence | Defines | Publishes |
 |-------|---------|---------|-----------|
 | [Strategic](STRATEGIC.md) | 1 / 3 / 6-12 months | The axis: mission, vision, method; short/mid/long horizons | Realignment log; AXIS and DIRECTION updates |
-| [Tactical](TACTICAL.md) | monthly, then weekly | Architecture lifecycle; epics broken down into weekly project backlogs | Monthly architecture review; weekly backlog |
-| [Daily](DAILY.md) | daily | The day's backlog of 3-5 projects | Executive deck slide (CEO level) and whitepaper summary (CTO level), to Atlas |
-| [Project](LIFECYCLE.md) | per project | PRD, ADR, plan, acceptance criteria, worktree/PR, evidence, CI/CD, architectural review | Article (Architect and Builder levels), to Atlas |
+| [Tactical](TACTICAL.md) | monthly, then weekly | Architecture lifecycle; epics broken down into weekly project backlogs | Monthly architecture review; weekly digest (daily decks and whitepapers + market research) to Webinars, Atlas weekly overview, and stakeholder mailing lists |
+| [Daily](DAILY.md) | daily | The day's backlog of 3-5 projects | Executive deck (CEO level) and whitepaper (CTO level), to Atlas |
+| [Project](LIFECYCLE.md) | per project (one or several PRs) | Intent from the Architect; PRD, ARD, plan, handoff; acceptance criteria, worktree/PR, evidence, CI/CD, architectural review | Article with lessons included (Architect and Builder levels), triggering Atlas updates |
 
 ## Closing the loops
 
 ```text
 direction:  axis -> epics -> weekly backlog -> daily backlog -> project scope
-lessons:    project articles -> daily summaries -> monthly review -> realignment
+lessons:    project articles -> daily deck + whitepaper -> weekly digest
+            -> monthly review -> realignment
 ```
 
 Downward, each level scopes the one below it: the axis bounds what an epic may be,
-epics bound projects, the weekly backlog bounds the day. Upward, every project ends
-in an article and a [lessons](../docs/lessons/) entry; daily summaries combine
-them, the monthly architecture review aggregates the month, and the strategic
-checkpoints consume the aggregate. Publications are scheduled, not occasional - an
-unpublished level is an open loop.
+epics bound projects, the weekly backlog bounds the day. Upward, every project
+ends in an article that includes its [lessons](../docs/lessons/); the daily deck
+and whitepaper aggregate the day's articles, the weekly digest combines the
+dailies with market research, the monthly architecture review aggregates the
+month, and the strategic checkpoints consume the aggregate. Publications are
+scheduled, not occasional - an unpublished level is an open loop.
 
 ## Status
 

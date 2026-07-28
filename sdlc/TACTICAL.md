@@ -25,7 +25,7 @@ backlog that feeds the [daily level](DAILY.md).
 4. **Hand-off up**: the review digest goes to the strategic
    [alignment check](STRATEGIC.md#checkpoints).
 
-## Weekly - project backlog
+## Weekly - project backlog and digest
 
 1. Break the active epics into projects sized for the
    [project lifecycle](LIFECYCLE.md), each with a draft goal, a horizon, and a
@@ -33,6 +33,10 @@ backlog that feeds the [daily level](DAILY.md).
 2. Order the backlog: dependencies first, then horizon weighting - the 80/15/5
    mix is held by the backlog as a whole, not by any single project.
 3. The top of the backlog feeds the daily level its 3-5 projects.
+4. **Weekly digest**: aggregate the week's daily whitepapers and decks and
+   combine them with the week's **market research** into the tactical weekly
+   digest. Published to **Webinars** and the **Atlas weekly overview**, and
+   shared via mailing lists to notify external stakeholders.
 
 ## Artifacts
 
