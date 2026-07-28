@@ -6,6 +6,13 @@ every artifact links back toward its anchors. Agents do not scan the tree;
 they **traverse the graph** and pull only the context the current project
 phase requires.
 
+**Always start at the root README** - for reading and for writing. Its
+[Start here](../README.md#start-here) block fetches the graph, the axis, the
+strategic directions, the relevant agents, and the relevant skills, and gives
+the SDLC guidance in one paragraph. Any change to documentation begins there
+too: before committing, confirm the documents you touched still trace from
+the root README and that nothing in it became inconsistent with them.
+
 ## Nodes and edges
 
 ```text

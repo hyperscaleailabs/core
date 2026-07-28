@@ -87,8 +87,10 @@ intent (from the human Architect), captured as a GitHub issue
    before it is accepted. Simplify what the implementation grew, relocate
    misplaced artifacts (module evidence into the module - see
    [GRAPH.md](GRAPH.md#placement-rules)), repair vocabulary and link drift,
-   compact documents. Gradual complexity increase and drift are the failure
-   mode this stage exists to stop.
+   compact documents, and **re-verify from the root README**: everything the
+   project touched still traces from the entrance node with no inconsistency
+   introduced. Gradual complexity increase and drift are the failure mode
+   this stage exists to stop.
 6. The **Human Architect and MGMT** review back and forth to accept the
    project. Comments and notes are collected on the GitHub issue and PR: they
    are the project's trail in the repository and part of the project history.
