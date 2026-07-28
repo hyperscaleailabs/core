@@ -1,16 +1,16 @@
 # Tactical level
 
-Cadence: **monthly, broken down to weekly**. The tactical level turns strategic
+Cadence: **monthly, reviewed weekly**. The tactical level turns strategic
 packages into an ordered stream of executable projects. It expresses the
-architecture lifecycle on a monthly rhythm and maintains the weekly project
-backlog that feeds the [daily level](DAILY.md).
+architecture lifecycle on a monthly rhythm and runs a **templated weekly
+review** whose outcome feeds the [daily level](DAILY.md).
 
 ## Vocabulary
 
 | Unit | Size | Defined at |
 |------|------|------------|
 | **Epic** | Large scope: a strategic package milestone or architecture move; weeks of projects | Monthly |
-| **Project** | One architect-approved iteration per [LIFECYCLE.md](LIFECYCLE.md); hours to days | Weekly breakdown |
+| **Project** | One architect-approved iteration per [LIFECYCLE.md](LIFECYCLE.md); several hours of work for the Architect with the AI agentic coding system | Weekly review |
 
 ## Monthly - architecture lifecycle
 
@@ -25,26 +25,36 @@ backlog that feeds the [daily level](DAILY.md).
 4. **Hand-off up**: the review digest goes to the strategic
    [alignment check](STRATEGIC.md#checkpoints).
 
-## Weekly - project backlog and digest
+## Weekly - tactical review and digest
 
-1. Break the active epics into projects sized for the
-   [project lifecycle](LIFECYCLE.md), each with a draft goal, a horizon, and a
-   rough acceptance shape.
-2. Order the backlog: dependencies first, then horizon weighting - the 80/15/5
-   mix is held by the backlog as a whole, not by any single project.
-3. The top of the backlog feeds the daily level its 3-5 projects.
-4. **Weekly digest**: aggregate the week's daily whitepapers and decks and
+The weekly tactical review is **templated**. Its inputs:
+
+- the **strategic context** and the strategic template from the monthly
+  [research iteration](STRATEGIC.md#templated-iterative-research) - both are
+  also used to frame discussions with reasoning assistants;
+- a **current system status summary** of core and the apps.
+
+Reasoning over these against the active epics produces the review's outcome:
+
+1. The **next ~20 suggested projects**, formed as a **dependency graph with
+   priorities**. Each project is sized at several hours of work for the
+   Architect with the AI agentic coding system; the 80/15/5 horizon mix is held
+   by the graph as a whole, not by any single project.
+2. The top of the graph - highest priority, dependencies satisfied - feeds the
+   [daily level](DAILY.md) its 3-5 projects.
+3. **Weekly digest**: aggregate the week's daily whitepapers and decks and
    combine them with the week's **market research** into the tactical weekly
-   digest. Published to **Webinars** and the **Atlas weekly overview**, and
-   shared via mailing lists to notify external stakeholders.
+   digest. Published to **Webinars** and the **Atlas weekly overview**,
+   generating artifacts, and shared via mailing lists to notify external
+   stakeholders.
 
 ## Artifacts
 
-First iteration: the epic register and weekly backlog are markdown tables kept in
-this directory once the cadence activates; tracker tooling is pluggable and can
-replace them without changing the method. Epics reference strategic packages,
-projects reference epics, PRs reference projects - the chain must be walkable in
-both directions.
+First iteration: the review template, epic register, and weekly project graph
+are markdown documents kept in this directory once the cadence activates;
+tracker tooling is pluggable and can replace them without changing the method.
+Epics reference strategic packages, projects reference epics, PRs reference
+projects - the chain must be walkable in both directions.
 
 ## Status
 

@@ -40,17 +40,32 @@ enforces the structure and CI verifies it (`sdlc / pr-discipline`).
 
 ## Project shape
 
-A project is **one or several PRs**, follow-ups included. Its full arc:
+A project is **one or several PRs**, follow-ups included, sized at **several
+hours of work** for the Architect with the AI agentic coding system. Every
+project is **templated**; its full arc:
 
 ```text
-intent (from the human Architect)
-  -> project pack: prd.md, ard.md, plan.md, handoff.md
-  -> implementation PR(s), follow-ups included, each with human Architect review
+intent (from the human Architect), captured in the project template:
+  header restating mission, vision, and goal
+  (the strategic touch and tactical outlook) + the specific challenge
+  -> Architect review: product and architecture solution,
+     handed off as PRD and spec (prd.md, ard.md, plan.md, handoff.md)
+  -> agent team: implement, verify against the definition of done,
+     present results, commit, wait for acceptance
+  -> LGTM -> squash merge to main
   -> article
 ```
 
-The pack: `prd.md` (requirements), `ard.md` (architecture decisions and
-trade-offs), `plan.md` (execution plan), `handoff.md` (implementation handoff).
+The template header carries the alignment down: mission, vision, and goal
+restated from the strategic and tactical context, then the specific challenge
+this project answers. The Architect reviews the templated project and produces
+the product and architecture solution as the handoff pack: `prd.md`
+(requirements), `ard.md` (architecture decisions and trade-offs), `plan.md`
+(execution plan), `handoff.md` (implementation handoff). That initial spec goes
+to the agents for implementation and verification: agents work **as a team**,
+verify against the definition of done, present the results with evidence,
+commit, and wait for acceptance; the Architect's LGTM merges to `main`.
+
 A multi-PR project carries the pack as files; a single-PR project may carry the
 PRD/ARD content in the PR body, as today - only repo-shaping decisions get a
 standalone entry in [docs/adr/](../docs/adr/).

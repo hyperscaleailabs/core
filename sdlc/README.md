@@ -10,21 +10,25 @@ neighbors is decoration.
 
 | Level | Cadence | Defines | Publishes |
 |-------|---------|---------|-----------|
-| [Strategic](STRATEGIC.md) | 1 / 3 / 6-12 months | The axis: mission, vision, method; short/mid/long horizons | Realignment log; AXIS and DIRECTION updates |
-| [Tactical](TACTICAL.md) | monthly, then weekly | Architecture lifecycle; epics broken down into weekly project backlogs | Monthly architecture review; weekly digest (daily decks and whitepapers + market research) to Webinars, Atlas weekly overview, and stakeholder mailing lists |
-| [Daily](DAILY.md) | daily | The day's backlog of 3-5 projects | Executive deck (CEO level) and whitepaper (CTO level), to Atlas |
-| [Project](LIFECYCLE.md) | per project (one or several PRs) | Intent from the human Architect; PRD, ARD, plan, handoff; acceptance criteria, worktree/PR, evidence, CI/CD, architectural review | Article with lessons included (Architect and Builder levels), triggering Atlas updates |
+| [Strategic](STRATEGIC.md) | 1 / 3 / 6-12 months; templated research monthly | The axis: mission, vision, method; short/mid/long horizons; iterative research on the platform and its apps | Strategic context and template for the weekly tactical review; realignment log; AXIS and DIRECTION updates |
+| [Tactical](TACTICAL.md) | monthly, reviewed weekly | Architecture lifecycle; templated weekly review: strategic context + current system status -> the next ~20 projects as a prioritized dependency graph | Monthly architecture review; weekly digest (daily decks and whitepapers + market research) to Webinars, Atlas weekly overview, and stakeholder mailing lists |
+| [Daily](DAILY.md) | daily | Priorities backlog: 3-5 projects drawn from the weekly graph | Scheduled daily update: executive deck (CEO level) and whitepaper (CTO level), to Atlas |
+| [Project](LIFECYCLE.md) | per project: several hours, one or several PRs | Templated initiation; Architect handoff (PRD, ARD, plan, handoff); agent-team execution with acceptance criteria, worktree/PR, evidence, CI/CD; acceptance LGTM | Article with lessons included (Architect and Builder levels), triggering Atlas updates |
+
+Every level is **templated**: the initial templates are extracted from documents
+already in the repository (starting with the strategic packages) and improved
+with each iteration.
 
 ## Closing the loops
 
 ```text
-direction:  axis -> epics -> weekly backlog -> daily backlog -> project scope
+direction:  axis -> epics -> weekly project graph -> daily 3-5 -> project scope
 lessons:    project articles -> daily deck + whitepaper -> weekly digest
             -> monthly review -> realignment
 ```
 
 Downward, each level scopes the one below it: the axis bounds what an epic may be,
-epics bound projects, the weekly backlog bounds the day. Upward, every project
+epics bound projects, the weekly project graph bounds the day. Upward, every project
 ends in an article that includes its [lessons](../docs/lessons/); the daily deck
 and whitepaper aggregate the day's articles, the weekly digest combines the
 dailies with market research, the monthly architecture review aggregates the
