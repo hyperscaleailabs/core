@@ -14,6 +14,7 @@ ALLOW_RE='example\.(com|org|net)|users\.noreply\.github\.com|/(Users|home)/(runn
 # pattern id : regex
 PATTERNS=(
   'email-address|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+  'email-address-urlencoded|[a-zA-Z0-9._+-]+(%40|%2[fF]40)[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
   'home-path-unix|/(Users|home)/[A-Za-z0-9._-]+'
   'home-path-windows|[Cc]:\\+Users\\+[A-Za-z0-9._-]+'
   'coauthor-trailer|[Cc]o-[Aa]uthored-[Bb]y:'

@@ -10,10 +10,12 @@ a second one before the first merges.
 
 ## Steps
 
-1. **Frame the work with the Architect.** State in chat: goal, PRD delta (what the
-   product should do after this PR), ADR delta (decisions and trade-offs, if any),
-   and draft acceptance criteria as concrete checkboxes. Wait for confirmation
-   before writing code. Substantial PRD/ADR content goes into the PR body; only
+1. **Frame the work with the Architect.** State in chat: the **horizon** this work
+   serves (short / mid / long, per AXIS.md - ambiguous work is short, and
+   mid-horizon work whose short-horizon foundation does not exist yet is deferred
+   rather than started), goal, PRD delta (what the product should do after this
+   PR), ADR delta (decisions and trade-offs, if any), and draft acceptance criteria
+   as concrete checkboxes. Wait for confirmation before writing code. Substantial PRD/ADR content goes into the PR body; only
    repo-shaping decisions get an ADR file in docs/adr/.
 2. **Create a worktree** so main stays clean:
    `git worktree add ../core-wt/<slug> -b pr/<slug> main`

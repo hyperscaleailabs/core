@@ -3,7 +3,11 @@
 
 ## Purpose
 
-<!-- Why this PR exists; which discussion or plan item it implements. -->
+<!-- Why this PR exists; which discussion or plan item it implements.
+     State the horizon this work serves: short / mid / long (see AXIS.md).
+     Ambiguous work is short. -->
+
+Horizon: <!-- short | mid | long -->
 
 ## Tasks
 

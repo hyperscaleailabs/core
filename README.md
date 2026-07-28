@@ -8,10 +8,67 @@ governance, shared tooling, and strict hygiene rules suitable for a public repos
 
 License: Apache-2.0 by default (see [Licensing](#licensing) for subproject specifics).
 
+## Mission and direction
+
+> **Biological and synthetic intelligence expanding together toward the stars.**
+
+HSAILabs is an open scientific application lab: infrastructure, models, simulations,
+agents, and collaborative workflows for building increasingly capable autonomous
+scientific and physical systems. The full statement lives in [MISSION.md](MISSION.md).
+
+Three questions, kept deliberately separate:
+
+| | Question | Answer |
+|-|----------|--------|
+| **WHY** | What is the lab ultimately for? | The line above. See [MISSION.md](MISSION.md) |
+| **WHAT** | Which direction do core and apps move? | [docs/strategic/DIRECTION.md](docs/strategic/DIRECTION.md), realigned from market research each cycle |
+| **HOW** | What do we build with, right now? | [Tech stack](#tech-stack) below - grounded, practical, immediate |
+
+The direction runs across three horizons: **short**, reproducible AI/ML infrastructure
+at scale on open models and open datasets; **mid**, physics-simulated environments and
+the sim-to-real evaluation control plane; **long**, materials, energy, aerospace, and
+robotics connected through one platform. Effort is weighted **80% short, 15% mid,
+5% long**; all of it is compressed into [AXIS.md](AXIS.md), which is what contributors
+and agents read before deciding what to build.
+
+Flagship applications under [`apps/`](apps/) provide the practical proving grounds.
+The first is [AstraGrid](apps/astragrid/README.md): a voice-controlled lunar power
+and thermal maintenance rover - an end-to-end embodied-AI mission that exercises the
+core platform (model serving, RL simulation, distributed evaluation, human
+supervision through Meet) on a resource-constrained autonomous maintenance task.
+Its initiation package - PRDs, reference architectures, execution plans, and
+implementation handoffs for both the core platform and the application - lives in
+[docs/strategic/20260727-astragrid/](docs/strategic/20260727-astragrid/).
+
+A second direction, [NeuroDuet](apps/neuroduet/README.md), is proposed but not
+scheduled: a language-aligned BCI simulation lab whose purpose is to test whether
+contracts written for a rover mission survive an application with no robot, no
+terrain, and no battery. Its research package is
+[docs/strategic/20260728-neuroduet/](docs/strategic/20260728-neuroduet/).
+
+## How this repository is structured
+
+Each layer answers exactly one question, so that direction, behavior, capability,
+state, and method never drift into each other.
+
+| Layer | Answers | Where |
+|-------|---------|-------|
+| **Axis** | Where are we going, strategically and tactically, and how is effort weighted? | [AXIS.md](AXIS.md), long form in [MISSION.md](MISSION.md) and [docs/strategic/](docs/strategic/) |
+| **Agent behavior** | How do agents and contributors work here? | [AGENTS.md](AGENTS.md) (canonical), [CLAUDE.md](CLAUDE.md) (pointer) |
+| **Capability** | What can agents actually do, as executable procedure? | [`.claude/skills/`](.claude/skills/): `pr-flow`, `pr-verify`, `lessons` |
+| **Method** | How does work move from research to production? | [sdlc/LIFECYCLE.md](sdlc/LIFECYCLE.md): research, data science, software R&D, pre-release and production gates |
+| **State** | What are we doing, and where does it stand? | [docs/](docs/) and subproject READMEs: PRDs, ADRs, designs, plans, lessons |
+| **Value** | What does this all produce? | [apps/](apps/): the long-term value stream, evolving with core and aligned to the axis |
+
+Everything realigns to the axis, including the axis itself: it is re-derived from
+market research roughly every six months and logged in
+[DIRECTION.md](docs/strategic/DIRECTION.md#realignment-log).
+
 ## Subprojects
 
 | Directory | Project | Focus |
 |-----------|---------|-------|
+| [`apps/`](apps/) | Apps | Flagship applications built on the core platform. [AstraGrid](apps/astragrid/README.md), a voice-controlled lunar power and thermal maintenance rover, is the first; [NeuroDuet](apps/neuroduet/README.md), a language-aligned BCI simulation lab, is proposed. Apps consume core capabilities through contracts; core never imports app code |
 | [`sdlc/`](sdlc/) | SDLC | Software development lifecycle: top-level loops for all subprojects, agentic engineering workflows, rotating AI Architect PR reviews, delivery automation |
 | [`models/`](models/) | Models | Model training, benchmarking, optimization, and inference serving. Produced models are consumed by the other subprojects |
 | [`prod/`](prod/) | Prod | Simulation, evaluation, release, and observability. Split into `ui/`, `backend/`, and `platform/` (Kafka services, data plane with telemetry, ClickHouse, presentation via Superset and Grafana) |
@@ -23,6 +80,27 @@ License: Apache-2.0 by default (see [Licensing](#licensing) for subproject speci
 
 Each subproject keeps its own `README.md` and, where it deviates from the repo default,
 its own license and notice files.
+
+## Tech stack
+
+The **how**: practical and immediate, grounded in ML and RL on PyTorch, JAX, and Ray
+for training, evaluation, and inference at scale. Practiced first on open-source models
+and datasets, then in physics-simulated environments, and finally connected to
+materials, energy, aerospace, and robotics - the three horizons in
+[DIRECTION.md](docs/strategic/DIRECTION.md). Frameworks here are adapters, not platform
+semantics: any of them can be replaced without changing what an experiment means.
+
+| Layer | Technologies |
+|-------|--------------|
+| AI & ML math | ML, RL, DPO, Transformers, LLM, VLM, V-LLM, Omni, ToT |
+| OS & K8s | Debian, KVM, K3d (Helm, Kustomize) |
+| Clouds | AWS, GCP, Azure, Terraform |
+| Data | Kafka, Flink, Spark, PostgreSQL, Cassandra, MinIO, ClickHouse, OTel, Prometheus, Grafana, Superset |
+| Scalable MLOps (model training, evaluation, inference) | JAX, Ray, vLLM |
+| Services & agents infra | Custom, SDKs, LiveKit; RAGs: FAISS, Chroma, Milvus, PostgreSQL (pgvector), Helicone |
+| Media & rendering | LiveKit SFU, WebRTC, UE Pixel Streaming |
+| 4D sim-real | MuJoCo, Isaac Gym |
+| Local models | Whisper, Gemma, Ultravox, Kokoro, Omni, and others |
 
 ## Target deployment
 
@@ -96,6 +174,19 @@ not a follow-up commit. Treat prevention as the only cheap option.
   Apache-2.0 distribution. Incompatible code does not enter this repo.
 - When work migrates into this monorepo from an existing repo, its license and provenance
   are reviewed at import time.
+
+## Documentation
+
+| Location | Content |
+|----------|---------|
+| [AXIS.md](AXIS.md) | Compressed direction and effort weighting: read before deciding what to build |
+| [AGENTS.md](AGENTS.md) | Canonical agent contract; [CLAUDE.md](CLAUDE.md) points at it |
+| [MISSION.md](MISSION.md) | Lab mission and long-term direction |
+| [docs/strategic/DIRECTION.md](docs/strategic/DIRECTION.md) | Directional axis: mission, vision, and the short/mid/long horizons, realigned each research cycle |
+| [docs/strategic/](docs/strategic/) | Strategic packages: market research, PRDs, reference architectures, plans, and handoffs per initiative |
+| [docs/adr/](docs/adr/) | Architecture decision records |
+| [docs/lessons/](docs/lessons/) | Lessons learned per review round or merge |
+| [sdlc/](sdlc/) | Lifecycle, workflows, and delivery automation |
 
 ## Getting started
 
