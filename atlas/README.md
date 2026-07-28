@@ -35,7 +35,7 @@ run them from this directory (`cd atlas`), not the repo root.
 | `scripts/build-search-index.mjs` | Rebuilds `public/search-index.json` from the corpus. Committed and CI-verified against a fresh rebuild |
 | `scripts/intake-module-article.mjs` | Module article -> Lab Notes entry; also the `--check` guard that CI runs |
 | `scripts/check-policy.sh`, `scripts/check-collections.mjs` | The module's guards, in scripts so `make verify` runs exactly what CI runs |
-| `docs/` | Content guide, site architecture, pipeline reference, deployment - plus this module's `articles/`, `evidence/`, and `lessons/` |
+| `docs/` | [Content guide](docs/content-guide.md), [architecture](docs/architecture.md), [pipeline](docs/pipeline.md), [deployment](docs/deployment.md) - plus this module's [articles](docs/articles/2026-07-28-atlas-integration/article.md), [evidence](docs/evidence/README.md), and [lessons](docs/lessons/2026-07-28-atlas-integration.md) |
 
 ## Quick start
 
