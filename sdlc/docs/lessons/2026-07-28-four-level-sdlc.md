@@ -51,9 +51,9 @@ checking alignment at every aggregation point produces signal. Push
 verification up the output chain rather than boilerplate down the intake
 chain.
 
-**Codified:** [sdlc/LIFECYCLE.md](../../sdlc/LIFECYCLE.md#project-shape) project
-template and article, [sdlc/DAILY.md](../../sdlc/DAILY.md) whitepaper,
-[sdlc/TACTICAL.md](../../sdlc/TACTICAL.md) weekly digest (merged in PR #5).
+**Codified:** [sdlc/LIFECYCLE.md](../../../sdlc/LIFECYCLE.md#project-shape) project
+template and article, [sdlc/DAILY.md](../../../sdlc/DAILY.md) whitepaper,
+[sdlc/TACTICAL.md](../../../sdlc/TACTICAL.md) weekly digest (merged in PR #5).
 
 ## L4. Vocabulary and anchor drift across a doc set is mechanical
 
@@ -68,10 +68,10 @@ sweep the whole set for the old term and for anchors derived from the old
 heading in the same commit. Broken relative links and anchors are guardable;
 guard them.
 
-**Codified:** [tools/policy/check_links.sh](../../tools/policy/check_links.sh)
+**Codified:** [tools/policy/check_links.sh](../../../tools/policy/check_links.sh)
 verifies every relative markdown link target and GitHub-style heading anchor in
 the tree; `docs-links` job in
-[.github/workflows/policy.yml](../../.github/workflows/policy.yml); pr-verify
+[.github/workflows/policy.yml](../../../.github/workflows/policy.yml); pr-verify
 check 4 runs it locally.
 
 ## L5. Branch-pinned evidence anchors rot with every push
@@ -86,5 +86,5 @@ while it points where it did when checked.
 branch, and re-verified after every review round that touches the files they
 cite.
 
-**Codified:** [.claude/skills/pr-verify/SKILL.md](../../.claude/skills/pr-verify/SKILL.md)
+**Codified:** [.claude/skills/pr-verify/SKILL.md](../../../.claude/skills/pr-verify/SKILL.md)
 check 2 now requires SHA-pinned line anchors and post-review refresh.
