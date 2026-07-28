@@ -32,6 +32,9 @@ jobs:
           if ! grep -qiE '^\s*Horizon:\s*(short|mid|long)\s*$' <<<"$BODY"; then
             echo "Purpose must declare 'Horizon: short|mid|long' (see AXIS.md)"; fail=1
           fi
+          if ! grep -qiE '^\s*Issue:\s*#[0-9]+\s*$' <<<"$BODY"; then
+            echo "Purpose must reference the project issue as 'Issue: #<number>' (see sdlc/LIFECYCLE.md)"; fail=1
+          fi
           if [ "$fail" -ne 0 ]; then
             echo ""
             echo "PR bodies must follow .github/PULL_REQUEST_TEMPLATE.md (see sdlc/LIFECYCLE.md)."

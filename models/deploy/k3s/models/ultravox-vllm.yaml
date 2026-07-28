@@ -1,0 +1,69 @@
+# Ultravox (audio+text multimodal) served by vLLM.
+# Audio is sent as OpenAI chat "input_audio" content parts.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ultravox-vllm
+  namespace: hyperswarm-models
+  labels:
+    app: ultravox-vllm
+    hyperswarm.ai/model: ultravox-v0_5-llama-3_2-1b
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ultravox-vllm
+  template:
+    metadata:
+      labels:
+        app: ultravox-vllm
+    spec:
+      containers:
+        - name: vllm
+          image: vllm/vllm-openai:v0.8.5
+          args:
+            - --model=fixie-ai/ultravox-v0_5-llama-3_2-1b
+            - --served-model-name=ultravox
+            - --max-model-len=4096
+            - --gpu-memory-utilization=0.90
+            - --trust-remote-code
+          env:
+            - name: HF_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: hf-token
+                  key: token
+          ports:
+            - containerPort: 8000
+          resources:
+            limits:
+              nvidia.com/gpu: 1
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            failureThreshold: 60
+          volumeMounts:
+            - name: hf-cache
+              mountPath: /root/.cache/huggingface
+      volumes:
+        - name: hf-cache
+          hostPath:
+            path: /var/lib/hyperswarm/hf-cache
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ultravox-vllm
+  namespace: hyperswarm-models
+spec:
+  type: NodePort
+  selector:
+    app: ultravox-vllm
+  ports:
+    - port: 8000
+      targetPort: 8000
+      nodePort: 30801

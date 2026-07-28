@@ -1,0 +1,11 @@
+domain: ecommerce
+version: "0.1.0"
+description: >
+  E-commerce assistant tasks: product Q&A, order support, catalog data
+  extraction. Reference pack demonstrating the domain-pack format.
+modalities:
+  - text
+files:
+  typical_inputs: typical_inputs.jsonl
+  failure_modes: failure_modes.jsonl
+maintainer: hyperswarm

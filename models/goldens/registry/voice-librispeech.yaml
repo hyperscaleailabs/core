@@ -1,0 +1,24 @@
+name: voice-librispeech
+domain: voice
+modality: audio-asr
+license: cc-by-4.0
+description: >
+  LibriSpeech (clean): 16kHz read English speech with transcripts, for
+  ASR benchmarking (faster-whisper) and audio-model evaluation (Ultravox).
+source:
+  hf_id: openslr/librispeech_asr
+  config: clean
+  splits:
+    train: train.100
+    eval: validation
+smoke_source:
+  # 73-row stand-in so smoke tests never stream the real corpus
+  hf_id: hf-internal-testing/librispeech_asr_dummy
+  config: clean
+  splits:
+    train: validation
+    eval: validation
+fields:
+  id: id
+  audio: audio
+  reference: text

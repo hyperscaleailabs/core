@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Hyperswarm golden dataset config",
+  "type": "object",
+  "required": ["name", "domain", "modality", "license", "source", "fields"],
+  "definitions": {
+    "source": {
+      "type": "object",
+      "required": ["hf_id", "splits"],
+      "properties": {
+        "hf_id": { "type": "string" },
+        "config": { "type": "string" },
+        "splits": {
+          "type": "object",
+          "required": ["train", "eval"],
+          "properties": {
+            "train": { "type": "string" },
+            "eval": { "type": "string" }
+          }
+        },
+        "row_filter": {
+          "description": "Optional per-logical-split row filter on a column value",
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["column", "equals"],
+            "properties": {
+              "column": { "type": "string" },
+              "equals": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "properties": {
+    "name": { "type": "string" },
+    "domain": { "type": "string" },
+    "modality": { "enum": ["text", "audio-text", "audio-asr"] },
+    "license": { "type": "string" },
+    "description": { "type": "string" },
+    "source": { "$ref": "#/definitions/source" },
+    "smoke_source": {
+      "$ref": "#/definitions/source",
+      "description": "Tiny stand-in dataset for CI / local K3s smoke tests"
+    },
+    "fields": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "input": { "type": "string" },
+        "input_template": {
+          "type": "string",
+          "description": "Python format string over source columns; alternative to `input`"
+        },
+        "audio": {
+          "type": "string",
+          "description": "Audio column; extracted to .wav, path becomes `input`"
+        },
+        "reference": { "type": "string" },
+        "extra": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "prompt_prefix": {
+      "type": "string",
+      "description": "Prepended to `input` at benchmark/training time"
+    }
+  }
+}
