@@ -15,6 +15,11 @@ keywords = ["@"]
 [rules.allowlist]
 regexes = [
   '''[a-zA-Z0-9._%+-]+@(example\.(com|org|net)|users\.noreply\.github\.com)''',
+  # In-cluster Kubernetes service DNS inside connection URIs
+  # (scheme://user:password@<svc>.<ns>.svc.cluster.local). The suffix is reserved
+  # by Kubernetes and can never be a real mail domain. Credentials in such URIs
+  # remain covered by the default secret rules, not by this PII rule.
+  '''[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.svc\.cluster\.local''',
 ]
 
 [[rules]]
@@ -55,4 +60,19 @@ paths = [
   '''\.gitleaks\.toml$''',
   '''tools/policy/check_pii\.sh$''',
   '''\.github/workflows/policy\.yml$''',
+  # Redaction test fixtures. This file's entire purpose is to hold values that
+  # *look* like live secrets - a Stripe-style key, a test card number, an SSN -
+  # and assert the telemetry redaction layer strips them before anything is
+  # emitted. Making the fixtures unrealistic would make the test meaningless, so
+  # the path is excepted rather than the values weakened.
+  '''prod/packages/telemetry/tests/test_telemetry\.py$''',
+]
+# Matched against the whole finding rather than the extracted secret, so the
+# surrounding key name is part of the decision.
+regexTarget = "match"
+regexes = [
+  # Idempotency keys in the v0.1.0 MVP's mock transaction data. These are request
+  # de-duplication identifiers in browser-side demo fixtures, not credentials;
+  # the default generic-api-key rule matches on the "_key" suffix alone.
+  '''idempotency_key"\s*:\s*"purchase-[0-9a-z-]+"''',
 ]

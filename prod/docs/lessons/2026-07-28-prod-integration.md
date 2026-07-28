@@ -5,7 +5,7 @@ merged its delivery system into the repository SDLC. Each lesson states the
 correction and where it is now codified.
 
 The theme running through all of them: **a component can look healthy while producing
-nothing.** Five of the seven findings below are silent failures - not crashes, not red
+nothing.** Five of the nine findings below are silent failures - not crashes, not red
 builds, but green surfaces over broken plumbing. That is the failure mode this module
 exists to catch in other people's systems, and it was catching us.
 
@@ -126,7 +126,31 @@ mistake nobody suspected is the guard earning its keep.
 checklist (L1 there) gains "anchored exclude patterns" and "run the link guard before
 declaring the copy complete".
 
-## L8. Screenshots carry identity the scanner cannot read
+## L8. Two scanners, one false positive, two places to fix
+
+The repository runs two independent secret and PII scanners: `check_pii.sh` and
+`gitleaks` with custom rules. An integration that brings in real infrastructure
+manifests trips both, on the same things, and fixing one is silently insufficient
+- the local check went green while CI stayed red.
+
+Three false positives, each needing a considered exception rather than a blanket
+one: in-cluster service DNS inside connection URIs (`user:pass@svc.ns.svc.cluster.local`)
+read as an email address by both scanners; the telemetry **redaction test**, whose
+entire purpose is holding values that look like live secrets so the redaction layer
+can be proven to strip them; and idempotency keys in the MVP's mock transaction
+data, matched by the generic `*_key` rule.
+
+**Lesson:** run both scanners locally before pushing, narrow every exception to
+the specific shape being excepted, and never weaken a security fixture to satisfy a
+scanner - except the path and say why. An allowlist widened enough to pass is a
+scanner switched off, which is L1 again in a different costume.
+
+**Codified:** allowlists in [.gitleaks.toml](../../../.gitleaks.toml) and
+[tools/policy/check_pii.sh](../../../tools/policy/check_pii.sh), each carrying the
+reason inline. Verified by planting a decoy secret and confirming both scanners
+still fire.
+
+## L9. Screenshots carry identity the scanner cannot read
 
 A committed product screenshot showed an operator avatar with a contributor's
 initials, hardcoded in the MVP markup as `<div class="operator">CG</div>`. No text
