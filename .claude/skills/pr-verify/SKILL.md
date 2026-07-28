@@ -24,7 +24,7 @@ Report a pass/fail table in chat; anything failed must be fixed before handoff.
 4. **Policy scan locally**: `bash tools/policy/check_pii.sh tree` on the branch.
 5. **Scope**: `gh pr diff --stat` - the diff matches the stated Tasks; flag
    unrelated changes.
-6. **Evidence artifacts**: files referenced under docs/evidence/ exist in the
+6. **Evidence artifacts**: files referenced under module docs/evidence/ directories exist in the
    diff and contain no PII (they pass check 4 automatically, but eyeball
    screenshots for paths and names - the scanner cannot read images).
 7. **Merge PRs only** (sdlc/<project> into main): the control surfaces table is

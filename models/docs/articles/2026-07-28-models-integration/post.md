@@ -1,4 +1,4 @@
-# LinkedIn variant
+# Post variant (LinkedIn format assumed)
 
 Audience: CTO / Architect / PM. Source of truth:
 [article.md](article.md); post text below.

@@ -4,7 +4,7 @@ Audience: Architect, PM. Project trail:
 [issue #7](https://github.com/hyperscaleailabs/core/issues/7) ->
 [PR #8](https://github.com/hyperscaleailabs/core/pull/8) -> merge `820dc85`.
 Produced by the RESEARCHER/PUBLISHER stage of the
-[project lifecycle](../../../sdlc/LIFECYCLE.md#stages).
+[project lifecycle](../../../../sdlc/LIFECYCLE.md#stages).
 
 ## Goal
 
@@ -21,7 +21,7 @@ repository now runs on.
   dataset configs with schema and streaming pull, LoRA fine-tune entrypoint,
   benchmark runner, inference containers, domain packs, K3s manifests and
   scripts, docs with evidence and lessons) now live under
-  [models/](../../../models/README.md). Caches, weights, and the standalone
+  [models/](../../../README.md). Caches, weights, and the standalone
   repo's superseded methodology files were deliberately left behind; runtime
   identifiers were deliberately kept, with the rename recorded as separate
   future work.
@@ -30,18 +30,18 @@ repository now runs on.
   every models PR and publishes the transcript), and policy guards (no
   hardcoded registries; no committed weights, checkpoints, or kubeconfigs).
 - **Process machinery**: per-subproject acceptance criteria templates
-  ([models/ACCEPTANCE.md](../../../models/ACCEPTANCE.md) is the first),
+  ([models/ACCEPTANCE.md](../../../ACCEPTANCE.md) is the first),
   issue-anchored projects with CI-enforced `Issue: #N` linkage, the
-  [repository graph](../../../sdlc/GRAPH.md) with the root README as entrance
+  [repository graph](../../../../sdlc/GRAPH.md) with the root README as entrance
   node, a cleanup-and-refinement stage in every project, and the
-  [executive/](../../../executive/README.md) CEO and CTO validation charters.
+  [executive/](../../../../executive/README.md) CEO and CTO validation charters.
 
 ## QA results
 
 Every check green on every commit: repo policy (gitleaks + PII), PR
 discipline, markdown link/anchor guard, and the three models jobs. The
 **compact regression** defined in
-[models/ACCEPTANCE.md](../../../models/ACCEPTANCE.md#compact-regression-per-pr-scale)
+[models/ACCEPTANCE.md](../../../ACCEPTANCE.md#compact-regression-per-pr-scale)
 was executed against the previous accepted baseline:
 
 | Metric | Baseline (2026-07-26) | Regression (2026-07-28) | Delta |
@@ -50,12 +50,12 @@ was executed against the previous accepted baseline:
 | `train_loss` | 3.647 | 3.649 | +0.002 |
 
 **PASS** - the golden -> fine-tune -> adapter path is unchanged by the move
-([full record](../../../models/docs/evidence/2026-07-28-regression-lora-smoke.md),
+([full record](../../evidence/2026-07-28-regression-lora-smoke.md),
 evidence tier: smoke).
 
 ## Axis alignment check
 
-- **Strategic** ([AXIS.md](../../../AXIS.md)): short horizon - reproducible
+- **Strategic** ([AXIS.md](../../../../AXIS.md)): short horizon - reproducible
   ML infrastructure on open models and public datasets. The project moves the
   train/evaluate/serve loop into the platform where its evidence, gates, and
   replay live. Horizon declared short; no mid/long work smuggled in.
@@ -68,7 +68,7 @@ evidence tier: smoke).
 
 ## Lessons
 
-Carried in [docs/lessons/2026-07-28-models-integration.md](../../../docs/lessons/2026-07-28-models-integration.md):
+Carried in [docs/lessons/2026-07-28-models-integration.md](../../lessons/2026-07-28-models-integration.md):
 sweep migrated docs for the old repo's filenames; capture evidence
 screenshots logged-out and sanitize transcripts; module evidence lives in the
 module; path-filtered CI cannot block merges by itself; the article intake

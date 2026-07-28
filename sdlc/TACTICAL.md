@@ -15,7 +15,7 @@ review** whose outcome feeds the [daily level](DAILY.md).
 ## Monthly - architecture lifecycle
 
 1. **Architecture review**: read the month's project articles, daily and weekly
-   publications, and [lessons](../docs/lessons/) against the current architecture
+   publications, and [lessons](docs/lessons/) against the current architecture
    and [ADRs](../docs/adr/). Name what held and what fought back.
 2. **Epic definition**: define or re-scope epics from the open strategic packages
    (their prd / ref-architecture / pland documents). Every epic declares its

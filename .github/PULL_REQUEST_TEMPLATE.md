@@ -25,7 +25,7 @@ Issue: <!-- #<number> of the project issue -->
 ## Evidence
 
 <!-- Proof for each criterion: CI run links, command transcripts, screenshots.
-     Committed artifacts go under docs/evidence/. Evidence or it didn't happen. -->
+     Committed artifacts go under the touched module's docs/evidence/. Evidence or it didn't happen. -->
 
 ## Lessons learned
 

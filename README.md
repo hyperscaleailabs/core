@@ -195,7 +195,7 @@ not a follow-up commit. Treat prevention as the only cheap option.
 | [docs/strategic/DIRECTION.md](docs/strategic/DIRECTION.md) | Directional axis: mission, vision, and the short/mid/long horizons, realigned each research cycle |
 | [docs/strategic/](docs/strategic/) | Strategic packages: market research, PRDs, reference architectures, plans, and handoffs per initiative |
 | [docs/adr/](docs/adr/) | Architecture decision records |
-| [docs/lessons/](docs/lessons/) | Lessons learned per review round or merge |
+| [sdlc/docs/lessons/](sdlc/docs/lessons/) | Process lessons; module lessons live in `<module>/docs/lessons/` |
 | [sdlc/](sdlc/) | Lifecycle, workflows, and delivery automation |
 
 ## Getting started

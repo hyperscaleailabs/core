@@ -19,7 +19,7 @@ Lessons are the handoff mechanism and the raw material for Atlas white papers.
    - **Methodological** (process or sizing correction) - update
      sdlc/LIFECYCLE.md or the relevant skill in the same PR as the lesson.
    - **Contextual** (project knowledge) - record it; no tooling change.
-3. **Write the file**: `docs/lessons/YYYY-MM-DD-<slug>.md`, one file per review
+3. **Write the file**: `<module>/docs/lessons/YYYY-MM-DD-<slug>.md` (process lessons: `sdlc/docs/lessons/`), one file per review
    round or merge. For each lesson: the correction (quote the review comment if
    short), the lesson, and where it is now codified. Refer to people by role.
 4. **Keep reference docs clean**: lessons files and PR bodies are the journal;

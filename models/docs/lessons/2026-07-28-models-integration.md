@@ -15,7 +15,7 @@ implementation plan presented the old repo's PR numbers as current state.
 filenames, CWD assumptions in command examples, and historical
 plans/checkboxes. Historical records get a preface, never a rewrite.
 
-**Codified:** [models/README.md](../../models/README.md) module-relative
+**Codified:** [models/README.md](../../README.md) module-relative
 command note; prefaces on the historical plan and lessons files; recorded
 here for the next integration.
 
@@ -30,8 +30,8 @@ look for it.
 placement question is part of the cleanup-and-refinement stage, not an
 afterthought.
 
-**Codified:** [sdlc/GRAPH.md](../../sdlc/GRAPH.md#placement-rules) placement
-rules; stage 5 in [sdlc/LIFECYCLE.md](../../sdlc/LIFECYCLE.md#stages).
+**Codified:** [sdlc/GRAPH.md](../../../sdlc/GRAPH.md#placement-rules) placement
+rules; stage 5 in [sdlc/LIFECYCLE.md](../../../sdlc/LIFECYCLE.md#stages).
 
 ## L3. Screenshots and transcripts are PII surfaces
 
@@ -57,7 +57,7 @@ explicitly. The next step is baselines as data (small JSON + tolerances)
 computed by CI rather than compared by hand - filed as a suggestion, not yet
 built.
 
-**Codified:** [models/ACCEPTANCE.md](../../models/ACCEPTANCE.md#compact-regression-per-pr-scale)
+**Codified:** [models/ACCEPTANCE.md](../../ACCEPTANCE.md#compact-regression-per-pr-scale)
 defines the compact regression against the previous accepted baseline.
 
 ## L5. Path-filtered CI cannot gate by itself
@@ -76,12 +76,12 @@ module level. Until then the gate is review discipline.
 
 The lifecycle required an article before merge while Atlas had no intake
 surface - the requirement was prose until
-[atlas/articles/](../../atlas/articles/2026-07-28-models-integration/article.md)
+[the module article intake](../articles/2026-07-28-models-integration/article.md)
 existed.
 
 **Lesson:** when a stage names an artifact, the same change must create the
 place the artifact lands (the PR #5 lesson "a policy landing without an
 enforcement point should be treated as unlanded", applied to publication).
 
-**Codified:** `atlas/articles/<date>-<project>/` intake established by this
+**Codified:** `<module>/docs/articles/<date>-<project>/` intake established by this
 project's own article.

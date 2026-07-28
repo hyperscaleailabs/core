@@ -40,7 +40,8 @@ project passes through regardless of mode:
 5. Architect reviews the acceptance checks; LGTM merges (squash) to `main`.
 
 Every PR carries: Purpose, Tasks, Acceptance criteria (checkboxes), Evidence
-(committed artifacts under `docs/evidence/`), Lessons learned. The PR template
+(committed artifacts under the touched module's `docs/evidence/`; top-level
+`docs/` only for cross-module content), Lessons learned. The PR template
 enforces the structure and CI verifies it (`sdlc / pr-discipline`).
 
 ## Project shape
@@ -93,7 +94,8 @@ intent (from the human Architect), captured as a GitHub issue
    are the project's trail in the repository and part of the project history.
 7. **RESEARCHER/PUBLISHER** follows up: reviews what changed, summarizes, and
    produces the **article** - MD format for the Architect and PM audiences,
-   plus a LinkedIn variant for the CTO / Architect / PM audiences. Special
+   plus a platform-neutral `post.md` (LinkedIn format assumed) for the CTO /
+   Architect / PM audiences. Special
    project types produce their level's artifacts instead: the daily summary
    produces the executive whitepaper (CTO) and the exec deck/brief (CEO); the
    weekly summary produces the weekly digest in the form of a short book
@@ -135,14 +137,35 @@ A multi-PR project carries the pack as files; a single-PR project may carry the
 PRD/ARD content in the PR body, as today - only repo-shaping decisions get a
 standalone entry in [docs/adr/](../docs/adr/).
 
-Every project ends in an **article** (MD format, Architect and PM audiences,
-with a LinkedIn variant for CTO / Architect / PM), and generating it triggers
-the [Atlas](../atlas/) update. The article contains the analysis and summary
-of the project, **includes the project's lessons**, and **checks that
-alignment with the axis remained** through implementation, at the strategic
-and tactical levels. Its other sources are the PR bodies, their evidence, and
-the [lessons](../docs/lessons/) entries. The [daily level](DAILY.md)
-aggregates the day's articles into its executive and whitepaper publications.
+**Module-bounded PRs**: work is bounded to a specific module or app (e.g.
+`models`, `prod`, `apps/astragrid`) to keep boundaries clear and avoid
+coupling. This lifecycle is the **generic process template**; each module
+carries its specific adjustments in its `ACCEPTANCE.md` and module docs.
+Artifacts follow the boundary: the article lands in the owning module
+(`<module>/docs/articles/<date>-<project>/`), and cross-module narratives are
+separate articles in their own PRs cross-referencing each other; genuinely
+cross-module publications (whitepapers, weekly short books) land in
+[docs/projects/](../docs/projects/) and [docs/weekly/](../docs/weekly/).
+
+**Module CI/CD DAGs and two-tier regression**: every module has its own CI/CD
+DAG. On every PR and merge, change detection (path filters) decides depth: a
+**modified module** runs its full extensive verification - complete evidence
+collection including the product screenshot and the regression run (for
+models: the training, evaluation, and inference pipelines against the
+accepted baseline) - while the **top API level** runs a less extensive
+regression across all modules regardless of what changed.
+
+Every project ends in an **article** as `article.md` (MD format, Architect
+and PM audiences) plus `post.md` (platform-neutral social variant, LinkedIn
+format assumed, CTO / Architect / PM audiences) under
+`<module>/docs/articles/<date>-<project>/`; publishing it triggers the
+[Atlas](../atlas/) update. The article contains the analysis and summary of
+the project, **includes the project's lessons**, and **checks that alignment
+with the axis remained** through implementation, at the strategic and
+tactical levels. Its other sources are the PR bodies, their evidence, and the
+lessons entries (module lessons in `<module>/docs/lessons/`, process lessons
+in [docs/lessons/](docs/lessons/)). The [daily level](DAILY.md) aggregates
+the day's articles into its executive and whitepaper publications.
 
 ## North star (direction, not yet in effect)
 
@@ -183,5 +206,6 @@ multiple worktrees running in parallel, returned to `main` as a single reviewed 
 - **Evidence or it didn't happen.** Smoke scale fine; fabrication is not.
 - **Review the review loop** - every mechanical review finding becomes a CI guard in
   the same correction PR.
-- **Methodology docs are reference, not journal** - notes live in PR bodies and
-  `docs/lessons/`; lessons aggregate into Atlas white papers.
+- **Methodology docs are reference, not journal** - notes live in PR bodies,
+  module lessons in `<module>/docs/lessons/`, and process lessons in
+  `sdlc/docs/lessons/`; lessons aggregate into Atlas white papers.

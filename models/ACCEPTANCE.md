@@ -33,8 +33,19 @@ example sets, not extensive training-correlation inference:
 
 Runs on the local K3s/k3d cluster when one is reachable, otherwise directly
 on the host (data + training layer only) - the evidence states which.
-Extensive regression (GPU benchmarks on served endpoints) belongs to release
-gates, not per-PR QA.
+
+## Two-tier verification (module CI/CD DAG)
+
+Per the [generic process template](../sdlc/LIFECYCLE.md#stages), change
+detection decides depth on every PR and merge:
+
+- **This module modified** -> full extensive verification: complete evidence
+  collection including the **product screenshot** and the regression run
+  across the **training, evaluation, and inference pipelines** against the
+  accepted baseline (compact regression above at PR scale; GPU benchmarks on
+  served endpoints at release gates).
+- **Module untouched** -> only the less extensive top-API-level regression
+  that runs across all modules on every merge.
 
 Evidence tiers apply ([AXIS.md](../AXIS.md#guardrails)): smoke-scale evidence
 proves the pipeline, not model quality; state the tier on every record.
