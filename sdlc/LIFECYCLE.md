@@ -1,4 +1,8 @@
-# SDLC lifecycle
+# Project lifecycle
+
+This is the **project level** of the [four-level SDLC](README.md): the strategic
+level sets the axis, the tactical level fills the backlog, the daily level frames
+the day; this document is the method for executing one project.
 
 Direction comes from [AXIS.md](../AXIS.md); this document is only the method for
 moving along it. Every PR declares a horizon (short / mid / long) in its Purpose
@@ -13,17 +17,70 @@ Graduation: once the single-PR flow is mastered, PRs get chunked into longer pro
 
 ## Current mode: one PR at a time
 
-The flow is optimized for one fully-mastered step:
+The flow is optimized for one fully-mastered step, in the three phases every
+project passes through regardless of mode:
+
+**Initiation**
 
 1. Branch against `main`.
 2. Discuss **PRD** and **ADR** with the architect; draft **acceptance criteria**.
+
+**Agentic execution**, behind verification and quality gates:
+
 3. Work in a dedicated **worktree**.
 4. Pass all acceptance checks in **CI/CD**.
+
+**Architectural review**
+
 5. Architect reviews the acceptance checks; LGTM merges (squash) to `main`.
 
 Every PR carries: Purpose, Tasks, Acceptance criteria (checkboxes), Evidence
 (committed artifacts under `docs/evidence/`), Lessons learned. The PR template
 enforces the structure and CI verifies it (`sdlc / pr-discipline`).
+
+## Project shape
+
+A project is **one or several PRs**, follow-ups included, sized at **several
+hours of work** for the Architect with the AI agentic coding system. Every
+project is **templated**; its full arc:
+
+```text
+intent (from the human Architect), captured in the project template:
+  header with the goal and the specific challenge,
+  referencing the strategic and tactical context
+  -> Architect review: product and architecture solution,
+     handed off as PRD and spec (prd.md, ard.md, plan.md, handoff.md)
+  -> agent team: implement, verify against the definition of done,
+     present results, commit, wait for acceptance
+  -> LGTM -> squash merge to main
+  -> article: analysis, summary, and the axis-alignment check
+```
+
+The template header stays light: the goal and the specific challenge this
+project answers, referencing the strategic and tactical context rather than
+restating mission and vision per project. The alignment lives at the end
+instead: the article carries the check that alignment with the axis held during
+implementation, at the strategic and tactical levels. The Architect reviews the
+templated project and produces the product and architecture solution as the
+handoff pack: `prd.md` (requirements), `ard.md` (architecture decisions and
+trade-offs), `plan.md` (execution plan), `handoff.md` (implementation handoff).
+That initial spec goes to the agents for implementation and verification:
+agents work **as a team**, verify against the definition of done, present the
+results with evidence, commit, and wait for acceptance; the Architect's LGTM
+merges to `main`.
+
+A multi-PR project carries the pack as files; a single-PR project may carry the
+PRD/ARD content in the PR body, as today - only repo-shaping decisions get a
+standalone entry in [docs/adr/](../docs/adr/).
+
+Every project ends in an **article** at the Architect and Builder levels, and
+generating it triggers the [Atlas](../atlas/) update. The article contains the
+analysis and summary of the project, **includes the project's lessons**, and
+**checks that alignment with the axis remained** through implementation, at the
+strategic and tactical levels. Its other sources are the PR bodies, their
+evidence, and the [lessons](../docs/lessons/) entries. The
+[daily level](DAILY.md) aggregates the day's articles into its executive and
+whitepaper publications.
 
 ## North star (direction, not yet in effect)
 
@@ -31,13 +88,15 @@ A **project** is one architect-approved iteration on `sdlc/<project>`, executed 
 multiple worktrees running in parallel, returned to `main` as a single reviewed merge.
 
 1. **Goal setting** - architect fixes scope, priorities, constraints. No code.
-2. **PR0: PRD + ADR + PLAN** - documents only; 5-10 PRs with dependency graph and
-   per-PR acceptance criteria. *Sizing: each PR under ~10 minutes of coding-model
-   execution; whole project fits a 1-2 hour runway.*
+2. **PR0: the project pack** (`prd.md`, `ard.md`, `plan.md`, `handoff.md`) -
+   documents only; 5-10 PRs with dependency graph and per-PR acceptance criteria.
+   *Sizing: each PR under ~10 minutes of coding-model execution; whole project
+   fits a 1-2 hour runway.*
 3. **Execution** - PRs in dependency order across parallel worktrees; each PR CI-gated
    and leaves the branch working. **Whole-project review every 1-2 hours against
-   PRD/ADR/plan; 4 planning/review sessions per day.** Drift corrected or plan amended.
-4. **Final PR: white paper** - goals, built, results, all PR links, lessons, deviations.
+   the pack; 4 planning/review sessions per day.** Drift corrected or plan amended.
+4. **Final PR: white paper** - goals, built, results, all PR links, lessons,
+   deviations. This is the long form behind the project article.
 5. **Merge acceptance via control surfaces** - merge PR accepted on the *running
    product*. The link targets below are the specific evidences required to approve:
 
