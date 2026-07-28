@@ -7,6 +7,9 @@ Cloud-agnostic deployment for the whole monorepo. The split of responsibilities:
 - **Infra owns the integrated picture**: k3d cluster definitions, Kubernetes manifests,
   and Terraform for the underlying VMs. Nothing service-specific is duplicated here;
   infra composes what subprojects publish.
+- **HSAI owns cluster operations**: [`hsai`](hsai/README.md) keeps private
+  target inventory outside the repository and plans, provisions, diagnoses,
+  and operates named multi-node K3s clusters over Tailscale and SSH.
 
 ## Layout
 
@@ -20,6 +23,7 @@ Cloud-agnostic deployment for the whole monorepo. The split of responsibilities:
 | `k8s/overlays/canary/` | Canary overlay: small replica counts, canary ingress weights |
 | `k8s/overlays/prod/` | Production overlay: full replicas, autoscaling, production ingress |
 | `k3d/` | Declarative k3d cluster configs (registry, ingress, port mappings) |
+| `hsai/` | Console and library for target inventory, K3s cluster lifecycle, and workload dispatch |
 
 ## Conventions
 
@@ -51,4 +55,25 @@ Cloud-agnostic deployment for the whole monorepo. The split of responsibilities:
   `~/.hsailabs-core` at deploy time (or via an external secrets operator later);
   manifests reference names only, never values.
 
-Status: skeleton. Cluster configs and manifests land as the first services migrate in.
+## Cluster operations
+
+Install the console from the repository, then keep the target inventory in
+the external runtime configuration:
+
+```bash
+python3 -m pip install -e infra/hsai
+hsai target add <target> --ssh-host <ssh-alias>
+hsai cluster create <cluster> --server <target>
+hsai cluster plan <cluster>
+hsai cluster provision <cluster>
+hsai cluster status <cluster>
+hsai cluster doctor <cluster>
+```
+
+Add worker nodes with `hsai cluster node-add <cluster> <target>`. A cluster
+has exactly one K3s server and zero or more K3s agents. Plans are read-only;
+provisioning refuses to start unless every target passes its preflight gates.
+See [the HSAI guide](hsai/README.md).
+
+Status: cluster lifecycle is implemented in `hsai`; integrated service
+manifests continue to land as services migrate.

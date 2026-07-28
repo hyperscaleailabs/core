@@ -59,6 +59,19 @@ else
   echo "ok"
 fi
 
+# 4. The console is named hsai. The earlier hsm spelling was renamed, and a
+#    stale reference sends an operator to a command that does not exist.
+echo "== hsai is the canonical console name =="
+hits=$(grep -rnE '\bhsm\b' \
+         --include='*.md' --include='*.yaml' --include='*.py' --include='*.sh' --include='*.json' models \
+       | grep -v "^$SELF:" || true)
+if [ -n "$hits" ]; then
+  printf '%s\n' "$hits"
+  fail "legacy hsm command found; use hsai"
+else
+  echo "ok"
+fi
+
 if [ "$status" -eq 0 ]; then
   echo ""
   echo "models policy guards OK"

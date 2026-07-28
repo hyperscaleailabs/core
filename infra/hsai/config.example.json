@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "targets": {
+    "server-node": {
+      "ssh_host": "server.example.invalid",
+      "ssh_port": 22
+    },
+    "worker-node": {
+      "ssh_host": "worker.example.invalid",
+      "ssh_port": 22
+    }
+  },
+  "clusters": {
+    "models": {
+      "k3s_version": "v1.33.3+k3s1",
+      "nodes": [
+        {
+          "target": "server-node",
+          "role": "server"
+        },
+        {
+          "target": "worker-node",
+          "role": "agent"
+        }
+      ]
+    }
+  }
+}

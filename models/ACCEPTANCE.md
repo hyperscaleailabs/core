@@ -49,3 +49,7 @@ detection decides depth on every PR and merge:
 
 Evidence tiers apply ([AXIS.md](../AXIS.md#guardrails)): smoke-scale evidence
 proves the pipeline, not model quality; state the tier on every record.
+
+For remote execution, the named cluster must also satisfy
+[infra/ACCEPTANCE.md](../infra/ACCEPTANCE.md). Real target configuration and
+kubeconfigs are never committed as model evidence.

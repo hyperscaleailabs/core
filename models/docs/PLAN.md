@@ -23,9 +23,8 @@ gateway -> publish config + article to this repo.
   pointer at the bottom of this file, and (c) states in its description what
   the next PR consumes from it (files, interfaces, cluster state). This file
   is the single source of truth for sequencing.
-- **Phase gate**: remote/GPU work (PR9) stays placeholder until the first
-  full local pass (PR1-PR8) is demonstrated, then real boxes get plugged into
-  `deploy/targets.yaml`.
+- **Phase gate**: remote/GPU work stays gated on the same local semantic
+  checks, while real target inventory always remains outside the repository.
 - **Final architectural review** happens after PR9 (or after PR8 if phase 2
   is deferred): whole-system review against the checklist at the bottom.
 
@@ -34,7 +33,7 @@ gateway -> publish config + article to this repo.
 ```mermaid
 graph TD
   PR1[PR1 goldens + docs + plan] --> PR3[PR3 golden-driven benchmark]
-  PR1 --> PR4[PR4 hsm CLI: pull + train]
+  PR1 --> PR4[PR4 hsai CLI: pull + train]
   PR2[PR2 local K3s bootstrap] --> PR3
   PR2 --> PR5[PR5 in-cluster training Job]
   PR4 --> PR5
@@ -42,7 +41,7 @@ graph TD
   PR3 --> PR7[PR7 run article + publish]
   PR4 --> PR7
   PR2 --> PR8[PR8 JAX scale track]
-  PR3 --> PR8a[PR8a end-to-end hsm run + DPO]
+  PR3 --> PR8a[PR8a end-to-end hsai run + DPO]
   PR6 --> PR8a
   PR7 --> PR8a
   PR8a --> PR9[PR9 remote GPU targets - GATED]
@@ -78,9 +77,9 @@ graph TD
   three goldens, report JSON committed as example.*
   *Hands off: report schema to PR7 (article) and PR8a (orchestrator).*
 
-- [ ] **PR4 - `hsm` CLI: pull + train**
-  `hsm` entrypoint (single Python package, `pyproject.toml`) with `hsm pull`
-  and `hsm train`: golden slice -> LoRA SFT (reuses train/finetune_lora.py
+- [ ] **PR4 - `hsai` CLI: pull + train**
+  `hsai` entrypoint (single Python package, `pyproject.toml`) with `hsai pull`
+  and `hsai train`: golden slice -> LoRA SFT (reuses train/finetune_lora.py
   internals), run directory layout (`runs/<run-id>/config.yaml`, checkpoint).
   CPU smoke path: tiny model, <=100 items. `--method full` wired; `--method
   dpo` stubbed with a clear error until PR8a.
@@ -89,8 +88,8 @@ graph TD
   *Hands off: run-dir contract to PR5/PR6/PR7.*
 
 - [ ] **PR5 - In-cluster training Job**
-  Containerize `hsm train`; K8s Job manifest (checkpoints to `local-path`
-  PVC), `hsm train --target local` submits the Job, streams logs, retrieves
+  Containerize `hsai train`; K8s Job manifest (checkpoints to `local-path`
+  PVC), `hsai train --target local` submits the Job, streams logs, retrieves
   the checkpoint. Same manifest parameterized for GPU (phase 2).
   *Evidence: Job completes on the k3d cluster, checkpoint retrieved locally.*
   *Hands off: Job template + submission code to PR8 (JAX) and PR9 (remote).*
@@ -98,7 +97,7 @@ graph TD
 - [ ] **PR6 - Serve fine-tuned checkpoints + gateway**
   vLLM `--enable-lora --lora-modules` wiring for adapters; single
   OpenAI-compatible gateway Service in front of all model Services (route by
-  model name); `hsm serve <run-id> --target local`. Local CPU serving uses
+  model name); `hsai serve <run-id> --target local`. Local CPU serving uses
   the PR2 stand-in server for adapters. GPU vLLM manifests updated for
   phase 2.
   *Evidence: chat completion against the gateway hitting base model AND the
@@ -106,8 +105,8 @@ graph TD
   *Hands off: gateway URL contract to PR8a.*
 
 - [ ] **PR7 - Run article + publish**
-  `hsm report <run-id>`: generate `report.md` (config, slices, before/after
-  metrics per category, sample wins/regressions). `hsm publish <run-id>`:
+  `hsai report <run-id>`: generate `report.md` (config, slices, before/after
+  metrics per category, sample wins/regressions). `hsai publish <run-id>`:
   commit `config.yaml` + `report.md` under `runs/` on a branch and open a PR
   to this repo.
   *Evidence: a real generated article from a PR4 run, published as a PR.*
@@ -121,28 +120,28 @@ graph TD
   checkpoint in PVC.*
   *Hands off: manifest scaled by env vars only; GPU variant ready for PR9.*
 
-- [ ] **PR8a - End-to-end `hsm run` + DPO**
-  `hsm run` chains pull -> train -> benchmark(before/after) -> report; adds
+- [ ] **PR8a - End-to-end `hsai run` + DPO**
+  `hsai run` chains pull -> train -> benchmark(before/after) -> report; adds
   `--method dpo` (TRL DPOTrainer, preference pairs derived from golden
   references vs base-model outputs); `--method full` exercised on the tiny
   model.
-  *Evidence: single `hsm run` command transcript producing a complete
+  *Evidence: single `hsai run` command transcript producing a complete
   `runs/<id>/` with article, on the local cluster.*
   *Hands off: the phase-1 complete demo; phase-2 gate opens.*
 
-### Phase 2: remote GPU boxes (GATED - awaiting real boxes from the architect)
+### Phase 2: remote GPU clusters
 
-- [ ] **PR9 - Remote SSH targets**
-  Fill `deploy/targets.yaml` placeholders with real box(es); `hsm --target
-  ssh:<name>` provisions K3s (existing script), imports/pulls images, runs
-  the same pipeline; multi-box K3s join for the JAX track; real Gemma +
+- [ ] **PR9 - HSAI remote clusters**
+  Use external HSAI inventory for real targets; `hsai --target <cluster>`
+  provisions K3s, imports/pulls images, and runs the same pipeline;
+  multi-node K3s joining supports the JAX track; real Gemma +
   Ultravox vLLM deployments and real-scale golden runs (e.g. train-limit 100
   as the first requested demo).
-  *Evidence: full `hsm run` transcript against a cloud GPU box; goldens
+  *Evidence: full `hsai run` transcript against a cloud GPU box; goldens
   benchmark numbers for Gemma, Ultravox, faster-whisper.*
 
 - [ ] **Final architectural review**
-  Whole-system review: interface stability (`hsm`, run-dir, report schema),
+  Whole-system review: interface stability (`hsai`, run-dir, report schema),
   security (SSH handling, HF tokens as Secrets, no weights in git), cost of
   a run, docs accuracy, deletion of dead scaffolding. Produces either sign-off
   or a punch-list PR.

@@ -1,0 +1,40 @@
+name: infra
+
+on:
+  pull_request:
+    paths:
+      - "infra/**"
+      - ".github/workflows/infra.yml"
+  push:
+    branches: [main]
+    paths:
+      - "infra/**"
+      - ".github/workflows/infra.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  hsai:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Compile
+        run: python -m compileall -q infra/hsai/src infra/hsai/tests
+      - name: Unit and mocked integration tests
+        run: |
+          PYTHONPATH=infra/hsai/src \
+            python -m unittest discover -s infra/hsai/tests -v
+      - name: Example inventory loads
+        run: |
+          HSAI_CONFIG=infra/hsai/config.example.json \
+            PYTHONPATH=infra/hsai/src python -m hsai.cli target list
+      - name: No private deployment state
+        run: |
+          if git ls-files infra | grep -E '(^|/)(config\.json|kubeconfigs?/|id_[a-z0-9]+$)'; then
+            echo "::error::private deployment state is committed"
+            exit 1
+          fi
