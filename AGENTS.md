@@ -10,7 +10,8 @@ Canonical agent contract for this repository, vendor-neutral.
    short. Mid-horizon work without its short-horizon foundation is deferred, not
    started.
 2. **[sdlc/LIFECYCLE.md](sdlc/LIFECYCLE.md)** - how ALL work here is organized.
-   Current mode: one PR at a time.
+   Current mode: one PR at a time. It is the project level of the four-level
+   SDLC (strategic / tactical / daily / project, [sdlc/README.md](sdlc/README.md)).
 
 Use the skills: `pr-flow` to run the cycle, `pr-verify` before every handoff,
 `lessons` after every merge or review round.
@@ -23,7 +24,7 @@ Use the skills: `pr-flow` to run the cycle, `pr-verify` before every handoff,
 | [MISSION.md](MISSION.md), [docs/strategic/](docs/strategic/) | Why, and the research behind the direction |
 | `AGENTS.md` (this file), `CLAUDE.md` | How agents behave |
 | [.claude/skills/](.claude/skills/) | What agents can do, as executable procedures |
-| [sdlc/LIFECYCLE.md](sdlc/LIFECYCLE.md) | Lifecycle methodology and release gates |
+| [sdlc/](sdlc/) | The four-level SDLC; [LIFECYCLE.md](sdlc/LIFECYCLE.md) is the project level with release gates |
 | [docs/](docs/), subproject `README.md` files | What we are doing: PRDs, ADRs, designs, state |
 | [apps/](apps/) | Long-term value stream; evolves with core, aligned to the axis |
 

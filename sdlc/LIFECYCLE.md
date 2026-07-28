@@ -1,4 +1,8 @@
-# SDLC lifecycle
+# Project lifecycle
+
+This is the **project level** of the [four-level SDLC](README.md): the strategic
+level sets the axis, the tactical level fills the backlog, the daily level frames
+the day; this document is the method for executing one project.
 
 Direction comes from [AXIS.md](../AXIS.md); this document is only the method for
 moving along it. Every PR declares a horizon (short / mid / long) in its Purpose
@@ -13,17 +17,32 @@ Graduation: once the single-PR flow is mastered, PRs get chunked into longer pro
 
 ## Current mode: one PR at a time
 
-The flow is optimized for one fully-mastered step:
+The flow is optimized for one fully-mastered step, in the three phases every
+project passes through regardless of mode:
+
+**Initiation**
 
 1. Branch against `main`.
 2. Discuss **PRD** and **ADR** with the architect; draft **acceptance criteria**.
+
+**Agentic execution**, behind verification and quality gates:
+
 3. Work in a dedicated **worktree**.
 4. Pass all acceptance checks in **CI/CD**.
+
+**Architectural review**
+
 5. Architect reviews the acceptance checks; LGTM merges (squash) to `main`.
 
 Every PR carries: Purpose, Tasks, Acceptance criteria (checkboxes), Evidence
 (committed artifacts under `docs/evidence/`), Lessons learned. The PR template
 enforces the structure and CI verifies it (`sdlc / pr-discipline`).
+
+Every project ends in an **article** at the Architect and Builder levels,
+published through [Atlas](../atlas/). In current mode the article's sources are
+the PR body, its evidence, and the [lessons](../docs/lessons/) entry; the
+[daily level](DAILY.md) combines the day's articles into its executive and
+whitepaper publications.
 
 ## North star (direction, not yet in effect)
 

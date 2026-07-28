@@ -3,10 +3,40 @@
 Software development lifecycle for the whole monorepo. This subproject defines the
 top-level loops that every other subproject plugs into, plus the tooling that runs them.
 
-**The operative methodology is [LIFECYCLE.md](LIFECYCLE.md)**: current mode (one PR at
-a time) and the north star (parallel multi-PR projects). It is enforced by the PR
-template, the `sdlc / pr-discipline` CI check, and the repo skills
-(`pr-flow`, `pr-verify`, `lessons`).
+The lifecycle operates at **four levels**. Each level has its own cadence, its own
+artifacts, and a defined hand-off to the levels above and below it. Direction flows
+down; lessons flow up. A level that neither informs nor is informed by its
+neighbors is decoration.
+
+| Level | Cadence | Defines | Publishes |
+|-------|---------|---------|-----------|
+| [Strategic](STRATEGIC.md) | 1 / 3 / 6-12 months | The axis: mission, vision, method; short/mid/long horizons | Realignment log; AXIS and DIRECTION updates |
+| [Tactical](TACTICAL.md) | monthly, then weekly | Architecture lifecycle; epics broken down into weekly project backlogs | Monthly architecture review; weekly backlog |
+| [Daily](DAILY.md) | daily | The day's backlog of 3-5 projects | Executive deck slide (CEO level) and whitepaper summary (CTO level), to Atlas |
+| [Project](LIFECYCLE.md) | per project | PRD, ADR, plan, acceptance criteria, worktree/PR, evidence, CI/CD, architectural review | Article (Architect and Builder levels), to Atlas |
+
+## Closing the loops
+
+```text
+direction:  axis -> epics -> weekly backlog -> daily backlog -> project scope
+lessons:    project articles -> daily summaries -> monthly review -> realignment
+```
+
+Downward, each level scopes the one below it: the axis bounds what an epic may be,
+epics bound projects, the weekly backlog bounds the day. Upward, every project ends
+in an article and a [lessons](../docs/lessons/) entry; daily summaries combine
+them, the monthly architecture review aggregates the month, and the strategic
+checkpoints consume the aggregate. Publications are scheduled, not occasional - an
+unpublished level is an open loop.
+
+## Status
+
+The **operative level today is Project**: [LIFECYCLE.md](LIFECYCLE.md), current
+mode, one PR at a time, enforced by the PR template, the `sdlc / pr-discipline` CI
+check, and the repo skills (`pr-flow`, `pr-verify`, `lessons`). The strategic,
+tactical, and daily documents are first-iteration scaffolding: references for
+alignment now, activated as their cadences begin. Each document carries its own
+activation status.
 
 ## Development-to-production loops
 
@@ -22,7 +52,8 @@ Highest level loops, each with its own sub-loops:
 4. **Agents**: run as APIs and LiveKit agents, pluggable and configurable into Meet.
 5. **D-twins**: containerized service with autoscale and startup/shutdown orchestration
    via API and command line, operable by agents.
-6. **Atlas**: publishes aggregated lessons learned as posts and white papers.
+6. **Atlas**: publishes the lifecycle's aggregated outputs - project articles, daily
+   slides and whitepaper summaries, and white papers built from lessons learned.
 7. **Deployment**: models, prod, meet, agents, dtwins, and atlas are exposed as
    Kubernetes services/deployments, internal or external per the access tiers in the
    root [README](../README.md).
