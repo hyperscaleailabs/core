@@ -19,6 +19,10 @@ Every level is **templated**: the initial templates are extracted from documents
 already in the repository (starting with the strategic packages) and improved
 with each iteration.
 
+The repository itself is navigated as a graph with the root README as the
+entrance node: [GRAPH.md](GRAPH.md) defines the nodes, placement rules,
+per-stage context pulling, and the compaction cadence.
+
 ## Closing the loops
 
 ```text

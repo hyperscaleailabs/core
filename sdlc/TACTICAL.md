@@ -22,7 +22,11 @@ review** whose outcome feeds the [daily level](DAILY.md).
    package, its horizon, and the architecture it advances.
 3. **ADR graduation**: decisions surfaced by the month's work graduate into
    [docs/adr/](../docs/adr/).
-4. **Hand-off up**: the review digest goes to the strategic
+4. **Graph compaction**: a periodic compaction and refinement pass over the
+   [repository graph](GRAPH.md#compaction-and-refinement) - merge duplicated
+   documents, retire dead nodes, relocate misplaced artifacts, verify the
+   root README still reaches every active node.
+5. **Hand-off up**: the review digest goes to the strategic
    [alignment check](STRATEGIC.md#checkpoints).
 
 ## Weekly - tactical review and digest

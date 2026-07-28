@@ -1,5 +1,12 @@
 # Implementation plan
 
+> Historical trace from before this subproject's integration into the
+> monorepo: PR numbers and checkboxes refer to the standalone repository's
+> pull requests, not this repo's. New work follows this repository's
+> [project lifecycle](../../sdlc/LIFECYCLE.md) with its own issues and PRs;
+> the remaining unchecked items below are backlog input, re-scoped through
+> the weekly tactical review before execution.
+
 Goal: the parameterized run workflow in [workflow.md](workflow.md) -
 select model -> fine-tune (full / LoRA / DPO) on a golden slice -> benchmark on
 held-out cases -> write the run article -> serve via vLLM + OpenAI-compatible

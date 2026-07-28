@@ -77,20 +77,33 @@ intent (from the human Architect), captured as a GitHub issue
    module level (e.g. the `models` workflow on `models/**`) and at the
    overall monorepo integration level; the checks verify that every project
    has its GitHub issue and its PR with evidences, and its article, before
-   merge into `main`.
-5. The **Human Architect and MGMT** review back and forth to accept the
+   merge into `main`. QA includes **regression testing**: a compact
+   regression on defined example sets at module-appropriate scale (for
+   models: golden-slice train / evaluate / infer against the previous
+   accepted baseline, per [models/ACCEPTANCE.md](../models/ACCEPTANCE.md)),
+   with the regression output attached as evidence.
+5. **Cleanup and refinement**: every project removes the complexity it added
+   before it is accepted. Simplify what the implementation grew, relocate
+   misplaced artifacts (module evidence into the module - see
+   [GRAPH.md](GRAPH.md#placement-rules)), repair vocabulary and link drift,
+   compact documents. Gradual complexity increase and drift are the failure
+   mode this stage exists to stop.
+6. The **Human Architect and MGMT** review back and forth to accept the
    project. Comments and notes are collected on the GitHub issue and PR: they
    are the project's trail in the repository and part of the project history.
-6. **RESEARCHER/PUBLISHER** follows up: reviews what changed, summarizes, and
+7. **RESEARCHER/PUBLISHER** follows up: reviews what changed, summarizes, and
    produces the **article** - MD format for the Architect and PM audiences,
    plus a LinkedIn variant for the CTO / Architect / PM audiences. Special
    project types produce their level's artifacts instead: the daily summary
    produces the executive whitepaper (CTO) and the exec deck/brief (CEO); the
    weekly summary produces the weekly digest in the form of a short book
    (CTO and CEO).
-7. **MGMT final review**: project goals, implementation, QA results,
+8. **MGMT final review**: project goals, implementation, QA results,
    published materials, cross-module project checks, overall regression and
    integrity - prior to the merge and its follow-ups.
+
+Context for every stage is pulled from the [repository graph](GRAPH.md):
+enter at the node closest to the task, read outward only as needed.
 
 **Every project has a GitHub issue**, opened at initiation from the project
 template; it is the project's anchor, and every PR of the project references

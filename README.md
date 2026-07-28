@@ -56,13 +56,22 @@ state, and method never drift into each other.
 | **Axis** | Where are we going, strategically and tactically, and how is effort weighted? | [AXIS.md](AXIS.md), long form in [MISSION.md](MISSION.md) and [docs/strategic/](docs/strategic/) |
 | **Agent behavior** | How do agents and contributors work here? | [AGENTS.md](AGENTS.md) (canonical), [CLAUDE.md](CLAUDE.md) (pointer) |
 | **Capability** | What can agents actually do, as executable procedure? | [`.claude/skills/`](.claude/skills/): `pr-flow`, `pr-verify`, `lessons` |
-| **Method** | How does work move from research to production? | [sdlc/LIFECYCLE.md](sdlc/LIFECYCLE.md): research, data science, software R&D, pre-release and production gates |
+| **Method** | How does work move from research to production? | [sdlc/LIFECYCLE.md](sdlc/LIFECYCLE.md): staged project flow with QA and **regression testing** gates, pre-release and production gates |
 | **State** | What are we doing, and where does it stand? | [docs/](docs/) and subproject READMEs: PRDs, ADRs, designs, plans, lessons |
+| **Oversight** | Is the repo sound, from the executive perspective? | [executive/](executive/): standing CEO and CTO validation agents, outlooks, repo monitoring |
 | **Value** | What does this all produce? | [apps/](apps/): the long-term value stream, evolving with core and aligned to the axis |
 
 Everything realigns to the axis, including the axis itself: it is re-derived from
 market research roughly every six months and logged in
 [DIRECTION.md](docs/strategic/DIRECTION.md#realignment-log).
+
+This README is the **entrance node of the repository graph**
+([sdlc/GRAPH.md](sdlc/GRAPH.md)): from here, links trace into each module's
+`README.md` and `ACCEPTANCE.md`, from modules into projects (GitHub issues),
+and from projects into PRs, evidence, and articles. Agents pull context by
+traversing this graph, not by scanning the tree. Every project passes QA with
+a compact **regression test** at module-appropriate scale before merge; the
+regression output is attached as evidence.
 
 ## Subprojects
 
@@ -77,6 +86,7 @@ market research roughly every six months and logged in
 | [`dtwins/`](dtwins/) | D-twins | Digital twins: seem-to-real and real-to-seem environments, 2D/3D/4D simulation engines, an engine-under-your-engine layer, demoable in Meet via pixel streaming |
 | [`atlas/`](atlas/) | Atlas | Agentic research project that aggregates lessons learned across all subprojects and produces regular white papers and posts |
 | [`infra/`](infra/) | Infra | Cloud-agnostic deployment: Terraform, Kubernetes manifests, integrated k3d environments. Subprojects own their Dockerfiles and compose files; infra owns the integrated picture |
+| [`executive/`](executive/) | Executive | Standing CEO and CTO validation agents, strategic and tactical outlook material, repo-monitoring tooling |
 
 Each subproject keeps its own `README.md` and, where it deviates from the repo default,
 its own license and notice files.

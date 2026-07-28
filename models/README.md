@@ -18,6 +18,9 @@ Runtime identifiers (the `hyperswarm-models` namespace, `hyperswarm.ai/*`
 labels, the `k3d-hyperswarm` context) predate the move into this monorepo and
 are kept as-is; renaming them is a separate, deliberate change.
 
+All command examples in this subproject's docs are written relative to
+`models/` - run them from this directory (`cd models`), not the repo root.
+
 ## Layout
 
 | Path | Purpose |

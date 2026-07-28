@@ -16,5 +16,25 @@ the template of every subproject it touches.
       the pipeline (pull golden -> fine-tune -> benchmark -> serve) executes
       end to end for each registry model the change affects.
 
+## Compact regression (per-PR scale)
+
+The regression test at PR scale is deliberately compact - several fixed
+example sets, not extensive training-correlation inference:
+
+1. Pull the fixed golden slice (`ecommerce-ecinstruct`, train split).
+2. Fine-tune the smoke model (`HuggingFaceTB/SmolLM2-135M-Instruct`, 32
+   examples, 2 epochs, 16 optimizer steps) with
+   [train/finetune_lora.py](train/finetune_lora.py).
+3. Compare the loss trajectory against the **previous accepted baseline**
+   (first: [docs/evidence/2026-07-26-lora-smoke.md](docs/evidence/2026-07-26-lora-smoke.md),
+   train_loss 3.647, final 3.43): downward trajectory, final loss within
+   tolerance of the baseline.
+4. Commit transcript and loss curve to [docs/evidence/](docs/evidence/).
+
+Runs on the local K3s/k3d cluster when one is reachable, otherwise directly
+on the host (data + training layer only) - the evidence states which.
+Extensive regression (GPU benchmarks on served endpoints) belongs to release
+gates, not per-PR QA.
+
 Evidence tiers apply ([AXIS.md](../AXIS.md#guardrails)): smoke-scale evidence
 proves the pipeline, not model quality; state the tier on every record.
