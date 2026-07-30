@@ -71,7 +71,7 @@ export function minutesFor(entry: AnyEntry): number {
 }
 
 export function urlFor(entry: AnyEntry): string {
-  return `/${entry.collection}/${entry.slug}`;
+  return `/${entry.collection}/${entry.id}`;
 }
 
 export async function getPublished<C extends CollectionKey>(collection: C) {
@@ -80,7 +80,7 @@ export async function getPublished<C extends CollectionKey>(collection: C) {
     const ao = (a.data as { order?: number }).order ?? 999;
     const bo = (b.data as { order?: number }).order ?? 999;
     if (ao !== bo) return ao - bo;
-    return String(a.slug).localeCompare(String(b.slug));
+    return String(a.id).localeCompare(String(b.id));
   });
 }
 

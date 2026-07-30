@@ -31,12 +31,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: atlas/package-lock.json
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Production dependency audit
+        run: npm audit --omit=dev --audit-level=high
 
       # The committed index is what `astro dev` serves, so it is real state, not
       # a build artifact. A generated file that is committed and never compared
@@ -92,7 +95,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
       - name: Every module article has a Lab Notes entry
         run: node scripts/intake-module-article.mjs --all --check
 

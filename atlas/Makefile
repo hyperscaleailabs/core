@@ -35,6 +35,10 @@ check: ## Type and content-schema check
 build: ## Production build (validates every article's frontmatter)
 	$(NPM) run build
 
+.PHONY: audit
+audit: ## Fail on high or critical production dependency advisories
+	$(NPM) audit --omit=dev --audit-level=high
+
 .PHONY: preview
 preview: ## Serve the production build locally
 	$(NPM) run preview
@@ -48,7 +52,7 @@ policy: ## Module policy guards - exactly what the atlas workflow runs
 	bash scripts/check-policy.sh
 
 .PHONY: verify
-verify: index check-collections check build policy ## Everything CI runs for the site, in CI's order
+verify: audit index check-collections check build policy ## Everything CI runs for the site, in CI's order
 
 ## ---- Publication intake ----
 .PHONY: intake-check

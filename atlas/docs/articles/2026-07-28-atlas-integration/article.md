@@ -70,16 +70,18 @@ hosted runner. All green:
 
 | Check | Result |
 |-------|--------|
-| Search index | 34 documents, unchanged by a fresh rebuild |
+| Production dependencies | 0 high or critical advisories; CI guarded |
+| Search index | 35 documents, unchanged by a fresh rebuild |
 | Collection registration | 9 collections, consistent across schema and metadata |
 | `astro check` | 0 errors, 0 warnings, 0 hints across 20 files |
-| `astro build` | 47 pages |
-| Publication intake | 2 of 2 module articles published |
+| `astro build` | 48 pages |
+| Publication intake | 3 of 3 module articles published |
 | Module policy guards | 5 of 5 |
 | Repo policy (gitleaks, PII, links) | clean |
 
-Both new guards were also run in the **failing** direction - a planted removal
-for the collection guard, a planted repository reference for the policy guard -
+The new guards were also run in the **failing** direction - a planted removal
+for the collection guard, a planted repository reference for the policy guard,
+and an isolated vulnerable lockfile for the dependency audit -
 because a guard that has never been seen to fail is a guard nobody has tested.
 
 Full record:
@@ -142,6 +144,8 @@ Every finding became a guard or a structural fix in the same PR:
 
 Full write-up:
 [docs/lessons/2026-07-28-atlas-integration.md](../../lessons/2026-07-28-atlas-integration.md).
+The acceptance review correction is recorded separately in
+[docs/lessons/2026-07-29-atlas-security-review.md](../../lessons/2026-07-29-atlas-security-review.md).
 
 ## Axis alignment
 

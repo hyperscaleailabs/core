@@ -1,4 +1,6 @@
-import { defineCollection, z, reference } from 'astro:content';
+import { defineCollection, reference } from 'astro:content';
+import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 /**
  * Shared frontmatter contract for every article on Agentic Atlas.
@@ -12,7 +14,7 @@ const LEVELS = ['beginner', 'intermediate', 'advanced'] as const;
 
 const source = z.object({
   title: z.string(),
-  url: z.string().url(),
+  url: z.url(),
   publisher: z.string().optional(),
   // License of the *original* referenced material, so we attribute correctly.
   license: z.string().optional(),
@@ -41,12 +43,12 @@ const baseArticle = z.object({
 });
 
 const foundations = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/foundations' }),
   schema: baseArticle,
 });
 
 const patterns = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/patterns' }),
   schema: baseArticle.extend({
     problem: z.string().optional(),
     alsoKnownAs: z.array(z.string()).default([]),
@@ -54,17 +56,17 @@ const patterns = defineCollection({
 });
 
 const production = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/production' }),
   schema: baseArticle,
 });
 
 const comparisons = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/comparisons' }),
   schema: baseArticle,
 });
 
 const caseStudies = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/case-studies' }),
   schema: baseArticle.extend({
     company: z.string(),
     domain: z.string().optional(),
@@ -73,7 +75,7 @@ const caseStudies = defineCollection({
 
 /** The Awesome-list-style framework catalog. Richer, structured metadata. */
 const frameworks = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/frameworks' }),
   schema: baseArticle.extend({
     name: z.string(),
     category: z.enum([
@@ -87,9 +89,9 @@ const frameworks = defineCollection({
       'toolkit',
     ]),
     language: z.array(z.string()).default([]),
-    repo: z.string().url().optional(),
-    homepage: z.string().url().optional(),
-    docs: z.string().url().optional(),
+    repo: z.url().optional(),
+    homepage: z.url().optional(),
+    docs: z.url().optional(),
     codeLicense: z.string().optional(),
     maturity: z.enum(['experimental', 'beta', 'stable', 'mature']).default('beta'),
     maintainer: z.string().optional(),
@@ -100,14 +102,14 @@ const frameworks = defineCollection({
 
 /** Generated / curated news aggregation posts. */
 const news = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/news' }),
   schema: baseArticle.extend({
     published: z.coerce.date(),
   }),
 });
 
 const learningPaths = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/learning-paths' }),
   schema: baseArticle.extend({
     steps: z.array(reference('foundations').or(z.string())).default([]),
   }),
@@ -128,7 +130,7 @@ const learningPaths = defineCollection({
  * attached.
  */
 const lab = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/lab' }),
   schema: baseArticle.extend({
     /** Owning module, e.g. `models`, `prod`, `atlas`. */
     module: z.string(),

@@ -2,7 +2,7 @@
 /**
  * Every content collection is registered exactly once, in both places.
  *
- * A collection lives in two files: its schema in `src/content/config.ts`, and
+ * A collection lives in two files: its loader and schema in `src/content.config.ts`, and
  * its label, blurb, icon, and accent in `SECTION_META` (`src/lib/content.ts`).
  * The pages, the home-page grid, and the cross-section article list are all
  * derived from `SECTION_META`, so a collection missing from it validates,
@@ -21,7 +21,7 @@ import { fileURLToPath } from 'node:url';
 
 const MODULE_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-const config = await readFile(join(MODULE_ROOT, 'src/content/config.ts'), 'utf-8');
+const config = await readFile(join(MODULE_ROOT, 'src/content.config.ts'), 'utf-8');
 const lib = await readFile(join(MODULE_ROOT, 'src/lib/content.ts'), 'utf-8');
 
 /** Keys of the exported `collections` object literal. */
@@ -57,7 +57,7 @@ if (missingMeta.length || orphanMeta.length) {
     console.error(`MISSING SECTION_META: collection '${c}' has a schema but no entry in src/lib/content.ts`);
   }
   for (const m of orphanMeta) {
-    console.error(`ORPHAN SECTION_META: '${m}' has an entry but no collection in src/content/config.ts`);
+    console.error(`ORPHAN SECTION_META: '${m}' has an entry but no collection in src/content.config.ts`);
   }
   process.exit(1);
 }

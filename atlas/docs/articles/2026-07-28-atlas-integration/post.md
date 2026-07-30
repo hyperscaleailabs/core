@@ -24,14 +24,16 @@ move to close that gap:
 - The repository graph now has an exit node. Agents enter at the root README and
   leave through the publication surface.
 
-Three defects showed up on the way, none of which a build could see: every
+Four defects showed up on the way: every
 outbound link in the migrated site still pointed at the repository it had left;
 a new content section registered in three of four places reported the wrong
 article count on the home page - nothing looked broken, which is worse than a
 missing page; and our new CI guards had nowhere to run before CI, so their first
 execution was on a hosted runner, where they promptly failed on themselves.
+The acceptance review then found high-severity production dependency advisories
+that the build did not check.
 
-All three are now guards, in scripts a person can run before pushing. A check
+All four are now guarded in commands a person can run before pushing. A check
 you cannot run locally is a check that debugs itself in front of your reviewer.
 
 The repo is public and the trail - issue, PR, evidence, article, published entry

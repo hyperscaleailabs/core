@@ -13,7 +13,7 @@ that article becomes an entry here with its evidence trail attached.
 
 - Public surface, Apache-2.0 code and CC BY 4.0 content by design (see
   [Licensing](#licensing)).
-- Static Astro 5 build, deployed on Vercel from this directory; migration into
+- Static Astro 7 build, deployed on Vercel from this directory; migration into
   the shared k3d deployment happens where it makes sense, not before.
 - Incorporated work is referenced with careful attention to its original
   license: Atlas summarizes, analyzes, and links; it does not republish.
@@ -28,14 +28,14 @@ run them from this directory (`cd atlas`), not the repo root.
 
 | Path | Purpose |
 |------|---------|
-| `src/content/` | The corpus: one Markdown file per article, in typed collections. The build validates every file's frontmatter against [`src/content/config.ts`](src/content/config.ts) |
+| `src/content/` | The corpus: one Markdown file per article, in typed collections. The build validates every file's frontmatter against [`src/content.config.ts`](src/content.config.ts) |
 | `src/pages/`, `src/layouts/`, `src/components/` | The Astro site. Section index and article pages are generic over the collections, so a new collection is a schema plus a `SECTION_META` entry |
 | `src/lib/repo.ts` | Single source of truth for every "view / edit / report on GitHub" link. CI fails the build on a hardcoded repository URL anywhere else in `src/` |
 | `pipeline/` | The ingestion pipeline: diff `sources.yaml` against the registry, fetch (robots-aware), extract, plan, draft, index, open a PR. Nothing auto-publishes |
 | `scripts/build-search-index.mjs` | Rebuilds `public/search-index.json` from the corpus. Committed and CI-verified against a fresh rebuild |
 | `scripts/intake-module-article.mjs` | Module article -> Lab Notes entry; also the `--check` guard that CI runs |
 | `scripts/check-policy.sh`, `scripts/check-collections.mjs` | The module's guards, in scripts so `make verify` runs exactly what CI runs |
-| `docs/` | [Content guide](docs/content-guide.md), [architecture](docs/architecture.md), [pipeline](docs/pipeline.md), [deployment](docs/deployment.md) - plus this module's [articles](docs/articles/2026-07-28-atlas-integration/article.md), [evidence](docs/evidence/README.md), and [lessons](docs/lessons/2026-07-28-atlas-integration.md) |
+| `docs/` | [Content guide](docs/content-guide.md), [architecture](docs/architecture.md), [pipeline](docs/pipeline.md), [deployment](docs/deployment.md) - plus this module's [articles](docs/articles/2026-07-28-atlas-integration/article.md), [evidence](docs/evidence/README.md), and [lessons](docs/lessons/2026-07-28-atlas-integration.md), including the [security review](docs/lessons/2026-07-29-atlas-security-review.md) |
 
 ## Quick start
 
@@ -43,10 +43,11 @@ run them from this directory (`cd atlas`), not the repo root.
 cd atlas
 make install      # npm ci
 make dev          # live preview at http://localhost:4321
-make verify       # index + astro check + build - exactly what CI runs
+make verify       # audit + index + astro check + build + policy
 ```
 
 Without `make`, the underlying commands are `npm ci`, `npm run dev`, and
+`npm audit --omit=dev --audit-level=high`,
 `npm run index && npm run check && npm run build`.
 
 The ingestion pipeline is optional for site work:

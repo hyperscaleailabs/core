@@ -8,7 +8,7 @@ every subproject it touches.
 - [ ] **The site builds and the corpus validates**: `make verify` is green -
       search index rebuilt, collections registered consistently, `astro check`
       reports zero errors, `astro build` passes (so every article's frontmatter
-      satisfies the schema in `src/content/config.ts`), and
+      satisfies the schema in `src/content.config.ts`), and
       `scripts/check-policy.sh` passes. The transcript is committed as evidence.
       `make verify` runs exactly what the `atlas` workflow runs: a guard the
       author cannot run before pushing is a guard first exercised on a hosted
@@ -89,7 +89,7 @@ Its instances of the generic gates:
 |--------------|------------------------|
 | Self-gating product artifact | The corpus: the site build fails on any invalid article, so the product validates itself |
 | Module regression baseline | Page count and indexed document count in `docs/evidence/` |
-| Contract compatibility | `src/content/config.ts` - a schema change that invalidates existing articles is a breaking change and fixes them in the same PR |
+| Contract compatibility | `src/content.config.ts` - a schema change that invalidates existing articles is a breaking change and fixes them in the same PR |
 | Observability gate | The deployed build log and the walked surface; there is no runtime to instrument, so the gate is the build and the page |
 | Canary-always change class | Content schema changes, the ingestion pipeline's drafting path, and anything touching attribution or license rendering |
 

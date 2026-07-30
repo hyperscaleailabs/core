@@ -32,7 +32,7 @@ How Agentic Atlas is put together, and why.
 ### 1. Content
 - One file per article under a collection directory (`foundations/`,
   `frameworks/`, …).
-- [`src/content/config.ts`](../src/content/config.ts) defines a Zod schema per
+- [`src/content.config.ts`](../src/content.config.ts) defines a glob loader and Zod schema per
   collection. `astro build` fails if any file violates it — the guardrail that
   keeps `level`, `sources`, `tags`, reading-time, etc. consistent.
 - The URL of an article is `/{collection}/{slug}` where `slug` is the filename.

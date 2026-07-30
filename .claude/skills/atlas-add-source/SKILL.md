@@ -19,7 +19,7 @@ push to `main`, never merge your own PR, never bypass CI.
 Ground rules for content live in
 [`atlas/docs/content-guide.md`](../../../atlas/docs/content-guide.md) and the
 enforced schema in
-[`atlas/src/content/config.ts`](../../../atlas/src/content/config.ts). Read them;
+[`atlas/src/content.config.ts`](../../../atlas/src/content.config.ts). Read them;
 they are not duplicated here.
 
 ## Inputs

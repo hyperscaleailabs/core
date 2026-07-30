@@ -20,14 +20,38 @@ First accepted baseline for this module. Subsequent runs compare against it.
 | Collections registered | 9 (`case-studies`, `comparisons`, `foundations`, `frameworks`, `lab`, `learning-paths`, `news`, `patterns`, `production`) |
 | Module policy guards | 5 of 5 |
 | Module articles with Lab Notes entries | 3 of 3 |
-| Toolchain | Node v24.18.0, npm 11.16.0, Astro 5.18.2 |
+| Toolchain | Node v24.18.0, npm 11.16.0, Astro 7.1.6 |
 
 The counts include this project's own article and its published entry: the
 intake was exercised on the project that built it, not only on the two it
 inherited.
 
-CI pins Node 20 (the version declared in `package.json` `engines`); this local
+CI pins Node 22 (the version declared in `package.json` `engines`); this local
 run used the host's Node 24, and both produce the counts above.
+
+## Acceptance review correction, 2026-07-29
+
+The pre-merge review found five high-severity production dependency advisories.
+The correction upgraded Astro from 5.18.2 to 7.1.6, migrated all nine
+collections to the content-layer glob loader, replaced the legacy `slug` and
+entry rendering APIs, and raised the runtime floor to Node 22.12.
+
+The mechanical class is now guarded in both local and hosted verification:
+`make verify` and the `site` CI job run
+`npm audit --omit=dev --audit-level=high` before building.
+
+| Review check | Result |
+|--------------|--------|
+| Production dependency audit | 0 vulnerabilities |
+| Audit failing direction | Isolated Astro 5.6.1 lockfile: 2 high-severity vulnerabilities, exit 1 |
+| `astro check` | 0 errors, 0 warnings, 0 hints |
+| Production build | 48 pages |
+| Desktop browser | Home, Lab Notes index, and Atlas integration article: HTTP 200, no console errors or overlays, no horizontal overflow |
+| Mobile browser, 390 x 844 | Same three routes and assertions |
+| Repository policy | PII and markdown-link checks clean |
+
+The browser run used the local production preview, not the development server.
+It therefore exercised the exact static output produced by `astro build`.
 
 ## Transcript
 

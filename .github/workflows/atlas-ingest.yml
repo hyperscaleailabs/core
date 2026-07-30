@@ -81,13 +81,14 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: atlas/package-lock.json
 
       - name: Rebuild the index and validate that the drafts build
         run: |
           npm ci
+          npm audit --omit=dev --audit-level=high
           npm run index
           npm run check
           npm run build

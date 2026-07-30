@@ -6,7 +6,7 @@ How to write (or review) an article for Agentic Atlas.
 
 Every article is a Markdown file under `src/content/<collection>/<slug>.md`. The
 filename is the URL slug. Frontmatter must satisfy the schema in
-[`src/content/config.ts`](../src/content/config.ts) — the build fails otherwise.
+[`src/content.config.ts`](../src/content.config.ts) - the build fails otherwise.
 
 ### Base frontmatter (all collections)
 
