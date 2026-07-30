@@ -1,5 +1,19 @@
 [
   {
+    "title": "A missing link is invisible to a broken-link checker",
+    "description": "The repository link check was green while the root deployment table named four modules without linking to their documentation. Every declared edge worked. Four required edges did not exist.",
+    "section": "lab",
+    "level": "advanced",
+    "tags": [
+      "lab-notes",
+      "sdlc",
+      "doc-navigation"
+    ],
+    "url": "/lab/2026-07-29-doc-navigation",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
     "title": "A2A: Agent-to-Agent Communication",
     "description": "Standards and libraries for agents to discover and talk to each other across systems — the interoperability layer above single-agent tool use.",
     "section": "frameworks",

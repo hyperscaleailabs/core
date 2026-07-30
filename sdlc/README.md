@@ -29,6 +29,10 @@ The repository itself is navigated as a graph with the root README as the
 entrance node: [GRAPH.md](GRAPH.md) defines the nodes, placement rules,
 per-stage context pulling, and the compaction cadence.
 
+Project records live with the method they validate: process
+[evidence](docs/evidence/), [lessons](docs/lessons/), and
+[articles](docs/articles/) are kept under `sdlc/docs/`.
+
 ## Closing the loops
 
 ```text
