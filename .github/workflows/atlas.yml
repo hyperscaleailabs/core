@@ -1,0 +1,136 @@
+name: atlas
+
+on:
+  pull_request:
+    paths:
+      - "atlas/**"
+      - ".github/workflows/atlas.yml"
+      # A module article published anywhere in the repository owes Atlas a Lab
+      # Notes entry, so the intake guard has to see those changes too.
+      - "*/docs/articles/**"
+      - "apps/*/docs/articles/**"
+  push:
+    branches: [main]
+    paths:
+      - "atlas/**"
+      - ".github/workflows/atlas.yml"
+      - "*/docs/articles/**"
+      - "apps/*/docs/articles/**"
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    working-directory: atlas
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: atlas/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Production dependency audit
+        run: npm audit --omit=dev --audit-level=high
+
+      # The committed index is what `astro dev` serves, so it is real state, not
+      # a build artifact. A generated file that is committed and never compared
+      # drifts silently - the same shape as a regression baseline nothing diffs.
+      - name: Search index matches a fresh rebuild
+        run: |
+          npm run index
+          if ! git diff --quiet -- public/search-index.json; then
+            echo "::error::public/search-index.json is stale; run 'make index' and commit it"
+            git diff -- public/search-index.json
+            exit 1
+          fi
+          echo "search index is current"
+
+      # A collection registered in only one of its two places builds green and
+      # renders nothing, or renders and is counted nowhere. Neither is visible
+      # in a build log.
+      - name: Collections registered consistently
+        run: node scripts/check-collections.mjs
+
+      - name: Type and content-schema check
+        run: npm run check
+
+      - name: Build the site (validates every article's frontmatter)
+        run: npm run build | tee build.txt
+
+      - name: Job summary
+        if: always()
+        run: |
+          {
+            echo "### Atlas site build"
+            echo '```'
+            tail -n 12 build.txt 2>/dev/null || echo "no build output"
+            echo '```'
+            echo "Indexed documents: $(python3 -c 'import json;print(len(json.load(open("public/search-index.json"))))')"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload build output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: atlas-dist
+          path: atlas/dist/
+          if-no-files-found: ignore
+          retention-days: 14
+
+  # The graph edge `module article -> Atlas entry`, enforced. Without this the
+  # lifecycle's publication stage is prose: a stage that names an artifact must
+  # also create - and check - the place the artifact lands.
+  publication-intake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Every module article has a Lab Notes entry
+        run: node scripts/intake-module-article.mjs --all --check
+
+  # The guards live in atlas/scripts/check-policy.sh, not inline here, so that
+  # `make policy` runs exactly what CI runs. The first version of this job was
+  # inline and failed on its own grep pattern matching its own source line -
+  # a defect no local check could have caught, because there was no local check.
+  atlas-policy-guards:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Module policy guards
+        run: bash scripts/check-policy.sh
+
+  pipeline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet pyyaml
+
+      - name: Python syntax
+        run: python -m compileall -q pipeline
+
+      - name: Pipeline configuration is valid YAML
+        run: |
+          python - <<'PY'
+          import yaml
+          from pathlib import Path
+          for p in sorted(Path("pipeline").rglob("*.yaml")):
+              list(yaml.safe_load_all(p.read_text()))
+              print("ok", p)
+          PY
+
+      - name: Registry is valid JSON
+        run: python -c "import json;json.load(open('pipeline/registry.json'));print('registry ok')"

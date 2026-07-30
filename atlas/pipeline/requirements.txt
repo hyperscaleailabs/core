@@ -1,0 +1,14 @@
+# Agentic Atlas ingestion pipeline dependencies
+
+# Required
+requests>=2.31
+PyYAML>=6.0
+beautifulsoup4>=4.12
+
+# Recommended — better main-content extraction (falls back to BeautifulSoup)
+readability-lxml>=0.8.1
+lxml>=5.0
+
+# Optional — enables model-drafted articles. Without it (or without
+# ANTHROPIC_API_KEY), the pipeline emits structured outline stubs instead.
+anthropic>=0.40

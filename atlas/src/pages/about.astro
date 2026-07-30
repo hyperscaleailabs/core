@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About & methodology" description="What Agentic Atlas is, who it's for, and how the ingestion pipeline keeps it current.">
+  <div class="mx-auto max-w-3xl px-5 py-14">
+    <h1 class="text-4xl font-bold tracking-tight text-[var(--color-fog-100)]">About Agentic Atlas</h1>
+    <div class="prose-atlas prose prose-invert mt-8 max-w-none">
+      <p>
+        <strong>Agentic Atlas</strong> is an open, living technical reference for the people who
+        actually ship AI-agent systems: software engineers and architects rolling agentic
+        platforms into production. It sits somewhere between an <em>Awesome AI Agents</em> list
+        and a focused news aggregator — but every entry is written to teach, compare, and warn.
+      </p>
+
+      <h2>Who it's for</h2>
+      <p>Content is tagged by level so it serves a wide spectrum of readers:</p>
+      <ul>
+        <li><strong>Beginner</strong> — you know software, but agents are new. Start in Foundations.</li>
+        <li><strong>Intermediate</strong> — you've built a tool-using agent and want patterns and frameworks.</li>
+        <li><strong>Advanced</strong> — you run multi-agent systems, swarms, and long-running harnesses, and you care about failure modes, evaluation, and cost.</li>
+      </ul>
+
+      <h2>How content is organized</h2>
+      <p>
+        Everything is Markdown, versioned in Git, under <code>src/content/</code>:
+      </p>
+      <ul>
+        <li><code>foundations/</code> — the pre-agentic era, LLM→agent evolution, agent anatomy, glossary</li>
+        <li><code>frameworks/</code> — a structured catalog (LangChain, LangGraph, Claude Agent SDK, Strands, MCP, A2A, …)</li>
+        <li><code>patterns/</code> — reflection, planning, orchestration, swarms, context engineering, RAG/GraphRAG</li>
+        <li><code>production/</code> — harnesses, evaluation, observability, guardrails, cost, and failure modes</li>
+        <li><code>comparisons/</code> — framework matrices and failure-mode/tradeoff tables</li>
+        <li><code>case-studies/</code> — real deployments from public engineering blogs</li>
+        <li><code>news/</code> — aggregated ecosystem developments</li>
+        <li><code>learning-paths/</code> — curated sequences from beginner to architect</li>
+        <li><code>lab/</code> — notes from our own lab: what each project shipped, what it cost, and the evidence behind the claim</li>
+      </ul>
+      <p>
+        Every article carries frontmatter with its level, tags, last-updated date, sources, and
+        license. Articles are sized for a <strong>5–15 minute read</strong>; the build validates
+        the frontmatter contract so nothing drifts.
+      </p>
+
+      <h2>How it stays current: the ingestion pipeline</h2>
+      <p>
+        The knowledge base extends itself. A developer maintains a list of reference links in
+        <code>pipeline/sources.yaml</code>. On a schedule (and on demand) a GitHub Action runs
+        <code>pipeline/ingest.py</code>, which:
+      </p>
+      <ol>
+        <li><strong>Diffs</strong> the source list against <code>pipeline/registry.json</code> using content hashes, ETags, and declared versions — so already-processed material is skipped.</li>
+        <li><strong>Fetches and extracts</strong> the readable content of anything new or changed, caching a snapshot.</li>
+        <li><strong>Plans</strong> where each source belongs (section, level, tags) and what article(s) it should produce.</li>
+        <li><strong>Drafts</strong> a 5–15 minute Markdown article with a full sources/attribution block. With an <code>ANTHROPIC_API_KEY</code> present it uses a Claude model; without one it emits a structured outline stub for a human to finish.</li>
+        <li><strong>Indexes</strong> the corpus and opens a pull request for review.</li>
+      </ol>
+      <p>
+        Nothing is auto-published without landing in Git first, so a human always reviews machine
+        drafts. Machine-drafted pages are labeled until reviewed.
+      </p>
+
+      <h2>Sourcing &amp; licensing</h2>
+      <p>
+        Articles <em>summarize and link to</em> primary sources; they do not republish third-party
+        text. Each references its sources with publisher and license. The site's own code is
+        Apache 2.0 and its original prose is CC BY 4.0. Referenced material remains under its own
+        license and copyright. See <a href="/licenses">Licenses &amp; attribution</a>.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,41 @@
+---
+import { minutesFor, urlFor, type AnyEntry } from '../lib/content';
+
+interface Props {
+  entry: AnyEntry;
+  showSection?: boolean;
+}
+const { entry, showSection = false } = Astro.props;
+const data = entry.data as {
+  title: string;
+  description: string;
+  level: 'beginner' | 'intermediate' | 'advanced';
+  tags?: string[];
+  aiGenerated?: boolean;
+};
+const minutes = minutesFor(entry);
+---
+
+<a href={urlFor(entry)} class="card group flex flex-col p-5">
+  <div class="flex items-center gap-2 text-xs">
+    {showSection && <span class="chip">{entry.collection}</span>}
+    <span class:list={['chip', `level-${data.level}`]}>{data.level}</span>
+    <span class="ml-auto font-mono text-[var(--color-fog-400)]">{minutes} min</span>
+  </div>
+
+  <h3 class="mt-3 text-lg font-semibold leading-snug text-[var(--color-fog-100)] group-hover:text-[var(--color-cyan)]">
+    {data.title}
+  </h3>
+  <p class="mt-2 line-clamp-3 text-sm text-[var(--color-fog-400)]">{data.description}</p>
+
+  <div class="mt-4 flex flex-wrap items-center gap-1.5">
+    {(data.tags ?? []).slice(0, 4).map((t) => (
+      <span class="rounded border border-[var(--color-line)] px-1.5 py-0.5 font-mono text-[0.65rem] text-[var(--color-fog-400)]">#{t}</span>
+    ))}
+    {data.aiGenerated && (
+      <span class="ml-auto rounded border border-[color-mix(in_srgb,var(--color-violet)_40%,transparent)] px-1.5 py-0.5 font-mono text-[0.6rem] text-[var(--color-violet)]" title="Drafted by the ingestion pipeline; review status noted on the page.">
+        ⚙ drafted
+      </span>
+    )}
+  </div>
+</a>

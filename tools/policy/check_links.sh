@@ -2,7 +2,13 @@
 # Verify relative markdown links across the tree: linked files must exist and
 # heading anchors must resolve (GitHub slug rules: lowercase; drop characters
 # other than alphanumerics, spaces, hyphens, underscores; spaces to hyphens).
-# External (http/https/mailto) links are out of scope. Exit 1 on any breakage.
+# External (http/https/mailto) and root-relative site links are out of scope.
+# Exit 1 on any breakage.
+#
+# Scope is what git tracks. It used to be every *.md under the tree, which was
+# equivalent only while no module had dependencies: the first module with a
+# node_modules/ directory produced hundreds of failures from third-party
+# READMEs, none of them ours and none of them fixable here.
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
@@ -33,8 +39,18 @@ while IFS= read -r -d '' src; do
   while IFS= read -r target; do
     case "$target" in
       http://*|https://*|mailto:*|'') continue ;;
+      # Root-relative targets are site URLs (atlas renders `/patterns/tool-use`),
+      # never repository paths - resolving them against the file's directory
+      # reports every one of them as broken.
+      /*) continue ;;
     esac
     path=${target%%#*}
+    # Percent-escapes are how a markdown link carries a path containing
+    # brackets (`src/pages/[section]/index.astro` -> `%5Bsection%5D`); decode
+    # before testing the filesystem or every such link reads as broken.
+    case "$path" in
+      *%*) path=$(printf '%b' "${path//%/\\x}") ;;
+    esac
     anchor=""
     case "$target" in
       *'#'*) anchor=${target#*#} ;;
@@ -52,7 +68,7 @@ while IFS= read -r -d '' src; do
       esac
     fi
   done < <(grep -oE '\]\([^)]+\)' "$src" | sed -E 's/^\]\(//; s/\)$//; s/ "[^"]*"$//')
-done < <(find . -name '*.md' -not -path './.git/*' -print0)
+done < <(git ls-files -z '*.md' '*.markdown')
 
 if [ "$status" -eq 0 ]; then
   echo "markdown links OK"

@@ -97,7 +97,9 @@ intent (from the human Architect), captured as a GitHub issue
 7. **RESEARCHER/PUBLISHER** follows up: reviews what changed, summarizes, and
    produces the **article** - MD format for the Architect and PM audiences,
    plus a platform-neutral `post.md` (LinkedIn format assumed) for the CTO /
-   Architect / PM audiences. Special
+   Architect / PM audiences - and takes the article through the
+   [Atlas intake](../atlas/README.md#from-module-article-to-atlas-entry), which
+   publishes it as a Lab Notes entry and is CI-enforced. Special
    project types produce their level's artifacts instead: the daily summary
    produces the executive whitepaper (CTO) and the exec deck/brief (CEO); the
    weekly summary produces the weekly digest in the form of a short book
@@ -160,8 +162,12 @@ regression across all modules regardless of what changed.
 Every project ends in an **article** as `article.md` (MD format, Architect
 and PM audiences) plus `post.md` (platform-neutral social variant, LinkedIn
 format assumed, CTO / Architect / PM audiences) under
-`<module>/docs/articles/<date>-<project>/`; publishing it triggers the
-[Atlas](../atlas/) update. The article contains the analysis and summary of
+`<module>/docs/articles/<date>-<project>/`; publishing it updates
+[Atlas](../atlas/README.md) through
+`atlas/scripts/intake-module-article.mjs`, which turns the article into a
+published Lab Notes entry. The `atlas` workflow fails when a module article has
+no entry, so publication is part of the project rather than a follow-up someone
+remembers. The article contains the analysis and summary of
 the project, **includes the project's lessons**, and **checks that alignment
 with the axis remained** through implementation, at the strategic and
 tactical levels. Its other sources are the PR bodies, their evidence, and the

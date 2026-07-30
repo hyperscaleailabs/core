@@ -1,0 +1,59 @@
+# =============================================================================
+# Agentic Atlas — ingestion pipeline configuration
+# =============================================================================
+
+# Anthropic model used to plan and draft articles when ANTHROPIC_API_KEY is set.
+# Without a key, the pipeline degrades to structured outline stubs (no API calls).
+# Current Claude model ids: claude-opus-4-8, claude-sonnet-4-6, claude-haiku-4-5-20251001
+model: claude-sonnet-4-6
+max_output_tokens: 4096
+
+# Reading-time house rule (minutes). Drafts target this range; the site schema
+# also enforces an upper bound.
+reading_time:
+  min: 5
+  max: 15
+  # ~ average adult technical reading speed, words per minute
+  words_per_minute: 220
+
+# Where drafted Markdown is written. Resolved relative to this file's directory
+# (pipeline/), so the module is relocatable - it survived the move from the
+# standalone repository into core/atlas/ unchanged.
+content_root: ../src/content
+
+# Draft policy:
+#   draft: true         -> new files are marked draft (hidden in prod build)
+#   ai_generated: true  -> new files are labeled machine-drafted for review
+draft_by_default: true
+mark_ai_generated: true
+
+# Networking
+request_timeout_seconds: 30
+user_agent: "AgenticAtlasBot/0.1 (+https://github.com/hyperscaleailabs/core/tree/main/atlas)"
+# Respect robots.txt before fetching a URL.
+respect_robots: true
+
+# Default content license applied to generated articles (site's own prose).
+content_license: CC-BY-4.0
+
+# ---------------------------------------------------------------------------
+# Auto-classification rules (used only when a source has no explicit override).
+# First matching rule wins; matching is case-insensitive substring on URL+title.
+# ---------------------------------------------------------------------------
+classification:
+  default_section: foundations
+  default_level: intermediate
+  rules:
+    - match: [langchain, langgraph, strands, agent-sdk, modelcontextprotocol, "github.com/mcp", a2a, graphrag-toolkit]
+      section: frameworks
+    - match: [context-engineering, planning, retrieval, rag, swarm, orchestration, reflection]
+      section: patterns
+    - match: [harness, observability, evaluation, guardrail, production, long-running]
+      section: production
+    - match: [blog, engineering/, case, codelab, roadshow]
+      section: case-studies
+    - match: [learn, course, tutorial, getting-started, intro]
+      section: foundations
+  level_hints:
+    beginner: [intro, getting-started, overview, learn, "101", basics, tutorial]
+    advanced: [swarm, long-running, harness, graphrag, context-engineering, multiagent, multi-agent, production]

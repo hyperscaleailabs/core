@@ -1,0 +1,154 @@
+name: atlas-ingest
+
+# The Atlas ingestion pipeline: diff atlas/pipeline/sources.yaml against the
+# registry, pull new or changed references, draft articles, rebuild the search
+# index, and open a pull request. Nothing is auto-merged and nothing is
+# auto-published - drafts land marked `draft: true` and `aiGenerated: true`, and
+# a human reviews every one.
+#
+# The PR it opens is an ordinary PR under this repository's SDLC: it carries the
+# full template, declares its horizon, and references a standing project issue,
+# because `sdlc / pr-discipline` checks every PR and a bot is not an exception.
+# The issue number comes from the `ATLAS_CONTENT_ISSUE` repository variable; the
+# job fails early and loudly when it is unset, rather than opening a PR that
+# cannot pass its own checks.
+
+on:
+  schedule:
+    # Weekly, Monday 06:00 UTC.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Max new sources to process (0 = all)"
+        required: false
+        default: "0"
+      force_all:
+        description: "Reprocess every source, ignoring the registry"
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: atlas-ingest
+  cancel-in-progress: false
+
+defaults:
+  run:
+    working-directory: atlas
+
+jobs:
+  ingest:
+    name: Ingest and draft
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Standing content issue is configured
+        env:
+          ISSUE: ${{ vars.ATLAS_CONTENT_ISSUE }}
+        run: |
+          if ! printf '%s' "$ISSUE" | grep -qE '^[0-9]+$'; then
+            echo "::error::repository variable ATLAS_CONTENT_ISSUE must be the number of the standing Atlas content issue; the PR this job opens has to reference it (sdlc/LIFECYCLE.md)"
+            exit 1
+          fi
+          echo "content issue: #$ISSUE"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install pipeline dependencies
+        run: pip install --quiet -r pipeline/requirements.txt
+
+      - name: Run ingestion
+        env:
+          # Optional. Without it the pipeline emits structured outline stubs
+          # instead of model-drafted articles, and the job still succeeds.
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          LIMIT: ${{ github.event.inputs.limit }}
+          FORCE_ALL: ${{ github.event.inputs.force_all }}
+        run: |
+          set -o pipefail
+          ARGS=""
+          if [ -n "$LIMIT" ] && [ "$LIMIT" != "0" ]; then ARGS="$ARGS --limit $LIMIT"; fi
+          if [ "$FORCE_ALL" = "true" ]; then ARGS="$ARGS --force-all"; fi
+          python pipeline/ingest.py $ARGS 2>&1 | tee ingest.txt
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: atlas/package-lock.json
+
+      - name: Rebuild the index and validate that the drafts build
+        run: |
+          npm ci
+          npm audit --omit=dev --audit-level=high
+          npm run index
+          npm run check
+          npm run build
+
+      - name: Job summary
+        if: always()
+        run: |
+          {
+            echo "### Atlas ingestion"
+            echo '```'
+            tail -n 40 ingest.txt 2>/dev/null || echo "no ingestion output"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Open a pull request with the drafted content
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: atlas/ingest-content
+          title: "atlas: ingested content drafts and registry update"
+          commit-message: "atlas: ingest new and changed sources"
+          labels: |
+            content
+            automated
+            needs-review
+          body: |
+            ## Purpose
+
+            The Atlas ingestion pipeline processed new or changed references from
+            `atlas/pipeline/sources.yaml` and drafted the content in this PR. It
+            extends the published corpus without a human having to notice that a
+            referenced source moved.
+
+            Horizon: short
+            Issue: #${{ vars.ATLAS_CONTENT_ISSUE }}
+
+            ## Tasks
+
+            - Fetched every source whose content hash, ETag, or declared version changed.
+            - Drafted or updated the corresponding articles under `atlas/src/content/`.
+            - Rebuilt `atlas/public/search-index.json` and updated `atlas/pipeline/registry.json`.
+
+            ## Acceptance criteria
+
+            - [ ] Every drafted article was read against its primary source before the `draft` flag is removed.
+            - [ ] Attribution is correct: `sources` records publisher and, where known, the original license.
+            - [ ] The site builds and the corpus validates (`atlas` workflow green).
+            - [ ] Nothing here republishes third-party text; every article summarizes and links.
+
+            ## Evidence
+
+            The `atlas` workflow on this PR: index freshness, `astro check`, full
+            build, policy guards. The ingestion transcript is in this run's job
+            summary, linked from the checks below.
+
+            ## Lessons learned
+
+            None - routine ingestion. Anything surprising in the drafting goes in
+            a review comment and, if mechanical, becomes a guard in the follow-up.
+
+            > Opened by `.github/workflows/atlas-ingest.yml`. Drafts are marked
+            > `draft: true` and `aiGenerated: true`; **nothing is auto-merged or
+            > auto-published** - review each article, then publish it under the
+            > normal lifecycle.

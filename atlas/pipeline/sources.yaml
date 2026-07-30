@@ -1,0 +1,134 @@
+# =============================================================================
+# Agentic Atlas — source registry
+# =============================================================================
+# This is the developer-facing input to the ingestion pipeline. Add reference
+# links here; on the next CI run, `ingest.py` will fetch anything new or changed
+# (by content hash / ETag / declared version), plan an article, draft it, and
+# open a pull request for review.
+#
+# An entry can be a bare URL string, or a mapping with optional overrides:
+#   - url        (required)
+#   - section    foundations|frameworks|patterns|production|comparisons|
+#                case-studies|news|learning-paths   (else auto-classified)
+#   - level      beginner|intermediate|advanced      (else auto-classified)
+#   - title      human title override
+#   - publisher  attribution
+#   - license    license of the ORIGINAL material (for attribution)
+#   - tags       [list]
+#   - version    bump this to force reprocessing when the page updates
+#                but its content hash wouldn't change enough to trip
+#
+# Adding a link here is the ONLY step required to queue new content.
+# =============================================================================
+
+sources:
+  # ai-hyperswarm-proto-core: twice-daily whitepapers from the self-improving
+  # swarm harness (lessons synthesized per governance block). Bump `version`
+  # to force re-ingestion after notable new whitepapers land.
+  - url: https://github.com/hyperscaleailabs/ai-hyperswarm-proto-core/tree/main/knowledge/whitepapers
+    section: case-studies
+    level: advanced
+    title: "ai-hyperswarm-proto-core: field lessons from a self-improving swarm harness"
+    publisher: hyperscale.ai labs
+    license: Apache-2.0
+    tags: [self-improvement, autonomous-loop, governance, harness, whitepapers]
+    version: 1
+
+  - url: https://strandsagents.com/
+    section: frameworks
+    publisher: Strands Agents
+    tags: [sdk, model-driven, mcp]
+
+  - url: https://code.claude.com/docs/en/agent-sdk/overview
+    section: frameworks
+    publisher: Anthropic
+    tags: [sdk, claude, harness]
+
+  - url: https://www.anthropic.com/engineering/building-effective-agents
+    section: case-studies
+    publisher: Anthropic
+    tags: [best-practices, workflows]
+
+  - url: https://huggingface.co/learn
+    section: foundations
+    publisher: Hugging Face
+    tags: [education, courses]
+
+  - url: https://www.geeksforgeeks.org/artificial-intelligence/multiagent-planning-in-ai/
+    section: patterns
+    publisher: GeeksforGeeks
+    tags: [multi-agent-planning, coordination]
+
+  - url: https://codelabs.developers.google.com/codelabs/production-ready-ai-roadshow/1-building-a-multi-agent-system/building-a-multi-agent-system#0
+    section: case-studies
+    publisher: Google Developers
+    tags: [multi-agent, orchestrator-worker]
+
+  - url: https://github.com/langchain-ai/langchain
+    section: frameworks
+    publisher: LangChain
+    license: MIT
+    tags: [framework, orchestration]
+
+  - url: https://python-a2a.readthedocs.io/en/latest/
+    section: frameworks
+    publisher: python-a2a
+    tags: [protocol, a2a, interoperability]
+
+  - url: https://modelcontextprotocol.io/docs/getting-started/intro
+    section: frameworks
+    publisher: Anthropic / MCP
+    tags: [protocol, mcp, tools]
+
+  - url: https://github.com/mcp
+    section: frameworks
+    publisher: Model Context Protocol
+    tags: [protocol, mcp, sdks]
+
+  - url: https://github.com/awslabs/graphrag-toolkit
+    section: frameworks
+    publisher: AWS Labs
+    license: Apache-2.0
+    tags: [rag, graphrag, knowledge-graph]
+
+  - url: https://aws.amazon.com/blogs/database/introducing-the-graphrag-toolkit/
+    section: patterns
+    publisher: AWS
+    tags: [graphrag, retrieval]
+
+  - url: https://github.com/awslabs/aidlc-workflows
+    section: production
+    publisher: AWS Labs
+    tags: [harness, workflows, sdlc]
+
+  - url: https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents
+    section: production
+    publisher: Anthropic
+    tags: [harness, long-running, durability]
+
+  - url: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+    section: patterns
+    publisher: Anthropic
+    tags: [context-engineering, memory]
+
+  - url: https://docs.langchain.com/
+    section: frameworks
+    publisher: LangChain
+    tags: [framework, docs]
+
+  - url: https://docs.langchain.com/oss/python/langgraph/overview
+    section: frameworks
+    publisher: LangChain
+    tags: [orchestration, state-machine, durability]
+
+  - url: https://docs.langchain.com/oss/python/langchain/mcp
+    section: patterns
+    publisher: LangChain
+    tags: [mcp, tools, integration]
+
+  - url: https://anthropic.skilljar.com/claude-with-the-anthropic-api/
+    section: foundations
+    level: beginner
+    title: "Building with the Claude API (Anthropic Academy)"
+    publisher: Anthropic Academy
+    tags: [claude, api, education, tool-use, mcp]

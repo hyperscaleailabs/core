@@ -21,7 +21,7 @@ Before any work, fetch in this order:
 | **The axis** | [AXIS.md](AXIS.md) | Compressed direction and the 80/15/5 effort weighting |
 | **Strategic directions** | [docs/strategic/DIRECTION.md](docs/strategic/DIRECTION.md), [docs/strategic/](docs/strategic/) | Horizons, research evidence, strategic packages |
 | **Relevant agents** | [AGENTS.md](AGENTS.md) (contract), [executive/](executive/) (CEO/CTO validation), role groups in [sdlc/LIFECYCLE.md](sdlc/LIFECYCLE.md) | Who does what, by role |
-| **Relevant skills** | [`.claude/skills/`](.claude/skills/): `pr-flow`, `pr-verify`, `lessons` | Executable procedures for the cycle |
+| **Relevant skills** | [`.claude/skills/`](.claude/skills/): `pr-flow`, `pr-verify`, `lessons`; module skills `atlas-add-source`, `atlas-changelog-post` | Executable procedures for the cycle |
 
 **SDLC in one paragraph**: work runs on the [four-level lifecycle](sdlc/README.md)
 (strategic / tactical / daily / project). A project is a GitHub issue with a
@@ -84,7 +84,7 @@ state, and method never drift into each other.
 |-------|---------|-------|
 | **Axis** | Where are we going, strategically and tactically, and how is effort weighted? | [AXIS.md](AXIS.md), long form in [MISSION.md](MISSION.md) and [docs/strategic/](docs/strategic/) |
 | **Agent behavior** | How do agents and contributors work here? | [AGENTS.md](AGENTS.md) (canonical), [CLAUDE.md](CLAUDE.md) (pointer) |
-| **Capability** | What can agents actually do, as executable procedure? | [`.claude/skills/`](.claude/skills/): `pr-flow`, `pr-verify`, `lessons` |
+| **Capability** | What can agents actually do, as executable procedure? | [`.claude/skills/`](.claude/skills/): `pr-flow`, `pr-verify`, `lessons`; module skills `atlas-add-source`, `atlas-changelog-post` |
 | **Method** | How does work move from research to production? | [sdlc/LIFECYCLE.md](sdlc/LIFECYCLE.md): staged project flow with QA and **regression testing** gates; [sdlc/PROMOTION.md](sdlc/PROMOTION.md): the ladder from merge to operated production |
 | **State** | What are we doing, and where does it stand? | [docs/](docs/) and subproject READMEs: PRDs, ADRs, designs, plans, lessons |
 | **Oversight** | Is the repo sound, from the executive perspective? | [executive/](executive/): standing CEO and CTO validation agents, outlooks, repo monitoring |
@@ -110,7 +110,7 @@ context by traversing the graph, not by scanning the tree.
 | [`meet/`](meet/) | Meet | LiveKit / SFU based video conferencing system with pluggable LiveKit agents and pixel streaming integrated in the browser |
 | [`agents/`](agents/) | Agents | Agent services: APIs plus LiveKit agents. Starts with a text agent, extends to voice (Ultravox plus Kokoro direction), aiming at a generalist agent pipeline pluggable into Meet |
 | [`dtwins/`](dtwins/) | D-twins | Digital twins: seem-to-real and real-to-seem environments, 2D/3D/4D simulation engines, an engine-under-your-engine layer, demoable in Meet via pixel streaming |
-| [`atlas/`](atlas/) | Atlas | Agentic research project that aggregates lessons learned across all subprojects and produces regular white papers and posts |
+| [`atlas/`](atlas/README.md) | Atlas | The lab's public publication surface and the **exit node** of the repository graph: the Agentic Atlas field guide to AI agents (foundations, framework catalog, patterns, production failure modes, case studies) plus **Lab Notes**, where every project's module article is published with its evidence trail. Static Astro build on Vercel, extended by a robots-aware ingestion pipeline that opens PRs and publishes nothing automatically |
 | [`infra/`](infra/) | Infra | Cloud-agnostic deployment: Terraform, Kubernetes manifests, integrated k3d environments. Subprojects own their Dockerfiles and compose files; infra owns the integrated picture |
 | [`executive/`](executive/) | Executive | Standing CEO and CTO validation agents, strategic and tactical outlook material, repo-monitoring tooling |
 
@@ -147,7 +147,7 @@ of VMs. Public and gated surfaces:
 
 | Surface | Backed by | Access |
 |---------|-----------|--------|
-| Atlas | `atlas/` | Public. Text and video posts: agents, simulations, lessons learned, experiment results, webinar recordings |
+| Atlas | [`atlas/`](atlas/README.md) | Public. Static site deployed on Vercel with `atlas` as the project root directory: the agent field guide, and Lab Notes publishing this repository's project articles, experiment results, and lessons. Moves into the shared k3d deployment when hosting - not content - makes that worthwhile |
 | Meet | `meet/` | Public with approved sign-up. Conferencing with a plugged generalist voice agent and pixel streaming in the same browser |
 | Internal dashboards | [`prod/`](prod/README.md) | Gated to internal use. Operator console for simulation runs and release decisions, with the Grafana and Superset dashboards embedded as tabs; release-into-production controls |
 | APIs | `agents/`, `models/` | Requires API key |
@@ -207,7 +207,11 @@ not a follow-up commit. Treat prevention as the only cheap option.
 
 ## Licensing
 
-- Repo default: [Apache-2.0](LICENSE). Atlas is public under Apache-2.0 by design.
+- Repo default: [Apache-2.0](LICENSE).
+- [`atlas/`](atlas/README.md#licensing) is **dual-licensed**: its code under the
+  repo default, its written content under CC BY 4.0
+  ([atlas/LICENSE-CONTENT](atlas/LICENSE-CONTENT)), unless an article declares
+  otherwise. Provenance and attribution: [atlas/NOTICE.md](atlas/NOTICE.md).
 - Subprojects that incorporate third-party work must record the upstream license in a
   `THIRD_PARTY_NOTICES.md` inside that subproject and stay compatible with public
   Apache-2.0 distribution. Incompatible code does not enter this repo.

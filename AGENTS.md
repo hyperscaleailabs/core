@@ -17,7 +17,9 @@ Canonical agent contract for this repository, vendor-neutral.
    SDLC (strategic / tactical / daily / project, [sdlc/README.md](sdlc/README.md)).
 
 Use the skills: `pr-flow` to run the cycle, `pr-verify` before every handoff,
-`lessons` after every merge or review round.
+`lessons` after every merge or review round. Module skills sit beside them:
+`atlas-add-source` and `atlas-changelog-post` for publication work, and they
+defer to `pr-flow` rather than replacing it.
 
 ## Where things live
 
@@ -29,6 +31,7 @@ Use the skills: `pr-flow` to run the cycle, `pr-verify` before every handoff,
 | [.claude/skills/](.claude/skills/) | What agents can do, as executable procedures |
 | [sdlc/](sdlc/) | The four-level SDLC; [LIFECYCLE.md](sdlc/LIFECYCLE.md) is the project level, [PROMOTION.md](sdlc/PROMOTION.md) the ladder from merge to operated production |
 | [sdlc/GRAPH.md](sdlc/GRAPH.md) | The repository graph: how to traverse it and pull per-stage context, placement rules, compaction |
+| [atlas/](atlas/README.md) | The graph's exit node: where a finished project's article gets published, and the intake that enforces it |
 | [executive/](executive/) | Standing CEO and CTO validation agents and repo monitoring |
 | [docs/](docs/), subproject `README.md` files | What we are doing: PRDs, ADRs, designs, state |
 | [apps/](apps/) | Long-term value stream; evolves with core, aligned to the axis |

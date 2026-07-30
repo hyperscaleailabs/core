@@ -1,0 +1,550 @@
+[
+  {
+    "title": "A2A: Agent-to-Agent Communication",
+    "description": "Standards and libraries for agents to discover and talk to each other across systems — the interoperability layer above single-agent tool use.",
+    "section": "frameworks",
+    "level": "advanced",
+    "tags": [
+      "protocol",
+      "a2a",
+      "interoperability",
+      "multi-agent"
+    ],
+    "url": "/frameworks/a2a-protocol",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Agent Anatomy: The Six Components Every System Has",
+    "description": "Model, instructions, tools, memory, orchestration, and the harness — the parts that make up any agent, and the design decisions each one forces.",
+    "section": "foundations",
+    "level": "intermediate",
+    "tags": [
+      "architecture",
+      "memory",
+      "tools",
+      "orchestration",
+      "harness"
+    ],
+    "url": "/foundations/agent-anatomy",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Agent Swarms: Emergent Coordination at the Deep End",
+    "description": "Many agents coordinating with little central control. Where swarms genuinely help, the reliability tax they impose, and how to keep them from thrashing.",
+    "section": "patterns",
+    "level": "advanced",
+    "tags": [
+      "swarms",
+      "multi-agent",
+      "emergent",
+      "advanced",
+      "coordination"
+    ],
+    "url": "/patterns/agent-swarms",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Anthropic: The Discipline Behind 'Building Effective Agents'",
+    "description": "Lessons from Anthropic's engineering guidance — start simple, prefer workflows until you need agents, and add complexity only when it demonstrably pays off.",
+    "section": "case-studies",
+    "level": "intermediate",
+    "tags": [
+      "case-study",
+      "anthropic",
+      "workflows",
+      "best-practices"
+    ],
+    "url": "/case-studies/anthropic-building-effective-agents",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "AWS Labs GraphRAG Toolkit",
+    "description": "An open-source toolkit for building graph-based RAG — constructing a knowledge graph from documents and querying it to ground agents with structured context.",
+    "section": "frameworks",
+    "level": "advanced",
+    "tags": [
+      "rag",
+      "graphrag",
+      "retrieval",
+      "knowledge-graph",
+      "aws"
+    ],
+    "url": "/frameworks/graphrag-toolkit",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Bringing a model pipeline home: what 'integrated' has to mean",
+    "description": "A train/benchmark/serve pipeline moved from a standalone repository into a monorepo without losing a single check - and the move was used to land the process machinery the whole repository now runs on.",
+    "section": "lab",
+    "level": "advanced",
+    "tags": [
+      "lab-notes",
+      "models",
+      "migration",
+      "ci",
+      "evidence",
+      "monorepo"
+    ],
+    "url": "/lab/2026-07-28-models-integration",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Building with the Claude API: From First Request to Agents",
+    "description": "A foundations map of the Claude API primitives — messages, system prompts, tool use, extended thinking, prompt caching, and MCP — and how they stack up into agents, anchored to Anthropic Academy's free course.",
+    "section": "foundations",
+    "level": "beginner",
+    "tags": [
+      "claude",
+      "api",
+      "tool-use",
+      "mcp",
+      "rag",
+      "education"
+    ],
+    "url": "/foundations/building-with-the-claude-api",
+    "aiGenerated": true,
+    "draft": false
+  },
+  {
+    "title": "Claude Agent SDK",
+    "description": "Anthropic's SDK for building agents on the same harness that powers Claude Code — tool use, MCP, subagents, and long-running loops with production ergonomics.",
+    "section": "frameworks",
+    "level": "intermediate",
+    "tags": [
+      "sdk",
+      "anthropic",
+      "claude",
+      "mcp",
+      "subagents"
+    ],
+    "url": "/frameworks/claude-agent-sdk",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Context Engineering: Managing the Agent's Working Memory",
+    "description": "The context window is the agent's only view of the world each turn. How to curate it — selection, compression, isolation, retrieval — to avoid context rot.",
+    "section": "patterns",
+    "level": "advanced",
+    "tags": [
+      "context-engineering",
+      "memory",
+      "compression",
+      "retrieval"
+    ],
+    "url": "/patterns/context-engineering",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Ecosystem Roundup: Protocols, Harnesses, and Graph Retrieval",
+    "description": "A seed aggregation post — the current center of gravity across agent frameworks, the MCP/A2A protocol layer, long-running harnesses, and GraphRAG.",
+    "section": "news",
+    "level": "intermediate",
+    "tags": [
+      "news",
+      "roundup",
+      "mcp",
+      "a2a",
+      "graphrag",
+      "harnesses"
+    ],
+    "url": "/news/2026-06-agent-ecosystem-roundup",
+    "aiGenerated": true,
+    "draft": false
+  },
+  {
+    "title": "Effective Harnesses for Long-Running Agents",
+    "description": "What changes when an agent runs for hours or days — durability, checkpointing, context compaction, and human-in-the-loop — and how to build a harness that survives it.",
+    "section": "production",
+    "level": "advanced",
+    "tags": [
+      "harness",
+      "durability",
+      "long-running",
+      "checkpointing",
+      "hitl"
+    ],
+    "url": "/production/long-running-harnesses",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Evaluating Agents: Measuring What You Can't See Otherwise",
+    "description": "Why agent evaluation is the real bottleneck, and how to build it — task suites, trajectory vs. outcome metrics, LLM-as-judge, and online evaluation in production.",
+    "section": "production",
+    "level": "advanced",
+    "tags": [
+      "evaluation",
+      "testing",
+      "metrics",
+      "llm-as-judge"
+    ],
+    "url": "/production/evaluation",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Failure Modes of Agentic Systems: A Field Catalog",
+    "description": "The characteristic ways agents go wrong in production — looping, hallucinated tool use, context poisoning, cascading multi-agent errors — with causes and mitigations.",
+    "section": "production",
+    "level": "advanced",
+    "tags": [
+      "failure-modes",
+      "reliability",
+      "debugging",
+      "production"
+    ],
+    "url": "/production/failure-modes",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Framework Comparison Matrix: Choosing an Agent Stack",
+    "description": "A side-by-side comparison of LangChain, LangGraph, the Claude Agent SDK, Strands, MCP, and A2A across control model, durability, multi-agent support, and lock-in.",
+    "section": "comparisons",
+    "level": "intermediate",
+    "tags": [
+      "comparison",
+      "frameworks",
+      "decision",
+      "matrix"
+    ],
+    "url": "/comparisons/framework-matrix",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "From LLM to Agent: The Capability Ladder",
+    "description": "How a next-token predictor became something that can plan and act — instruction tuning, tool calling, reasoning, and the harness that closes the loop.",
+    "section": "foundations",
+    "level": "beginner",
+    "tags": [
+      "llm",
+      "tool-calling",
+      "reasoning",
+      "evolution"
+    ],
+    "url": "/foundations/llm-to-agent-evolution",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Google: Building a Production-Ready Multi-Agent System",
+    "description": "Walking Google's Production-Ready AI codelab — how an orchestrator-worker multi-agent system is assembled, and the production concerns it surfaces.",
+    "section": "case-studies",
+    "level": "intermediate",
+    "tags": [
+      "case-study",
+      "google",
+      "multi-agent",
+      "orchestrator-worker",
+      "production"
+    ],
+    "url": "/case-studies/google-multi-agent-roadshow",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Guardrails & Safety: Constraining What an Agent Can Do",
+    "description": "Least privilege, human-in-the-loop, input/output validation, and prompt-injection defense — the controls that keep an autonomous, tool-using agent from doing harm.",
+    "section": "production",
+    "level": "advanced",
+    "tags": [
+      "guardrails",
+      "safety",
+      "security",
+      "permissions",
+      "prompt-injection"
+    ],
+    "url": "/production/guardrails-safety",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "LangChain",
+    "description": "The most widely adopted LLM application framework — model/tool abstractions, integrations, and the on-ramp to LangGraph for stateful agents.",
+    "section": "frameworks",
+    "level": "intermediate",
+    "tags": [
+      "framework",
+      "orchestration",
+      "integrations",
+      "python",
+      "javascript"
+    ],
+    "url": "/frameworks/langchain",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "LangGraph",
+    "description": "A low-level orchestration framework for stateful, durable agents modeled as graphs — with checkpointing, human-in-the-loop, and multi-actor topologies.",
+    "section": "frameworks",
+    "level": "advanced",
+    "tags": [
+      "framework",
+      "orchestration",
+      "state-machine",
+      "durability",
+      "multi-agent"
+    ],
+    "url": "/frameworks/langgraph",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Learning Path: From Zero to Your First Agent",
+    "description": "A guided sequence for engineers new to agents — the mental models, then the anatomy, then building a single tool-using agent you understand end to end.",
+    "section": "learning-paths",
+    "level": "beginner",
+    "tags": [
+      "learning-path",
+      "beginner",
+      "onboarding"
+    ],
+    "url": "/learning-paths/beginner-to-first-agent",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Learning Path: The Architect's Track to Production Agents",
+    "description": "For engineers taking agentic systems to production — topologies, context engineering, long-running harnesses, evaluation, observability, and guardrails, in order.",
+    "section": "learning-paths",
+    "level": "advanced",
+    "tags": [
+      "learning-path",
+      "advanced",
+      "architecture",
+      "production"
+    ],
+    "url": "/learning-paths/architect-track",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Model Context Protocol (MCP)",
+    "description": "The open standard for connecting models to tools, data, and prompts — the 'USB-C for AI' that makes integrations portable across hosts and models.",
+    "section": "frameworks",
+    "level": "intermediate",
+    "tags": [
+      "protocol",
+      "mcp",
+      "tools",
+      "integrations",
+      "standard"
+    ],
+    "url": "/frameworks/model-context-protocol",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Multi-Agent Orchestration: Topologies and Tradeoffs",
+    "description": "Orchestrator-worker, sequential, and graph topologies for coordinating multiple agents — when multi-agent beats single-agent, and the overhead you're signing up for.",
+    "section": "patterns",
+    "level": "advanced",
+    "tags": [
+      "multi-agent",
+      "orchestration",
+      "topology",
+      "delegation"
+    ],
+    "url": "/patterns/multi-agent-orchestration",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Observability for Agents: If You Can't Trace It, You Can't Ship It",
+    "description": "Agents fail invisibly. What to instrument — traces, spans, token and cost accounting, tool telemetry — and why the trace is the primary debugging artifact.",
+    "section": "production",
+    "level": "advanced",
+    "tags": [
+      "observability",
+      "tracing",
+      "telemetry",
+      "debugging",
+      "cost"
+    ],
+    "url": "/production/observability",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Planning: From Goal to Ordered Action",
+    "description": "How agents decompose goals into steps — plan-then-execute vs. interleaved planning, multi-agent planning, and why plans must be revisable.",
+    "section": "patterns",
+    "level": "intermediate",
+    "tags": [
+      "planning",
+      "decomposition",
+      "multi-agent-planning"
+    ],
+    "url": "/patterns/planning",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "RAG and GraphRAG: Grounding Agents in Real Knowledge",
+    "description": "Retrieval-augmented generation from vector search to knowledge graphs — how each grounds an agent, when GraphRAG's multi-hop structure is worth the build cost.",
+    "section": "patterns",
+    "level": "advanced",
+    "tags": [
+      "rag",
+      "graphrag",
+      "retrieval",
+      "knowledge-graph",
+      "grounding"
+    ],
+    "url": "/patterns/graphrag",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Reflection: Agents That Check Their Own Work",
+    "description": "The pattern where an agent critiques and revises its output before finishing — how it works, when it pays off, and when it just burns tokens.",
+    "section": "patterns",
+    "level": "intermediate",
+    "tags": [
+      "reflection",
+      "self-critique",
+      "quality",
+      "evaluator-optimizer"
+    ],
+    "url": "/patterns/reflection",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Strands Agents",
+    "description": "A model-driven, lightweight SDK that builds agents from three parts — model, tools, and prompt — and lets the model plan the loop, with MCP and multi-agent support.",
+    "section": "frameworks",
+    "level": "intermediate",
+    "tags": [
+      "sdk",
+      "model-driven",
+      "mcp",
+      "multi-agent",
+      "aws"
+    ],
+    "url": "/frameworks/strands-agents",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "The Agent Engineer's Glossary",
+    "description": "Precise, opinionated definitions for the vocabulary of agentic systems — from action space to swarm — so a team can argue about the right thing.",
+    "section": "foundations",
+    "level": "beginner",
+    "tags": [
+      "glossary",
+      "definitions",
+      "reference"
+    ],
+    "url": "/foundations/glossary",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "The pipeline that looked healthy and shipped nothing",
+    "description": "Five findings from integrating an agent simulation control plane, all with the same shape: a green surface reporting health over plumbing that was producing nothing. Including an API that had emitted zero telemetry for three days behind a passing readiness probe.",
+    "section": "lab",
+    "level": "advanced",
+    "tags": [
+      "lab-notes",
+      "prod",
+      "observability",
+      "failure-modes",
+      "evidence",
+      "kafka",
+      "clickhouse"
+    ],
+    "url": "/lab/2026-07-28-prod-integration",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "The Pre-Agentic Era: Everything We Built Before the Loop",
+    "description": "Expert systems, RPA, dialogue managers, and orchestration pipelines already solved parts of the agent problem. What carries forward, and what the LLM actually changed.",
+    "section": "foundations",
+    "level": "beginner",
+    "tags": [
+      "history",
+      "expert-systems",
+      "rpa",
+      "orchestration",
+      "context"
+    ],
+    "url": "/foundations/pre-agentic-era",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "The stage that named an artifact and never checked for it",
+    "description": "Our lifecycle said every project ends in a published article. Nothing checked that it did, and two finished projects were sitting unpublished. Closing that gap, plus three defects no green build could see.",
+    "section": "lab",
+    "level": "advanced",
+    "tags": [
+      "lab-notes",
+      "atlas",
+      "ci",
+      "process",
+      "migration",
+      "publishing"
+    ],
+    "url": "/lab/2026-07-28-atlas-integration",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Tool Use: Designing an Action Space an Agent Can Actually Use",
+    "description": "The single-agent pattern everything builds on. How to define, scope, and describe tools so the model calls the right one with the right arguments.",
+    "section": "patterns",
+    "level": "intermediate",
+    "tags": [
+      "tool-use",
+      "function-calling",
+      "react",
+      "design"
+    ],
+    "url": "/patterns/tool-use",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "Tradeoffs & Failure Modes by Architecture",
+    "description": "How the reliability, cost, latency, and failure profile change as you move from a single agent to orchestrator-worker to swarms — a decision table with mitigations.",
+    "section": "comparisons",
+    "level": "advanced",
+    "tags": [
+      "comparison",
+      "tradeoffs",
+      "failure-modes",
+      "architecture",
+      "cost"
+    ],
+    "url": "/comparisons/failure-mode-tradeoffs",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
+    "title": "What Is an AI Agent? A Definition That Survives Contact With Production",
+    "description": "A precise, engineering-first definition of an AI agent — the loop, autonomy, tools, and where the boundary sits between an agent and a plain LLM call.",
+    "section": "foundations",
+    "level": "beginner",
+    "tags": [
+      "fundamentals",
+      "definitions",
+      "agent-loop",
+      "autonomy"
+    ],
+    "url": "/foundations/what-is-an-agent",
+    "aiGenerated": false,
+    "draft": false
+  }
+]
