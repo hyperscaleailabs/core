@@ -5,10 +5,10 @@
 # External (http/https/mailto) and root-relative site links are out of scope.
 # Exit 1 on any breakage.
 #
-# Scope is what git tracks. It used to be every *.md under the tree, which was
-# equivalent only while no module had dependencies: the first module with a
-# node_modules/ directory produced hundreds of failures from third-party
-# READMEs, none of them ours and none of them fixable here.
+# Scope is files Git tracks plus non-ignored untracked files. A raw filesystem
+# walk includes dependency READMEs under node_modules; a tracked-only scan lets
+# a new document pass locally until it is staged. Git's standard excludes avoid
+# both failures.
 set -euo pipefail
 cd "$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 
@@ -33,6 +33,35 @@ check_anchor() {
   echo "BROKEN ANCHOR: $src -> $file#$anchor"
   return 1
 }
+
+check_deployment_navigation() {
+  awk '
+    /^## Target deployment$/ {
+      in_section = 1
+      next
+    }
+    in_section && /^## / {
+      exit
+    }
+    in_section && /^\|/ && $0 !~ /^\|[- |]+\|$/ && $0 !~ /^\| Surface / {
+      split($0, cells, "|")
+      rows += 1
+      if (cells[3] !~ /\]\([^)]+\)/) {
+        print "MISSING NAVIGATION LINK: README.md deployment row " cells[2] "has unlinked Backed by cell:" cells[3]
+        failed = 1
+      }
+    }
+    END {
+      if (rows == 0) {
+        print "MISSING NAVIGATION TABLE: README.md#target-deployment"
+        failed = 1
+      }
+      exit failed
+    }
+  ' README.md
+}
+
+check_deployment_navigation || status=1
 
 while IFS= read -r -d '' src; do
   dir=$(dirname "$src")
@@ -68,7 +97,7 @@ while IFS= read -r -d '' src; do
       esac
     fi
   done < <(grep -oE '\]\([^)]+\)' "$src" | sed -E 's/^\]\(//; s/\)$//; s/ "[^"]*"$//')
-done < <(git ls-files -z '*.md' '*.markdown')
+done < <(git ls-files -co --exclude-standard -z -- '*.md' '*.markdown')
 
 if [ "$status" -eq 0 ]; then
   echo "markdown links OK"

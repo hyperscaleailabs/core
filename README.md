@@ -148,10 +148,10 @@ of VMs. Public and gated surfaces:
 | Surface | Backed by | Access |
 |---------|-----------|--------|
 | Atlas | [`atlas/`](atlas/README.md) | Public. Static site deployed on Vercel with `atlas` as the project root directory: the agent field guide, and Lab Notes publishing this repository's project articles, experiment results, and lessons. Moves into the shared k3d deployment when hosting - not content - makes that worthwhile |
-| Meet | `meet/` | Public with approved sign-up. Conferencing with a plugged generalist voice agent and pixel streaming in the same browser |
+| Meet | [`meet/`](meet/README.md) | Public with approved sign-up. Conferencing with a plugged generalist voice agent and pixel streaming in the same browser |
 | Internal dashboards | [`prod/`](prod/README.md) | Gated to internal use. Operator console for simulation runs and release decisions, with the Grafana and Superset dashboards embedded as tabs; release-into-production controls |
-| APIs | `agents/`, `models/` | Requires API key |
-| D-twins | `dtwins/` | Gated environment spin-up; demoable via pixel streaming in Meet |
+| APIs | [`agents/`](agents/README.md), [`models/`](models/README.md) | Requires API key |
+| D-twins | [`dtwins/`](dtwins/README.md) | Gated environment spin-up; demoable via pixel streaming in Meet |
 
 Services and jobs are exposed as Kubernetes services and deployments, internal or
 external per the table above. See [infra/](infra/) for how environments are assembled
