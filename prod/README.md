@@ -86,13 +86,19 @@ On memory-constrained hosts use `bash deploy/scripts/deploy-lite.sh` instead of
 `make deploy-local`; it skips the heaviest tenants and is what the arm64 evidence in
 `docs/evidence/` was collected on. Teardown is `make cluster-down`.
 
-The checks that need no cluster - lint, unit tests, schema compatibility, and the
-in-process golden workflow - run directly:
+The checks that need no cluster run directly:
 
 ```bash
 cd prod
-make verify && make lint && make test && make e2e
+make verify
 ```
+
+`make verify` is the `prod` workflow's jobs, target for target, in CI's order:
+format, lint, shell syntax, handoff package, YAML, schemas, unit tests, the
+in-process golden e2e, the golden release-decision baseline, and the module
+policy guards. `make help` lists the individual targets and `make deps` installs
+what they need. Only `make terraform` sits outside `verify`, because it needs the
+`terraform` binary.
 
 ## Reviewing a running stack
 
