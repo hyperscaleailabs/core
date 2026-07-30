@@ -1,6 +1,7 @@
 # A checker cannot validate a link that does not exist
 
-Project: [issue #16](https://github.com/hyperscaleailabs/core/issues/16).
+Project: [issue #16](https://github.com/hyperscaleailabs/core/issues/16) and
+[pull request #17](https://github.com/hyperscaleailabs/core/pull/17).
 
 ## Correction
 

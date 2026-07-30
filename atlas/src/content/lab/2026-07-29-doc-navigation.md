@@ -2,13 +2,14 @@
 title: "A missing link is invisible to a broken-link checker"
 description: "The repository link check was green while the root deployment table named four modules without linking to their documentation. Every declared edge worked. Four required edges did not exist."
 level: "advanced"
-updated: 2026-07-29
+updated: 2026-07-30
 created: 2026-07-29
 tags: [lab-notes, sdlc, doc-navigation]
 module: "sdlc"
 project: "doc-navigation"
 articlePath: "sdlc/docs/articles/2026-07-29-doc-navigation/article.md"
 issue: 16
+pr: 17
 evidenceTier: "process"
 draft: false
 aiGenerated: false

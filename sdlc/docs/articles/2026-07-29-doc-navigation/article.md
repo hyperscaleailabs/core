@@ -1,7 +1,8 @@
 # A missing link is invisible to a broken-link checker
 
 Audience: Architect, PM. Project trail:
-[issue #16](https://github.com/hyperscaleailabs/core/issues/16).
+[issue #16](https://github.com/hyperscaleailabs/core/issues/16) and
+[pull request #17](https://github.com/hyperscaleailabs/core/pull/17).
 Produced by the RESEARCHER/PUBLISHER stage of the
 [project lifecycle](../../../LIFECYCLE.md#stages).
 

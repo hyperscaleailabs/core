@@ -1,6 +1,7 @@
 # Evidence: deployment documentation navigation
 
-Project: [issue #16](https://github.com/hyperscaleailabs/core/issues/16).
+Project: [issue #16](https://github.com/hyperscaleailabs/core/issues/16) and
+[pull request #17](https://github.com/hyperscaleailabs/core/pull/17).
 Collected 2026-07-29 from the project branch.
 
 Evidence tier: **process**. This record supports documentation navigation and
