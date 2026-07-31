@@ -1,7 +1,7 @@
 ---
 title: "AWS Labs GraphRAG Toolkit"
 name: "GraphRAG Toolkit"
-description: "An open-source toolkit for building graph-based RAG — constructing a knowledge graph from documents and querying it to ground agents with structured context."
+description: "An open-source toolkit for building graph-based RAG - constructing a knowledge graph from documents and querying it to ground agents with structured context."
 level: advanced
 readingTime: 6
 category: rag
@@ -31,7 +31,7 @@ sources:
 The **GraphRAG Toolkit** from AWS Labs is an open-source (Apache-2.0) framework
 for building **graph-based retrieval-augmented generation**. Instead of retrieving
 loose text chunks by vector similarity alone, GraphRAG constructs a **knowledge
-graph** — entities and their relationships — from your corpus, then queries that
+graph** - entities and their relationships - from your corpus, then queries that
 structure to assemble grounded, connected context for a model.
 
 ## Why graphs over chunks
@@ -41,11 +41,11 @@ can miss information that only emerges from **relationships across documents**
 ("which components depend on the service that failed?"). GraphRAG captures that
 structure explicitly:
 
-- **Construction** — extract entities/relations from documents into a graph
+- **Construction** - extract entities/relations from documents into a graph
   (optionally paired with a vector store for hybrid retrieval).
-- **Retrieval** — traverse the graph to gather multi-hop, connected context, not
+- **Retrieval** - traverse the graph to gather multi-hop, connected context, not
   just top-k similar chunks.
-- **Grounding** — feed that structured context to the model for more complete,
+- **Grounding** - feed that structured context to the model for more complete,
   less hallucination-prone answers.
 
 ## What the toolkit provides
@@ -71,9 +71,9 @@ walks through the architecture and a build.
   chunks into a vector store; justified when relationships matter.
 - **Infrastructure.** Adds graph and search services to operate and secure.
 - **Not always needed.** For simple lookup-style retrieval, plain vector RAG is
-  cheaper and simpler — choose based on the query shape.
+  cheaper and simpler - choose based on the query shape.
 
 ## See also
 
-- [RAG & GraphRAG patterns](/patterns/graphrag) — the concepts behind the toolkit.
+- [RAG & GraphRAG patterns](/patterns/graphrag) - the concepts behind the toolkit.
 - [Framework comparison matrix](/comparisons/framework-matrix)

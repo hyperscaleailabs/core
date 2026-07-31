@@ -1,4 +1,4 @@
-"""Agent Simulation Control Plane — deterministic simulation kernel."""
+"""Agent Simulation Control Plane - deterministic simulation kernel."""
 
 from asc_kernel.harness import HarnessMode
 from asc_kernel.kernel import (

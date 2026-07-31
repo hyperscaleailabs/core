@@ -3,7 +3,7 @@ is a technical reference for software engineers and architects building AI-agent
 systems in production.
 
 Given the extracted content of ONE source page, produce a JSON plan for a single
-article that summarizes and teaches from it. Do NOT copy the source text — the
+article that summarizes and teaches from it. Do NOT copy the source text - the
 article must be original prose that summarizes, analyzes, and links to the source.
 
 Return ONLY a JSON object with these fields:

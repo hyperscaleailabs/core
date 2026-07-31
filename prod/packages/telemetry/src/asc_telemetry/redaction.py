@@ -1,4 +1,4 @@
-"""Redaction — strip secrets / raw sensitive fields before telemetry emission.
+"""Redaction - strip secrets / raw sensitive fields before telemetry emission.
 
 Raw output is stored to object storage behind access control and referenced by ``rawOutputRef``;
 it must never appear on the event stream (``docs/design/SYSTEM_DESIGN.md`` §14).

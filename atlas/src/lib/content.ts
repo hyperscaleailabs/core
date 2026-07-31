@@ -4,7 +4,7 @@ import readingTime from 'reading-time';
 export const SECTION_META: Record<string, { label: string; blurb: string; icon: string; accent: string }> = {
   foundations: {
     label: 'Foundations',
-    blurb: 'From the pre-agentic era to the modern agent loop — the mental models.',
+    blurb: 'From the pre-agentic era to the modern agent loop - the mental models.',
     icon: '◇',
     accent: 'var(--color-cyan)',
   },
@@ -22,7 +22,7 @@ export const SECTION_META: Record<string, { label: string; blurb: string; icon: 
   },
   production: {
     label: 'Production',
-    blurb: 'Harnesses, evaluation, observability, guardrails, cost — and failure modes.',
+    blurb: 'Harnesses, evaluation, observability, guardrails, cost - and failure modes.',
     icon: '▲',
     accent: 'var(--color-rose)',
   },

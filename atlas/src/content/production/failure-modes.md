@@ -1,6 +1,6 @@
 ---
 title: "Failure Modes of Agentic Systems: A Field Catalog"
-description: "The characteristic ways agents go wrong in production — looping, hallucinated tool use, context poisoning, cascading multi-agent errors — with causes and mitigations."
+description: "The characteristic ways agents go wrong in production - looping, hallucinated tool use, context poisoning, cascading multi-agent errors - with causes and mitigations."
 level: advanced
 readingTime: 12
 updated: 2026-06-30
@@ -24,7 +24,7 @@ sources:
     accessed: "2026-06-30"
 ---
 
-Agents don't fail like ordinary software. They fail *plausibly* — producing
+Agents don't fail like ordinary software. They fail *plausibly* - producing
 confident, well-formed output that is wrong, or wandering off task while looking
 busy. This catalog names the recurring failure modes so you can recognize them in
 a trace, and pairs each with its usual cause and mitigation. Treat it as a
@@ -61,7 +61,7 @@ periodic re-grounding ([context engineering](/patterns/context-engineering)).
 **Symptom:** quality falls as a session lengthens; the agent fixates on stale or
 irrelevant content.
 **Cause:** an ever-growing window packed with low-signal tokens.
-**Mitigation:** compress history, isolate sub-tasks, retrieve on demand — the core
+**Mitigation:** compress history, isolate sub-tasks, retrieve on demand - the core
 of [context engineering](/patterns/context-engineering).
 
 ### 5. Overconfident fabrication
@@ -90,7 +90,7 @@ sandbox tools. A top security concern for any agent that reads the open web.
 
 ## Multi-agent failure modes
 
-These compound the above — see
+These compound the above - see
 [multi-agent orchestration](/patterns/multi-agent-orchestration) and
 [swarms](/patterns/agent-swarms).
 
@@ -112,7 +112,7 @@ sufficient context.
 **Symptom:** agents wait on each other, redo the same work, or hand a task back
 and forth.
 **Cause:** the classic [multi-agent planning](https://www.geeksforgeeks.org/artificial-intelligence/multiagent-planning-in-ai/)
-problems — conflicting goals, no clear ownership, no global termination.
+problems - conflicting goals, no clear ownership, no global termination.
 **Mitigation:** clear task ownership; global step/cost budget and abort signal
 above the fleet; a coordinator that owns "done."
 
@@ -129,16 +129,16 @@ for replay; prefer bounded topologies unless emergence is the point.
   and wall-clock time. Budget them explicitly ([cost & latency in
   comparisons](/comparisons/failure-mode-tradeoffs)).
 - **Invisible failure.** The worst version of every mode above is the one you
-  can't see. Without [observability](/production/observability) — full traces of
-  prompts, tool calls, and results — you can't diagnose any of them.
+  can't see. Without [observability](/production/observability) - full traces of
+  prompts, tool calls, and results - you can't diagnose any of them.
 
 ## How to use this catalog
 
-1. **At design time** — walk the list and ask "which of these can happen here,
+1. **At design time** - walk the list and ask "which of these can happen here,
    and what's my mitigation?" Absence of an answer is a risk you've accepted
    silently.
-2. **At review time** — map a proposed system to the modes it's exposed to.
-3. **At debug time** — match the symptom in your trace to a mode, then apply the
+2. **At review time** - map a proposed system to the modes it's exposed to.
+3. **At debug time** - match the symptom in your trace to a mode, then apply the
    mitigation rather than guessing.
 
 Reliability in agents is not a smarter model; it's **systematically closing off
@@ -146,7 +146,7 @@ these modes** with harness, context, and evaluation.
 
 ## Next
 
-- [Long-running harnesses](/production/long-running-harnesses) — durability that
+- [Long-running harnesses](/production/long-running-harnesses) - durability that
   prevents whole categories of failure.
-- [Evaluation](/production/evaluation) — measuring whether your mitigations work.
+- [Evaluation](/production/evaluation) - measuring whether your mitigations work.
 - [Failure-mode & tradeoff comparison](/comparisons/failure-mode-tradeoffs)

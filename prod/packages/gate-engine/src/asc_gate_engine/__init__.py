@@ -1,4 +1,4 @@
-"""Agent Simulation Control Plane — gate engine."""
+"""Agent Simulation Control Plane - gate engine."""
 
 from asc_gate_engine.engine import evaluate, evaluate_gates
 

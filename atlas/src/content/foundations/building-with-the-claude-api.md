@@ -1,6 +1,6 @@
 ---
 title: "Building with the Claude API: From First Request to Agents"
-description: "A foundations map of the Claude API primitives — messages, system prompts, tool use, extended thinking, prompt caching, and MCP — and how they stack up into agents, anchored to Anthropic Academy's free course."
+description: "A foundations map of the Claude API primitives - messages, system prompts, tool use, extended thinking, prompt caching, and MCP - and how they stack up into agents, anchored to Anthropic Academy's free course."
 level: beginner
 readingTime: 9
 created: 2026-07-01
@@ -13,7 +13,7 @@ sources:
   - title: "Building with the Claude API (Anthropic Academy)"
     url: "https://anthropic.skilljar.com/claude-with-the-anthropic-api/"
     publisher: "Anthropic Academy"
-    license: "© Anthropic — course materials"
+    license: "© Anthropic - course materials"
     accessed: "2026-07-01"
   - title: "Building Effective Agents"
     url: "https://www.anthropic.com/engineering/building-effective-agents"
@@ -21,7 +21,7 @@ sources:
     accessed: "2026-07-01"
 ---
 
-Most of the atlas talks about agents at the level of *concepts* — the loop,
+Most of the atlas talks about agents at the level of *concepts* - the loop,
 autonomy, harnesses. But every agent eventually bottoms out in concrete API
 calls: a request with messages, a system prompt, a set of tool definitions, and a
 response you have to parse. This page maps the **Claude API primitives** to the
@@ -29,7 +29,7 @@ response you have to parse. This page maps the **Claude API primitives** to the
 call a model" to "I built an agent" stops feeling like magic.
 
 It's organized around Anthropic Academy's free, hands-on course
-[*Building with the Claude API*](https://anthropic.skilljar.com/claude-with-the-anthropic-api/) —
+[*Building with the Claude API*](https://anthropic.skilljar.com/claude-with-the-anthropic-api/) -
 a good vendor-specific complement to vendor-neutral primers. You need working
 Python and comfort with JSON; you don't need prior ML experience.
 
@@ -37,7 +37,7 @@ Python and comfort with JSON; you don't need prior ML experience.
 
 A framework can hide these primitives, but it can't hide their *consequences*.
 Latency, cost, reliability, and most failure modes trace directly back to how you
-use the raw API — how big your context is, whether you cache it, how you shape
+use the raw API - how big your context is, whether you cache it, how you shape
 tool results. Understanding the primitives is what lets you debug an agent instead
 of just restarting it.
 
@@ -49,7 +49,7 @@ turn a text generator into something [agentic](/foundations/what-is-an-agent).
 ### 1. Messages and multi-turn context
 
 The core call is a list of `messages` (alternating user/assistant turns) that you
-resend each request — the API is stateless, so *you* own the conversation. Getting
+resend each request - the API is stateless, so *you* own the conversation. Getting
 message formatting and context handling right is the unglamorous foundation
 everything else sits on. Every extra turn you carry is tokens you pay for and
 latency you wait on, which is why [context
@@ -68,18 +68,19 @@ machine-parseable responses. This is the rung that turns a chatbot into a
 
 Reliable behavior comes from technique, not luck: XML-tag structuring to separate
 instructions from data, worked examples, and unambiguous directives. Crucially,
-the course pairs this with **evaluation** — generating test datasets and automated
+the course pairs this with **evaluation** - generating test datasets and automated
 graders. If you take one habit from it, take this one: an agent without an eval
 harness is a demo, not a system. See [evaluation](/production/evaluation).
 
-### 4. Tool use — the pivotal rung
+### 4. Tool use - the pivotal rung
 
 Tool use is where a model stops answering and starts *acting*. You pass tool
 definitions (name, description, JSON-schema parameters); the model may emit a tool
 call instead of prose; your code runs it and feeds the result back on the next
 turn. The course covers custom tools, batch operations, and built-in web search.
-This is the mechanism behind the entire [agent loop](/foundations/what-is-an-agent)
-— the atlas covers its design tradeoffs in depth under [tool use](/patterns/tool-use).
+This is the mechanism behind the entire
+[agent loop](/foundations/what-is-an-agent) - the atlas covers its design
+tradeoffs in depth under [tool use](/patterns/tool-use).
 
 ```jsonc
 // The model emits a tool call; your harness executes it and returns an observation.
@@ -95,33 +96,33 @@ chunk-level context before embedding to fight the "lost snippet" problem). This 
 the API-level view of what the atlas treats architecturally under
 [GraphRAG](/patterns/graphrag) and retrieval patterns.
 
-### 6. Extended features — thinking, multimodal, citations
+### 6. Extended features - thinking, multimodal, citations
 
 Beyond text: **extended thinking** (spending inference-time compute before
-answering — the concrete form of ["reasoning before
+answering - the concrete form of ["reasoning before
 acting"](/foundations/llm-to-agent-evolution)), image analysis, PDF processing,
 and citation generation. These widen what a single call can ingest and how
 verifiable its output is.
 
-### 7. Prompt caching — the cost/latency lever
+### 7. Prompt caching - the cost/latency lever
 
 Caching a stable prefix (a long system prompt, a document, a tool schema) so
 repeated requests skip re-processing it is one of the highest-leverage
 optimizations in production. In agent loops that resend a growing context every
 turn, caching is often the difference between viable and unaffordable.
 
-### 8. MCP — standardized tools and resources
+### 8. MCP - standardized tools and resources
 
 The [Model Context Protocol](/frameworks/model-context-protocol) standardizes how
 tools and data are exposed to a model, so integrations are portable across hosts
 instead of bespoke glue. The course has you build both MCP **servers** and
-**clients** — the same protocol the [Claude Agent
+**clients** - the same protocol the [Claude Agent
 SDK](/frameworks/claude-agent-sdk) and Claude Code speak.
 
 ### 9. Agent architectures
 
 The top rung composes everything below into workflows: **chaining**,
-**routing**, and **parallelization**. Note the framing — these are the *workflow*
+**routing**, and **parallelization**. Note the framing - these are the *workflow*
 patterns from [*Building Effective
 Agents*](https://www.anthropic.com/engineering/building-effective-agents), the
 predictable scaffolding you reach for before handing full control to an
@@ -130,12 +131,12 @@ orchestration](/patterns/multi-agent-orchestration).
 
 ## A suggested path through it
 
-1. **Rungs 1–3** first — get a reliable single call *and* an eval before adding
+1. **Rungs 1–3** first - get a reliable single call *and* an eval before adding
    moving parts. Most agent bugs are really prompt or context bugs.
-2. **Rung 4 (tools)** next — this is the conceptual jump to agency; everything
+2. **Rung 4 (tools)** next - this is the conceptual jump to agency; everything
    after is elaboration.
 3. **RAG and caching** when real data and real bills show up.
-4. **MCP and agent architectures** once a single tool-using loop is solid — don't
+4. **MCP and agent architectures** once a single tool-using loop is solid - don't
    orchestrate multiple agents before one works.
 
 ## Tradeoffs to keep in mind
@@ -143,14 +144,14 @@ orchestration](/patterns/multi-agent-orchestration).
 - **Vendor-specific by design.** These are Claude API mechanics. The *concepts*
   transfer to any provider; the exact parameters and MCP specifics are Anthropic's.
 - **Primitives, not a harness.** The API gives you the pieces; production
-  durability — retries, checkpoints, budgets — is the [harness
+  durability - retries, checkpoints, budgets - is the [harness
   layer](/production/long-running-harnesses) you build (or adopt via the
   [Claude Agent SDK](/frameworks/claude-agent-sdk)) on top.
 
 ## Next
 
-- [From LLM to Agent](/foundations/llm-to-agent-evolution) — the capability ladder
+- [From LLM to Agent](/foundations/llm-to-agent-evolution) - the capability ladder
   these primitives climb.
-- [Tool use](/patterns/tool-use) — designing tools a model can actually use well.
-- [Claude Agent SDK](/frameworks/claude-agent-sdk) — the batteries-included harness
+- [Tool use](/patterns/tool-use) - designing tools a model can actually use well.
+- [Claude Agent SDK](/frameworks/claude-agent-sdk) - the batteries-included harness
   over these same primitives.

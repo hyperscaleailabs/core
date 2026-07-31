@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Deploy the stack to the local cluster in dependency-aware waves (ASC-052, DEPLOYMENT.md §3).
 # Idempotent: re-running upgrades in place. Requires a running cluster (make cluster-up), kubectl,
-# and helm. Cluster bring-up itself pulls several GB (Druid/Flink/Superset) — run when ready.
+# and helm. Cluster bring-up itself pulls several GB (Druid/Flink/Superset) - run when ready.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"

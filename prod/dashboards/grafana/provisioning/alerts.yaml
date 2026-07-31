@@ -19,7 +19,7 @@ groups:
               instant: true
         for: 2m
         labels: { severity: critical }
-        annotations: { summary: "OpenTelemetry Collector is not up — traces/metrics are being lost." }
+        annotations: { summary: "OpenTelemetry Collector is not up - traces/metrics are being lost." }
       - uid: no-telemetry-received
         title: No telemetry received
         condition: A
@@ -31,4 +31,4 @@ groups:
               instant: true
         for: 10m
         labels: { severity: warning }
-        annotations: { summary: "No spans received in 10m — workers idle or telemetry path broken." }
+        annotations: { summary: "No spans received in 10m - workers idle or telemetry path broken." }

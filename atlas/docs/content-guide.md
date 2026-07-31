@@ -21,31 +21,31 @@ tags: [tool-use, design]       # short, kebab-case
 draft: false                   # true hides it in production builds
 aiGenerated: false             # true = machine-drafted, shows a review banner
 license: CC-BY-4.0             # defaults to CC BY 4.0
-sources:                       # attribution — one entry per referenced work
+sources:                       # attribution - one entry per referenced work
   - title: "Building Effective Agents"
     url: "https://www.anthropic.com/engineering/building-effective-agents"
     publisher: "Anthropic"
-    license: "—"               # license of the ORIGINAL, if known
+    license: "unknown"           # license of the ORIGINAL, if known
     accessed: "2026-06-30"
 ---
 ```
 
 ### Collection-specific extras
 
-- **frameworks** — also requires `name`, `category`
+- **frameworks** - also requires `name`, `category`
   (`orchestration|sdk|protocol|rag|runtime|observability|eval|toolkit`),
   `maturity` (`experimental|beta|stable|mature`), `supportsMcp`,
   `supportsMultiAgent`; optional `repo`, `homepage`, `docs`, `codeLicense`,
   `language`, `maintainer`.
-- **case-studies** — requires `company`; optional `domain`.
-- **lab** — requires `module`, `project`, `articlePath` (the repository-relative
+- **case-studies** - requires `company`; optional `domain`.
+- **lab** - requires `module`, `project`, `articlePath` (the repository-relative
   path of the module article it publishes), and `evidenceTier`; optional
   `issue`, `pr`. Do not hand-create these: run
   `scripts/intake-module-article.mjs` and write the body it drafts
   (see [../README.md](../README.md#from-module-article-to-atlas-entry)).
-- **news** — requires `published`.
-- **patterns** — optional `problem`, `alsoKnownAs`.
-- **learning-paths** — optional `steps`.
+- **news** - requires `published`.
+- **patterns** - optional `problem`, `alsoKnownAs`.
+- **learning-paths** - optional `steps`.
 
 ## House style
 
@@ -86,7 +86,7 @@ npm run build     # validates frontmatter across the whole corpus
 ```
 
 A failed build almost always means a frontmatter field is missing or the wrong
-type — read the error; it names the file and field.
+type - read the error; it names the file and field.
 
 ## Reviewing a machine-drafted article
 

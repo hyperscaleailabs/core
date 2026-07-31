@@ -1,7 +1,7 @@
 ---
 title: "LangChain"
 name: "LangChain"
-description: "The most widely adopted LLM application framework — model/tool abstractions, integrations, and the on-ramp to LangGraph for stateful agents."
+description: "The most widely adopted LLM application framework - model/tool abstractions, integrations, and the on-ramp to LangGraph for stateful agents."
 level: intermediate
 readingTime: 6
 category: orchestration
@@ -40,14 +40,14 @@ role today is as the **component and integration layer** beneath
 
 ## What it gives you
 
-- **Model & tool abstractions** — swap providers behind a consistent interface;
+- **Model & tool abstractions** - swap providers behind a consistent interface;
   bind tools to chat models with structured output.
-- **Integrations** — hundreds of connectors for vector DBs, document loaders,
+- **Integrations** - hundreds of connectors for vector DBs, document loaders,
   APIs, and, increasingly, [MCP](/frameworks/model-context-protocol) servers as a
   tool source.
-- **Retrieval** — building blocks for [RAG](/patterns/graphrag): loaders,
+- **Retrieval** - building blocks for [RAG](/patterns/graphrag): loaders,
   splitters, embeddings, retrievers.
-- **A path to agents** — for anything stateful or multi-step, LangChain points
+- **A path to agents** - for anything stateful or multi-step, LangChain points
   you to LangGraph rather than the older chain/agent-executor abstractions.
 
 ## When to reach for it

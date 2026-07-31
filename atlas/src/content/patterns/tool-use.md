@@ -3,7 +3,7 @@ title: "Tool Use: Designing an Action Space an Agent Can Actually Use"
 description: "The single-agent pattern everything builds on. How to define, scope, and describe tools so the model calls the right one with the right arguments."
 level: intermediate
 readingTime: 9
-problem: "An agent needs to affect the world — search, compute, call APIs, edit files — reliably and safely."
+problem: "An agent needs to affect the world - search, compute, call APIs, edit files - reliably and safely."
 alsoKnownAs: [function-calling, ReAct]
 updated: 2026-06-30
 tags: [tool-use, function-calling, react, design]
@@ -12,7 +12,7 @@ sources:
     url: "https://www.anthropic.com/engineering/building-effective-agents"
     publisher: "Anthropic"
     accessed: "2026-06-30"
-  - title: "Model Context Protocol — Introduction"
+  - title: "Model Context Protocol - Introduction"
     url: "https://modelcontextprotocol.io/docs/getting-started/intro"
     publisher: "Anthropic / MCP"
     accessed: "2026-06-30"
@@ -26,7 +26,7 @@ non-human, probabilistic caller**.
 
 ## The mechanic (ReAct in one breath)
 
-Each turn the model either emits a final answer or a **tool call** — a structured
+Each turn the model either emits a final answer or a **tool call** - a structured
 request naming a tool and its arguments. The harness executes it, appends the
 result as an observation, and loops. Reasoning interleaved with acting is the
 ReAct pattern, and it's the default shape of a tool-using agent.
@@ -44,7 +44,7 @@ model picks well among distinct options and badly among overloaded ones. If a
 tool's description needs the word "and" three times, split it.
 
 ### 3. Return signal, not noise
-Tool results consume the context window. Return the useful slice — the 5 rows,
+Tool results consume the context window. Return the useful slice - the 5 rows,
 not the 5,000; the extracted field, not the raw HTML. Noisy results cause
 [context rot](/patterns/context-engineering) and downstream mistakes.
 
@@ -71,14 +71,14 @@ reuse it everywhere.
 
 ## A worked example
 
-Bad — one overloaded tool:
+Bad - one overloaded tool:
 
 ```jsonc
 { "name": "db", "description": "run database operations",
   "parameters": { "op": "string", "payload": "object" } }
 ```
 
-Better — narrow, described, schema-constrained, read/write separated:
+Better - narrow, described, schema-constrained, read/write separated:
 
 ```jsonc
 { "name": "find_orders",
@@ -96,15 +96,15 @@ and the write path is explicitly gated.
 
 ## Common failure modes
 
-- **Wrong-tool selection** — usually vague/overlapping descriptions.
-- **Hallucinated arguments** — loose schemas; tighten them.
-- **Result overflow** — tools dumping raw payloads into context.
-- **Unsafe writes** — missing idempotency or approval on side-effecting tools.
+- **Wrong-tool selection** - usually vague/overlapping descriptions.
+- **Hallucinated arguments** - loose schemas; tighten them.
+- **Result overflow** - tools dumping raw payloads into context.
+- **Unsafe writes** - missing idempotency or approval on side-effecting tools.
 
 See [failure modes](/production/failure-modes) for the full catalog.
 
 ## Next
 
-- [Reflection](/patterns/reflection) — let the agent check its own work.
-- [Context engineering](/patterns/context-engineering) — keep tool results from
+- [Reflection](/patterns/reflection) - let the agent check its own work.
+- [Context engineering](/patterns/context-engineering) - keep tool results from
   drowning the signal.

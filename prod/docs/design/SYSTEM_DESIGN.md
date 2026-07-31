@@ -1,4 +1,4 @@
-# System Design — Agent Simulation Control Plane
+# System Design - Agent Simulation Control Plane
 
 **Status:** Draft for implementation · **Version:** 0.2.0-dev · **Supersedes:** none
 **Source of truth for product intent:** [`docs/v0.1.0/01_PRODUCT_REQUIREMENTS.md`](../v0.1.0/01_PRODUCT_REQUIREMENTS.md)
@@ -16,7 +16,7 @@ left open. Rationale for each choice is captured as an ADR under [`docs/adr/`](.
 **In scope (local-k3s batch):**
 
 - Deterministic simulation kernel that executes the four workflow templates (WF-01…WF-04) with
-  seeded, replayable dependency outcomes — **no live LLM required** for the golden path.
+  seeded, replayable dependency outcomes - **no live LLM required** for the golden path.
 - Real backend services replacing the browser's in-memory state: control API + PostgreSQL,
   orchestrator, worker pool, MCP simulator/proxy, telemetry adapter.
 - Real event backbone: **Kafka (KRaft)** carrying the iteration event envelope.
@@ -262,7 +262,7 @@ decision JSON becomes a machine-readable check (advisory first, per `06_…` §5
 - Tool authorization is enforced outside the model (in the proxy/policy layer).
 - Raw sensitive data is redacted before telemetry emission; raw output stays in MinIO behind
   access control.
-- No private chain-of-thought is exposed in trajectories — only operational summaries, tool calls,
+- No private chain-of-thought is exposed in trajectories - only operational summaries, tool calls,
   validations, and recovery actions.
 - Analytics failure cannot erase results; telemetry can be buffered and replayed.
 
@@ -271,6 +271,6 @@ decision JSON becomes a machine-readable check (advisory first, per `06_…` §5
 ## 15. Open decisions deferred (tracked as ADRs / issues)
 
 - Model-gateway abstraction (phase 2+). ADR-0006 records the deterministic-kernel-first choice.
-- Druid vs ClickHouse at larger scale — Druid chosen now (ADR-0004); revisit on cost/scale.
-- Temporal for durable orchestration — deferred; queue + Postgres state machine for now (ADR-0006).
-- Learned-distribution review workflow — phase 3+.
+- Druid vs ClickHouse at larger scale - Druid chosen now (ADR-0004); revisit on cost/scale.
+- Temporal for durable orchestration - deferred; queue + Postgres state machine for now (ADR-0006).
+- Learned-distribution review workflow - phase 3+.

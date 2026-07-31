@@ -1,7 +1,7 @@
 [project]
 name = "asc-gate-engine"
 version = "0.2.0"
-description = "Agent Simulation Control Plane — deterministic gate evaluation"
+description = "Agent Simulation Control Plane - deterministic gate evaluation"
 requires-python = ">=3.12"
 dependencies = ["asc-domain", "pydantic>=2.6"]
 

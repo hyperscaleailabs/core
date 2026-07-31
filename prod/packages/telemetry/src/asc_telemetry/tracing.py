@@ -46,7 +46,7 @@ def configure_tracing(
 
             provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
         except ImportError:
-            # OTLP exporter not installed — tracing stays local rather than breaking startup.
+            # OTLP exporter not installed - tracing stays local rather than breaking startup.
             pass
     _CONFIGURED = True
 

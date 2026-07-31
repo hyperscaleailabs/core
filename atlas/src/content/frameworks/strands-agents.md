@@ -1,7 +1,7 @@
 ---
 title: "Strands Agents"
 name: "Strands Agents"
-description: "A model-driven, lightweight SDK that builds agents from three parts — model, tools, and prompt — and lets the model plan the loop, with MCP and multi-agent support."
+description: "A model-driven, lightweight SDK that builds agents from three parts - model, tools, and prompt - and lets the model plan the loop, with MCP and multi-agent support."
 level: intermediate
 readingTime: 6
 category: sdk
@@ -20,14 +20,14 @@ sources:
     url: "https://strandsagents.com/"
     publisher: "Strands Agents"
     accessed: "2026-06-30"
-  - title: "Model Context Protocol — Introduction"
+  - title: "Model Context Protocol - Introduction"
     url: "https://modelcontextprotocol.io/docs/getting-started/intro"
     publisher: "Anthropic / MCP"
     accessed: "2026-06-30"
 ---
 
 **Strands Agents** is a lightweight, **model-driven** SDK: you define an agent
-from three ingredients — a **model**, a set of **tools**, and a **prompt** — and
+from three ingredients - a **model**, a set of **tools**, and a **prompt** - and
 let the model drive the loop rather than encoding the control flow yourself. The
 philosophy is to keep the framework thin and lean on increasingly capable models
 to plan and use tools.
@@ -41,12 +41,12 @@ This keeps simple agents genuinely simple while still supporting complex ones.
 
 ## What it provides
 
-- **Minimal agent definition** — model + tools + prompt, then run.
-- **Tools** — Python callables as tools, plus
+- **Minimal agent definition** - model + tools + prompt, then run.
+- **Tools** - Python callables as tools, plus
   [MCP](/frameworks/model-context-protocol) servers for external capabilities.
-- **Multi-agent** — patterns for agents that call other agents (delegation,
+- **Multi-agent** - patterns for agents that call other agents (delegation,
   workflows), enabling [orchestration](/patterns/multi-agent-orchestration).
-- **Provider flexibility** — works across multiple model providers.
+- **Provider flexibility** - works across multiple model providers.
 
 ## When to reach for it
 

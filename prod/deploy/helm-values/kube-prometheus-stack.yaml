@@ -1,4 +1,4 @@
-# kube-prometheus-stack (Prometheus + Grafana) — ASC-041/042.
+# kube-prometheus-stack (Prometheus + Grafana) - ASC-041/042.
 #   helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 #   helm upgrade --install kps prometheus-community/kube-prometheus-stack -n observability \
 #     -f deploy/helm-values/kube-prometheus-stack.yaml

@@ -1,15 +1,15 @@
-# GCP provisioning — VM + k3s (phase 2, human-gated)
+# GCP provisioning - VM + k3s (phase 2, human-gated)
 
 Provisions a single Compute Engine VM, installs k3s via the startup script, and rolls the **same
 manifests** as local (the `gcp` kustomize overlay). Written and CI-validated in phase 1; **applied
 only after a human completes the checklist below.**
 
-## Human-gating checklist (do these first — Terraform cannot)
+## Human-gating checklist (do these first - Terraform cannot)
 - [ ] Create/choose a GCP project and **enable billing**.
 - [ ] Enable APIs: `compute.googleapis.com`, `secretmanager.googleapis.com`, `iam.googleapis.com`.
 - [ ] `gcloud auth application-default login` (or provide a service-account key via
       `GOOGLE_APPLICATION_CREDENTIALS`).
-- [ ] Create the runtime secrets in **Secret Manager** (Postgres/MinIO/Superset/Grafana creds) — the
+- [ ] Create the runtime secrets in **Secret Manager** (Postgres/MinIO/Superset/Grafana creds) - the
       values from `.env.example`. The VM's service account reads them (ASC-072).
 - [ ] Put your egress IP in `operator_cidrs` (SSH, ingress, and kube-apiserver are restricted to it).
 
@@ -39,7 +39,7 @@ terraform destroy
 ```
 
 ## Notes
-- Single-node k3s trades HA for cost/simplicity — appropriate for a pre-production tool.
+- Single-node k3s trades HA for cost/simplicity - appropriate for a pre-production tool.
 - Add DNS + TLS (cert-manager) and tighten firewall rules before any non-operator exposure.
-- CI validates this module (`fmt`/`validate`/`tflint`) with **no apply** — see
+- CI validates this module (`fmt`/`validate`/`tflint`) with **no apply** - see
   `.github/workflows/terraform-validate.yml`.

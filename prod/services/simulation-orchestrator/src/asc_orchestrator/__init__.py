@@ -1,4 +1,4 @@
-"""Agent Simulation Control Plane — simulation orchestrator."""
+"""Agent Simulation Control Plane - simulation orchestrator."""
 
 from asc_orchestrator.runner import (
     RunResult,
