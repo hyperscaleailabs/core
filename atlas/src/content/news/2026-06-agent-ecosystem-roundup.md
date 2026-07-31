@@ -1,6 +1,6 @@
 ---
 title: "Ecosystem Roundup: Protocols, Harnesses, and Graph Retrieval"
-description: "A seed aggregation post — the current center of gravity across agent frameworks, the MCP/A2A protocol layer, long-running harnesses, and GraphRAG."
+description: "A seed aggregation post - the current center of gravity across agent frameworks, the MCP/A2A protocol layer, long-running harnesses, and GraphRAG."
 level: intermediate
 readingTime: 6
 published: 2026-06-30
@@ -8,7 +8,7 @@ updated: 2026-06-30
 aiGenerated: true
 tags: [news, roundup, mcp, a2a, graphrag, harnesses]
 sources:
-  - title: "Model Context Protocol — Introduction"
+  - title: "Model Context Protocol - Introduction"
     url: "https://modelcontextprotocol.io/docs/getting-started/intro"
     publisher: "Anthropic / MCP"
     accessed: "2026-06-30"
@@ -20,13 +20,13 @@ sources:
     url: "https://aws.amazon.com/blogs/database/introducing-the-graphrag-toolkit/"
     publisher: "AWS"
     accessed: "2026-06-30"
-  - title: "LangGraph — Overview"
+  - title: "LangGraph - Overview"
     url: "https://docs.langchain.com/oss/python/langgraph/overview"
     publisher: "LangChain"
     accessed: "2026-06-30"
 ---
 
-> **About this post.** This is a seed example of an aggregation roundup — the
+> **About this post.** This is a seed example of an aggregation roundup - the
 > format the [ingestion pipeline](/about) produces. Machine-drafted posts are
 > labeled and link every claim to a primary source. It illustrates the shape;
 > future roundups are generated from new/changed items in `pipeline/sources.yaml`.
@@ -39,7 +39,7 @@ this site tracks.
 
 The interesting action has moved from "which framework" to "which protocols." The
 [Model Context Protocol](/frameworks/model-context-protocol) has become the
-default way to connect agents to tools and data — portable across
+default way to connect agents to tools and data - portable across
 [LangChain](/frameworks/langchain)/[LangGraph](/frameworks/langgraph), the
 [Claude Agent SDK](/frameworks/claude-agent-sdk), [Strands](/frameworks/strands-agents),
 and IDEs. Its horizontal counterpart, [A2A](/frameworks/a2a-protocol), is
@@ -51,7 +51,7 @@ outlives it.
 
 ## 2. Harnesses, not models, are the reliability story
 
-The most useful recent guidance is about the **harness** — the code around the
+The most useful recent guidance is about the **harness** - the code around the
 model. Anthropic's writing on
 [long-running harnesses](/production/long-running-harnesses) and
 [context engineering](/patterns/context-engineering) crystallizes what production
@@ -69,9 +69,9 @@ have a plan. Reliability is engineered in the harness, context, and
 Vector RAG remains the baseline, but multi-hop, relationship-heavy questions are
 pushing teams toward graph-based retrieval. AWS Labs'
 [GraphRAG Toolkit](/frameworks/graphrag-toolkit) (Apache-2.0) operationalizes
-building a knowledge graph over a corpus and traversing it for connected context
-— see the [pattern writeup](/patterns/graphrag) for when the build cost is worth
-it.
+building a knowledge graph over a corpus and traversing it for connected
+context - see the [pattern writeup](/patterns/graphrag) for when the build cost
+is worth it.
 
 **Why it matters:** grounding quality caps agent quality. As corpora get more
 relational, "top-k similar chunks" leaves answers on the table.
@@ -80,7 +80,7 @@ relational, "top-k similar chunks" leaves answers on the table.
 
 Across all three: **the field is professionalizing.** The exciting work is less
 about a clever prompt and more about protocols, durability, retrieval structure,
-observability, and evaluation — the same disciplines that made any other class of
+observability, and evaluation - the same disciplines that made any other class of
 production software dependable. That's good news for engineers, and it's the lens
 this atlas is built around.
 

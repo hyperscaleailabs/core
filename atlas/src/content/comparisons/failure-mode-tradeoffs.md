@@ -1,6 +1,6 @@
 ---
 title: "Tradeoffs & Failure Modes by Architecture"
-description: "How the reliability, cost, latency, and failure profile change as you move from a single agent to orchestrator-worker to swarms — a decision table with mitigations."
+description: "How the reliability, cost, latency, and failure profile change as you move from a single agent to orchestrator-worker to swarms - a decision table with mitigations."
 level: advanced
 readingTime: 9
 updated: 2026-06-30
@@ -22,7 +22,7 @@ sources:
 
 Every step up in architectural complexity buys capability and pays in reliability,
 cost, and debuggability. This page makes that trade explicit so you can pick the
-*simplest* architecture that meets the requirement — the single most reliable
+*simplest* architecture that meets the requirement - the single most reliable
 decision you'll make.
 
 ## The complexity ladder
@@ -43,14 +43,14 @@ topologies in [orchestration](/patterns/multi-agent-orchestration) and
 
 ### Reliability
 Falls as autonomy and agent count rise. A workflow is nearly deterministic; a
-swarm is emergent. **Mitigation scales the other way** — the more complex the
+swarm is emergent. **Mitigation scales the other way** - the more complex the
 architecture, the more you must invest in guardrails, evaluation, and
 observability just to hold the line.
 
 ### Cost & latency
 Multiply with steps and agents. A single agent that averages 8 steps costs ~8
 model calls; a 4-worker orchestration where each worker loops can be an
-order of magnitude more per task. Loops and fan-out are the two amplifiers —
+order of magnitude more per task. Loops and fan-out are the two amplifiers -
 budget both explicitly and attribute cost per step in
 [observability](/production/observability).
 
@@ -63,7 +63,7 @@ can't afford first-class tracing, you can't afford the architecture.
 
 Ask, in order:
 
-1. **Does a workflow (fixed path) meet the need?** If yes, stop — it's the most
+1. **Does a workflow (fixed path) meet the need?** If yes, stop - it's the most
    reliable and cheapest option. Reserve agents for genuinely open-ended tasks.
 2. **Can one agent with better tools/prompt/context do it?** Usually yes. Improve
    the [tools](/patterns/tool-use) and [context](/patterns/context-engineering)
@@ -80,24 +80,24 @@ Ask, in order:
 Regardless of architecture, these move reliability up and are cheap relative to
 their payoff:
 
-- **Bounded autonomy** — hard step/cost/time budgets and a kill switch.
-- **Validated boundaries** — schema-checked tool I/O and handoffs; treat peer and
+- **Bounded autonomy** - hard step/cost/time budgets and a kill switch.
+- **Validated boundaries** - schema-checked tool I/O and handoffs; treat peer and
   retrieved content as untrusted.
-- **Grounding** — [RAG/GraphRAG](/patterns/graphrag) to cut fabrication.
-- **Verification** — [reflection](/patterns/reflection) or programmatic checks
+- **Grounding** - [RAG/GraphRAG](/patterns/graphrag) to cut fabrication.
+- **Verification** - [reflection](/patterns/reflection) or programmatic checks
   before acting.
-- **Full tracing + evals** — [observability](/production/observability) and
+- **Full tracing + evals** - [observability](/production/observability) and
   [evaluation](/production/evaluation) so failures are visible and regressions
   caught.
 
 ## The one-sentence takeaway
 
 **Add complexity only when a simpler architecture provably can't meet the
-requirement — and when you can pay for the guardrails, evaluation, and
+requirement - and when you can pay for the guardrails, evaluation, and
 observability the complexity demands.**
 
 ## Next
 
-- [Failure modes](/production/failure-modes) — the full catalog.
-- [Framework comparison matrix](/comparisons/framework-matrix) — picking the tool
+- [Failure modes](/production/failure-modes) - the full catalog.
+- [Framework comparison matrix](/comparisons/framework-matrix) - picking the tool
   once you've picked the architecture.

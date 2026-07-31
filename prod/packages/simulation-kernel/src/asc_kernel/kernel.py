@@ -2,7 +2,7 @@
 
 Executes the WF-04 transactional-MCP workflow (the Purchase Ambiguity golden path) with seeded,
 replayable dependency outcomes and produces a :class:`Trajectory` plus aggregated
-:class:`RunMetrics`. No live LLM is involved — the ``AgentRuntimeAdapter`` boundary is the
+:class:`RunMetrics`. No live LLM is involved - the ``AgentRuntimeAdapter`` boundary is the
 deterministic simulator for this phase (ADR-0006).
 """
 
@@ -29,7 +29,7 @@ from asc_kernel.harness import (
 from asc_kernel.rng import uniform
 
 # Outcomes where the underlying transaction actually completed even though the tool did not
-# return a clean confirmation — the source of duplicate-transaction risk if retried blindly.
+# return a clean confirmation - the source of duplicate-transaction risk if retried blindly.
 _AMBIGUOUS_BUT_COMMITTED = {"timeout", "ambiguous_completion"}
 
 
@@ -64,12 +64,12 @@ def run_iteration(
     outcome = Outcome.SUCCESS
     failure_type: str | None = None
 
-    # Stage 1 — inventory check (deterministically succeeds for the golden path).
+    # Stage 1 - inventory check (deterministically succeeds for the golden path).
     events.append(IterationEvent(type="tool_call", tool="check_inventory", status="success"))
     latency += CHECK_INVENTORY_MS
     cost += COST_CHECK_INVENTORY
 
-    # Stage 2 — make_purchase, outcome sampled from the failure profile.
+    # Stage 2 - make_purchase, outcome sampled from the failure profile.
     mp = sample_outcome(profile, uniform(seed, "make_purchase", 0))
     events.append(IterationEvent(type="tool_call", tool="make_purchase", status=mp))
     latency += MAKE_PURCHASE_MS.get(mp, 350)

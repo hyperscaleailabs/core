@@ -39,7 +39,7 @@ The economic thesis is equally important. Large experiment populations can often
 
 ---
 
-# Part I — Product Requirements Document
+# Part I - Product Requirements Document
 
 ## 1. Product Definition
 
@@ -154,31 +154,31 @@ The proposed platform combines the strongest elements of replay, evaluation, cha
 
 ## 5. Primary Use Cases
 
-### UC-1 — Candidate workflow resilience test
+### UC-1 - Candidate workflow resilience test
 
 A team changes an e-commerce support agent workflow. The candidate is run against transaction timeouts, partial inventory responses, context degradation, sub-agent failures, and container OOM conditions sampled from a production-derived profile. The platform compares the candidate with the current production baseline and reports whether recovery improved or failure propagation increased.
 
-### UC-2 — Harness validation and recovery test
+### UC-2 - Harness validation and recovery test
 
 A new validation-and-repair controller is introduced. The platform deliberately emits malformed tool results, invalid structured model outputs, stale context, and retryable service errors. The experiment measures first-pass success, recovery success, terminal failure, retry cost, and whether the controller enters a runaway loop.
 
-### UC-3 — Model or model-route migration
+### UC-3 - Model or model-route migration
 
 A workflow is moved to a new model or routing policy. The platform tests quality, tool-selection stability, recovery behavior, latency, and cost across the same paired scenario seeds. A small high-fidelity sample validates whether conclusions from lower-cost simulation models transfer to the target model.
 
-### UC-4 — Sub-agent fan-out and cascade test
+### UC-4 - Sub-agent fan-out and cascade test
 
 A multi-agent workflow delegates product, payment, inventory, and shipping analysis. The simulator injects slow and conflicting results, intermittent failures, and recursive delegation. The platform measures fan-out width, graph depth, duplicate actions, token amplification, queue pressure, and terminal user outcome.
 
-### UC-5 — Infrastructure resilience experiment
+### UC-5 - Infrastructure resilience experiment
 
 Containers are terminated or constrained, queues are delayed, caches miss, and resource limits are reduced. The platform verifies durable state, idempotency, checkpoint recovery, fallback behavior, and whether retries create a secondary incident.
 
-### UC-6 — Novel behavior discovery
+### UC-6 - Novel behavior discovery
 
 Thousands of trajectories are generated from distributions and scenario mutations. Trajectory embeddings, graph features, or statistical signatures identify clusters that differ materially from the baseline. Analysts inspect minimized representative scenarios and convert important discoveries into permanent regression tests.
 
-### UC-7 — Pre-canary release gate
+### UC-7 - Pre-canary release gate
 
 A release pipeline invokes the platform automatically. The candidate is blocked if it exceeds thresholds for unsafe side effects, terminal failure, recovery regression, cost amplification, latency, cascade depth, or policy violations.
 
@@ -422,13 +422,13 @@ Throughput and cost targets should be finalized after an initial benchmark becau
 
 ---
 
-# Part II — Architecture Review
+# Part II - Architecture Review
 
 ## 11. Review of the Initial Architectural Sketch
 
 ![Initial production-informed agentic simulation architecture sketch](agentic_simulation_architecture_sketch.png)
 
-*Figure 1 — Initial architectural sketch used as the basis for formalization.*
+*Figure 1 - Initial architectural sketch used as the basis for formalization.*
 
 ### 11.1 Architectural interpretation
 
@@ -496,7 +496,7 @@ The execution plane is made explicit because it has independent scaling, isolati
 
 ---
 
-# Part III — Reference Architecture
+# Part III - Reference Architecture
 
 ## 12. Architectural Thesis and Design Principles
 
@@ -1189,11 +1189,11 @@ The score should remain decomposable. A single number is useful for gates but in
 
 | Tier | Models | Tools/dependencies | Infrastructure | Purpose |
 |---|---|---|---|---|
-| F0 — deterministic | Stubbed or fixed | Scripted | Local process | Unit-level regression and scenario debugging. |
-| F1 — economical stochastic | Smaller model | Cached/synthetic | Containers or local cluster | Large population exploration. |
-| F2 — representative | Mid-tier or selected target calls | High-fidelity simulator | Representative cluster limits | Candidate comparison and calibration. |
-| F3 — target-model | Production target model | Simulated/sandboxed tools | Pre-production cluster | Release evidence on selected scenarios. |
-| F4 — canary | Production model | Real governed dependencies | Production canary | Final online validation with bounded exposure. |
+| F0 - deterministic | Stubbed or fixed | Scripted | Local process | Unit-level regression and scenario debugging. |
+| F1 - economical stochastic | Smaller model | Cached/synthetic | Containers or local cluster | Large population exploration. |
+| F2 - representative | Mid-tier or selected target calls | High-fidelity simulator | Representative cluster limits | Candidate comparison and calibration. |
+| F3 - target-model | Production target model | Simulated/sandboxed tools | Pre-production cluster | Release evidence on selected scenarios. |
+| F4 - canary | Production model | Real governed dependencies | Production canary | Final online validation with bounded exposure. |
 
 ### 23.2 Key fidelity risk
 
@@ -1383,7 +1383,7 @@ The platform must avoid confusing a simulator defect with a candidate defect.
 
 ## 28. Implementation Roadmap
 
-### Phase 0 — Architecture and instrumentation alignment
+### Phase 0 - Architecture and instrumentation alignment
 
 - Finalize canonical trajectory and simulation event schemas.
 - Define initial failure taxonomy.
@@ -1391,7 +1391,7 @@ The platform must avoid confusing a simulator defect with a candidate defect.
 - Establish tool-broker interface and side-effect policy.
 - Select first bounded e-commerce workflow.
 
-### Phase 1 — Deterministic and independent stochastic simulator
+### Phase 1 - Deterministic and independent stochastic simulator
 
 - Build experiment manifest and registry.
 - Implement simulator proxy for selected tools.
@@ -1400,7 +1400,7 @@ The platform must avoid confusing a simulator defect with a candidate defect.
 - Execute baseline/candidate paired runs.
 - Produce core metrics and human-readable report.
 
-### Phase 2 — Production-derived environment profiles
+### Phase 2 - Production-derived environment profiles
 
 - Ingest production telemetry through Kafka.
 - Build Flink feature and rate-estimation jobs.
@@ -1408,7 +1408,7 @@ The platform must avoid confusing a simulator defect with a candidate defect.
 - Add profile drift and confidence metadata.
 - Integrate Druid/Superset analysis.
 
-### Phase 3 — Multi-agent, infrastructure, and recovery testing
+### Phase 3 - Multi-agent, infrastructure, and recovery testing
 
 - Add sub-agent delegation graph and fan-out controls.
 - Add container/OOM and checkpoint failures.
@@ -1416,14 +1416,14 @@ The platform must avoid confusing a simulator defect with a candidate defect.
 - Add resilience sweeps and blast-radius metrics.
 - Add release gate API.
 
-### Phase 4 — Correlated failures and anomaly discovery
+### Phase 4 - Correlated failures and anomaly discovery
 
 - Add conditional distributions and dependency graph.
 - Add trajectory clustering and anomaly detection.
 - Add scenario mutation and failure minimization.
 - Export discovered scenarios as permanent regression assets.
 
-### Phase 5 — Fidelity optimization and federated scale
+### Phase 5 - Fidelity optimization and federated scale
 
 - Add explicit multi-tier fidelity policy.
 - Add target-model calibration workflow.
@@ -1435,43 +1435,43 @@ The platform must avoid confusing a simulator defect with a candidate defect.
 
 ## 29. Initial Architecture Decision Records
 
-### ADR-001 — Production-informed stochastic simulation
+### ADR-001 - Production-informed stochastic simulation
 
 **Decision:** Pre-release agent evaluation will sample from versioned production-informed environment profiles rather than only replay historical traces.  
 **Reason:** Historical data cannot represent all plausible combinations or new interactions.  
 **Consequence:** The platform must manage statistical models, confidence, drift, and calibration.
 
-### ADR-002 — Shared runtime contracts
+### ADR-002 - Shared runtime contracts
 
 **Decision:** Simulation will reuse production agent, harness, tool, policy, telemetry, and evaluation interfaces.  
 **Reason:** A separate mock implementation would test different behavior from the deployed system.  
 **Consequence:** Runtime components need environment-aware adapters and stable contracts.
 
-### ADR-003 — Brokered tools and denied real side effects
+### ADR-003 - Brokered tools and denied real side effects
 
 **Decision:** Every tool call is routed through a broker, and simulation denies production side effects by default.  
 **Reason:** Safety, reproducibility, and fault injection require one controlled action boundary.  
 **Consequence:** Direct model-to-tool integrations must be refactored behind the broker.
 
-### ADR-004 — Paired baseline/candidate scenarios
+### ADR-004 - Paired baseline/candidate scenarios
 
 **Decision:** Baseline and candidate populations should use matched seeds and initial conditions whenever possible.  
 **Reason:** Pairing reduces environmental variance and makes candidate deltas easier to interpret.  
 **Consequence:** Scenario compilation must be deterministic and artifact versions immutable.
 
-### ADR-005 — Multi-tier fidelity
+### ADR-005 - Multi-tier fidelity
 
 **Decision:** Large populations may use economical models and virtualized dependencies, but high-risk decisions require target-model calibration.  
 **Reason:** Cost reduction is valuable, but behavioral transfer cannot be assumed.  
 **Consequence:** Reports and gates must be fidelity-aware.
 
-### ADR-006 — Trajectory-first observability
+### ADR-006 - Trajectory-first observability
 
 **Decision:** `trajectory_id` and delegation graph are primary analysis keys alongside trace and request identifiers.  
 **Reason:** Agent outcomes emerge across many model calls, tool calls, retries, and sub-agents.  
 **Consequence:** Storage and dashboards must reconstruct complete behavior, not only service requests.
 
-### ADR-007 — Simulation artifacts are governed release artifacts
+### ADR-007 - Simulation artifacts are governed release artifacts
 
 **Decision:** Environment profiles, manifests, seeds, policies, evaluator versions, and reports are immutable and auditable.  
 **Reason:** Release evidence is valid only when the experiment can be reconstructed.  

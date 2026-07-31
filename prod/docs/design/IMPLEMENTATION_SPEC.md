@@ -1,4 +1,4 @@
-# Implementation Spec — Agent Simulation Control Plane
+# Implementation Spec - Agent Simulation Control Plane
 
 **Version:** 0.2.0-dev · **Companion to:** [`SYSTEM_DESIGN.md`](SYSTEM_DESIGN.md),
 [`DEPLOYMENT.md`](DEPLOYMENT.md), [`CICD_STRATEGY.md`](CICD_STRATEGY.md),
@@ -49,13 +49,13 @@ infra/terraform/gcp               phase-2 VM + k3s
 
 ---
 
-## 2. `packages/domain` — core schemas (do first)
+## 2. `packages/domain` - core schemas (do first)
 
 Pydantic models + `model_json_schema()` export for:
 
 - `ExperimentConfig`, `ExperimentVersion` (immutable), `Persona`, `AssistantAgent`, `SubAgent`,
   `WorkflowTemplate` (enum WF-01..04), `FailureProfile`, `Harness`, `GateSet`, `Gate`, `Policy`.
-- `IterationEventEnvelope` (§4.2 of SYSTEM_DESIGN) — the Kafka/Flink/Druid contract.
+- `IterationEventEnvelope` (§4.2 of SYSTEM_DESIGN) - the Kafka/Flink/Druid contract.
 - `RunMetrics`, `GateResult`, `ReleaseDecision`.
 
 **Acceptance:** the fixtures in `examples/` validate against these models round-trip; JSON schemas
@@ -63,7 +63,7 @@ are exported to `packages/domain/schemas/` and checked in CI for backward compat
 
 ---
 
-## 3. `packages/simulation-kernel` — deterministic engine
+## 3. `packages/simulation-kernel` - deterministic engine
 
 - `run_iteration(config, seed) -> (Trajectory, list[IterationEvent], IterationMetrics)`.
 - Seeded RNG keyed by `(seed, stage, tool, callIndex)`; failure outcomes sampled from
@@ -93,7 +93,7 @@ blocks despite high success). No I/O, no globals.
 - `KafkaEmitter` (topic `sim.iteration.events.v1`, key=`runId`).
 - `OtelTracer` helper producing spans with `runId`/`iteration`/`trajectoryId` attributes and
   `traceId` propagation.
-- `redact()` — strips secrets / raw sensitive fields before emission; raw output is stored to MinIO
+- `redact()` - strips secrets / raw sensitive fields before emission; raw output is stored to MinIO
   and referenced by `rawOutputRef`.
 
 ---
@@ -137,7 +137,7 @@ GET    /observability/links?runId=  deep links to Grafana/Superset for a run
 - Stop (GW-10): stop dispatch, let in-flight finish or cancel per policy, mark queued as
   `cancelled` (not `failed`), keep completed evidence queryable.
 - Final aggregation: when all iterations terminal, compute `RunMetrics` (prefer Flink/Druid
-  rollups; fall back to `aggregation-worker` if analytics lags — GW-11), call `gate-engine`,
+  rollups; fall back to `aggregation-worker` if analytics lags - GW-11), call `gate-engine`,
   persist `ReleaseDecision`, emit `run.completed`.
 
 ---
@@ -166,12 +166,12 @@ GET    /observability/links?runId=  deep links to Grafana/Superset for a run
 
 ---
 
-## 10. `stream/flink-job` — failure-type statistics
+## 10. `stream/flink-job` - failure-type statistics
 
 Per SYSTEM_DESIGN §8. Deliver:
-- `sql/failure_stats.sql` — Kafka source `sim.iteration.events.v1`, windowed aggregation by
+- `sql/failure_stats.sql` - Kafka source `sim.iteration.events.v1`, windowed aggregation by
   `(runId, failureClassification)`, sink `sim.failure.stats.v1`.
-- `pyflink/job.py` — packaging + submission for any custom classification logic.
+- `pyflink/job.py` - packaging + submission for any custom classification logic.
 - Dead-letter to `sim.deadletter.v1`.
 - Local submission via a `flink run` Job resource in `deploy/k3s`.
 
@@ -191,8 +191,8 @@ Per SYSTEM_DESIGN §8. Deliver:
 
 ## 12. Grafana + OTel
 
-- `deploy/k3s/components/otel` — Collector config (OTLP in; Prometheus + Tempo out).
-- `dashboards/grafana/*` — provisioned datasources + dashboards (Service Health, Kafka Lag, Worker
+- `deploy/k3s/components/otel` - Collector config (OTLP in; Prometheus + Tempo out).
+- `dashboards/grafana/*` - provisioned datasources + dashboards (Service Health, Kafka Lag, Worker
   Throughput/Errors, Trace Explorer, Run-in-Progress). Alerts for stuck runs, lost telemetry,
   gate-engine errors (`06_…` §10).
 

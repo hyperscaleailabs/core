@@ -1,6 +1,6 @@
 ---
 title: "Anthropic: The Discipline Behind 'Building Effective Agents'"
-description: "Lessons from Anthropic's engineering guidance — start simple, prefer workflows until you need agents, and add complexity only when it demonstrably pays off."
+description: "Lessons from Anthropic's engineering guidance - start simple, prefer workflows until you need agents, and add complexity only when it demonstrably pays off."
 level: intermediate
 readingTime: 8
 company: "Anthropic"
@@ -28,7 +28,7 @@ products (including Claude Code), they argue for **restraint**: use the simplest
 thing that works, and earn every increment of complexity. This case study distills
 the throughline.
 
-> This is a summary and analysis. Read the primary sources — linked below — for
+> This is a summary and analysis. Read the primary sources - linked below - for
 > the full detail and code.
 
 ## The central thesis: simplicity first
@@ -37,7 +37,7 @@ The headline recommendation from *Building Effective Agents* is to **start with
 the simplest solution and add complexity only when it demonstrably improves
 outcomes.** Concretely:
 
-- Many problems don't need an agent at all — a single well-crafted LLM call, or a
+- Many problems don't need an agent at all - a single well-crafted LLM call, or a
   **workflow** with predefined paths, is more predictable, cheaper, and easier to
   evaluate.
 - Reserve **agents** (model-directed control flow) for open-ended problems where
@@ -52,12 +52,12 @@ reliability and money, so don't climb without a reason.
 
 The guidance is compositional:
 
-1. **The augmented LLM** — a model with retrieval, tools, and memory is the base
+1. **The augmented LLM** - a model with retrieval, tools, and memory is the base
    unit. Get this right first.
-2. **Workflows** — compose augmented LLMs through code: prompt chaining, routing,
+2. **Workflows** - compose augmented LLMs through code: prompt chaining, routing,
    parallelization, orchestrator–workers, and evaluator–optimizer (our
    [reflection](/patterns/reflection) pattern). Predictable and often sufficient.
-3. **Agents** — hand control flow to the model only when the task demands it.
+3. **Agents** - hand control flow to the model only when the task demands it.
 
 The takeaway for architects: **most production value is captured at the workflow
 level**, with a bounded agentic core where flexibility is truly required.
@@ -66,7 +66,7 @@ level**, with a bounded agentic core where flexibility is truly required.
 
 A recurring theme: invest in **tool design and "agent-computer interface"**
 quality. Clear names, good descriptions, tight schemas, and low-noise results are
-what make the model call the right tool with the right arguments — the difference
+what make the model call the right tool with the right arguments - the difference
 between a demo and a dependable system. We expand this in
 [tool use](/patterns/tool-use).
 
@@ -74,9 +74,9 @@ between a demo and a dependable system. We expand this in
 
 The companion essays extend the thesis into two areas we treat as first-class:
 
-- **[Context engineering](/patterns/context-engineering)** — find the smallest
+- **[Context engineering](/patterns/context-engineering)** - find the smallest
   set of high-signal tokens; don't stuff the window because it's large.
-- **[Long-running harnesses](/production/long-running-harnesses)** — durability,
+- **[Long-running harnesses](/production/long-running-harnesses)** - durability,
   compaction, and bounded autonomy are what let agents run for hours without
   drifting or blowing up.
 
@@ -95,7 +95,7 @@ None of this is glamorous, which is exactly why it works in production.
 
 ## Primary sources
 
-Read them in full — the summaries here are no substitute:
+Read them in full - the summaries here are no substitute:
 
 - [Building Effective Agents](https://www.anthropic.com/engineering/building-effective-agents)
 - [Effective Context Engineering for AI Agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)
@@ -103,6 +103,6 @@ Read them in full — the summaries here are no substitute:
 
 ## Next
 
-- [Multi-agent orchestration](/patterns/multi-agent-orchestration) — the
+- [Multi-agent orchestration](/patterns/multi-agent-orchestration) - the
   workflow patterns applied to agents.
 - [Framework comparison matrix](/comparisons/framework-matrix)

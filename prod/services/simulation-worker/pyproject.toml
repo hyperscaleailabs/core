@@ -1,7 +1,7 @@
 [project]
 name = "asc-simulation-worker"
 version = "0.2.0"
-description = "Agent Simulation Control Plane — simulation worker"
+description = "Agent Simulation Control Plane - simulation worker"
 requires-python = ">=3.12"
 dependencies = ["asc-domain", "asc-simulation-kernel", "asc-telemetry", "pydantic>=2.6"]
 

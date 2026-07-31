@@ -1,7 +1,7 @@
 """Trajectory artifact storage (ASC-023).
 
 Raw/sanitized trajectory artifacts are written to object storage (MinIO/S3) and referenced from the
-event stream by ``rawOutputRef`` — the raw payload never rides the Kafka stream (SYSTEM_DESIGN §14).
+event stream by ``rawOutputRef`` - the raw payload never rides the Kafka stream (SYSTEM_DESIGN §14).
 The S3 client is lazily imported so the package imports/tests without boto3 or a bucket.
 """
 

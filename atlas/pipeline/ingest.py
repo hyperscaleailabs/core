@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Agentic Atlas — content ingestion pipeline.
+Agentic Atlas - content ingestion pipeline.
 
 Given a curated list of reference links (pipeline/sources.yaml), this script:
 
   1. DIFFS   the sources against pipeline/registry.json using content hashes,
-             ETags/Last-Modified, and declared versions — skipping anything
+             ETags/Last-Modified, and declared versions - skipping anything
              already processed.
   2. FETCHES new or changed pages (conditional GET, robots.txt-aware) and caches
              a snapshot under pipeline/cache/.
@@ -350,7 +350,7 @@ def draft_body(client, plan: dict, source: Source, text: str, cfg: dict) -> tupl
 def outline_stub(plan: dict, source: Source) -> str:
     """A structured, human-completable stub used when no model is available."""
     lines = [
-        f"> **Draft stub — needs a human (or a model-enabled run) to complete.**",
+        f"> **Draft stub - needs a human (or a model-enabled run) to complete.**",
         f"> Auto-generated outline from [{source.publisher or source.url}]({source.url}).",
         "",
         plan.get("description", ""),
@@ -364,7 +364,7 @@ def outline_stub(plan: dict, source: Source) -> str:
         lines.append(f"## {heading}")
         lines.append("")
         lines.append(f"_TODO: summarize and analyze the source for “{heading}”. "
-                     "Original prose only — do not copy source text._")
+                     "Original prose only - do not copy source text._")
         lines.append("")
     return "\n".join(lines).strip()
 
@@ -497,7 +497,7 @@ def main() -> int:
     entries: dict = registry.setdefault("entries", {})
     client = anthropic_client()
     mode = "Anthropic API" if client else "offline (outline stubs)"
-    print(f"Agentic Atlas ingest — {len(sources)} sources — mode: {mode}\n")
+    print(f"Agentic Atlas ingest - {len(sources)} sources - mode: {mode}\n")
 
     processed = 0
     for source in sources:

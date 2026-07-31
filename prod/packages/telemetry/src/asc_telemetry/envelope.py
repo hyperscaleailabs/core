@@ -1,4 +1,4 @@
-"""Iteration event envelope — the single schema Kafka, Flink, and Druid agree on.
+"""Iteration event envelope - the single schema Kafka, Flink, and Druid agree on.
 
 See ``docs/design/SYSTEM_DESIGN.md`` §4.2. Correlation IDs let one iteration be traced
 end-to-end (experiment/run/iteration/trajectory/trace/span/session/request).

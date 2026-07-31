@@ -1,7 +1,7 @@
 ---
 title: "LangGraph"
 name: "LangGraph"
-description: "A low-level orchestration framework for stateful, durable agents modeled as graphs — with checkpointing, human-in-the-loop, and multi-actor topologies."
+description: "A low-level orchestration framework for stateful, durable agents modeled as graphs - with checkpointing, human-in-the-loop, and multi-actor topologies."
 level: advanced
 readingTime: 7
 category: orchestration
@@ -17,7 +17,7 @@ supportsMultiAgent: true
 updated: 2026-06-30
 tags: [framework, orchestration, state-machine, durability, multi-agent]
 sources:
-  - title: "LangGraph — Overview"
+  - title: "LangGraph - Overview"
     url: "https://docs.langchain.com/oss/python/langgraph/overview"
     publisher: "LangChain"
     accessed: "2026-06-30"
@@ -29,7 +29,7 @@ sources:
 
 **LangGraph** models an agent as a **graph**: nodes are steps (an LLM call, a
 tool, a sub-agent) and edges are transitions over shared state. Instead of hiding
-the control flow, it makes the loop explicit and inspectable — which is exactly
+the control flow, it makes the loop explicit and inspectable - which is exactly
 what you want when an agent needs to be durable, resumable, and auditable in
 production.
 
@@ -38,25 +38,25 @@ production.
 The [agent loop](/foundations/what-is-an-agent) is a state machine. LangGraph
 leans into that:
 
-- **Explicit state** — a typed object threaded through every node; you control
+- **Explicit state** - a typed object threaded through every node; you control
   what persists and what's derived.
-- **Cycles** — first-class support for loops (reason → act → observe), not just
+- **Cycles** - first-class support for loops (reason → act → observe), not just
   DAGs.
-- **Deterministic control flow** — you decide routing and stopping conditions
+- **Deterministic control flow** - you decide routing and stopping conditions
   around the model's decisions.
 
 ## Production features that matter
 
-- **Checkpointing & durability** — persist state so a run can pause and resume,
+- **Checkpointing & durability** - persist state so a run can pause and resume,
   survive crashes, and support long-running tasks
   ([long-running harnesses](/production/long-running-harnesses)).
-- **Human-in-the-loop** — interrupt at a node for approval or correction, then
+- **Human-in-the-loop** - interrupt at a node for approval or correction, then
   continue.
-- **Time travel / replay** — inspect and re-run from a prior state, invaluable for
+- **Time travel / replay** - inspect and re-run from a prior state, invaluable for
   debugging.
-- **Multi-actor topologies** — orchestrator–worker, sequential, and peer patterns
+- **Multi-actor topologies** - orchestrator–worker, sequential, and peer patterns
   for [multi-agent systems](/patterns/multi-agent-orchestration).
-- **Streaming & observability** — stream tokens/events; integrates with tracing.
+- **Streaming & observability** - stream tokens/events; integrates with tracing.
 
 ## When to reach for it
 
@@ -66,7 +66,7 @@ leans into that:
 
 ## Tradeoffs
 
-- **More concepts up front.** You define state, nodes, and edges — more ceremony
+- **More concepts up front.** You define state, nodes, and edges - more ceremony
   than a one-shot agent loop, which pays off as complexity grows.
 - **You still own design.** The framework gives durability primitives; choosing a
   sane topology and stopping conditions is on you.

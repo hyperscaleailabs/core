@@ -1,4 +1,4 @@
-# SDLC Summary — Agent Simulation Control Plane
+# SDLC Summary - Agent Simulation Control Plane
 
 **Version:** 0.2.0 · **Date:** 2026-07-25 · **Repo:**
 `hyperscaleailabs/ai-multi-agent-simulation-eval-observability`
@@ -13,7 +13,7 @@ milestones M0–M7 (all closed), 13 production follow-up tickets (ASC-090…0102
 
 ---
 
-## 1. Inputs — the v0.1.0 handoff
+## 1. Inputs - the v0.1.0 handoff
 
 The starting point was a self-contained handoff package (preserved under `app/`, `docs/v0.1.0/`,
 `release/`):
@@ -22,26 +22,26 @@ The starting point was a self-contained handoff package (preserved under `app/`,
 |---|---|---|
 | `app/agent_simulation_control_plane_mvp.html` (673 KB) | Deterministic browser MVP (interaction reference) | **Helped**: unambiguous UX target. **Hindered**: minified single-file bundle → not wire-able to the backend; kept as `/mvp` reference, a new live console was built instead. |
 | `01_PRODUCT_REQUIREMENTS.md`, `02_OPERATOR_UI_SPEC.md` | Functional + UI intent | **Helped**: clear domain entities and acceptance. |
-| `08_GOLDEN_WORKFLOW_TEST_CASES.md` (GW-01…GW-15) | Executable Given/When/Then acceptance | **Most valuable input** — became unit/e2e tests verbatim and the definition of done. |
+| `08_GOLDEN_WORKFLOW_TEST_CASES.md` (GW-01…GW-15) | Executable Given/When/Then acceptance | **Most valuable input** - became unit/e2e tests verbatim and the definition of done. |
 | `07_ARCHITECTURE_CONTEXT.md` + `assets/architecture.png` | 3-plane target architecture | **Helped**: named the Kafka/Flink/Druid/Superset/OTel/Grafana topology. |
 | `09_DECISIONS_AND_OPEN_QUESTIONS.md` | Open tech choices | **Helped**: pre-scoped the ADRs. |
 | `examples/*.json` (experiment, harness, gates, trajectories) | Seed contracts/fixtures | **Helped**: drove the domain schemas and golden path directly. |
 
 **Structure that worked:** a source-of-truth ordering (requirements → UI spec → golden tests →
 architecture) plus concrete fixtures. **What was missing:** no arch decisions on language/runtime,
-persistence, or platform (arm64) — surfaced late as the main friction (see §7).
+persistence, or platform (arm64) - surfaced late as the main friction (see §7).
 
 ---
 
 ## 2. SDLC stages & work done
 
-### Stage A — Planning & design (foundational commit + M0 docs)
+### Stage A - Planning & design (foundational commit + M0 docs)
 - Reviewed the handoff; wrote **SYSTEM_DESIGN, IMPLEMENTATION_SPEC, DEPLOYMENT, CICD_STRATEGY,
   BACKLOG** (`docs/design/`) and **7 ADRs** resolving the open decisions.
 - Scaffolded the monorepo, tooling (ruff/mypy/pytest), CI skeleton, issue/PR templates, CODEOWNERS.
 - Converted the backlog into **51 GitHub issues (ASC-###)** across milestones M0–M7 with a 16-PR plan.
 
-### Stage B — Implementation (deterministic core → services → data/observability)
+### Stage B - Implementation (deterministic core → services → data/observability)
 Delivered as stacked/sequential PRs, each green with tests and an evidence bundle:
 
 | Milestone | Work | PRs |
@@ -58,13 +58,13 @@ Delivered as stacked/sequential PRs, each green with tests and an evidence bundl
 Late scope from platform reality: control-api stability fix (#66), lite arm64 stack (#67), and
 **ClickHouse+Superset** analytics (#69, ADR-0004 update).
 
-### Stage C — Local deployment & verification
+### Stage C - Local deployment & verification
 Stood up the full stack on a local **k3d** cluster (`agentsim`) and verified **every hop
 end-to-end**, with browser + CLI evidence in [`docs/evidence/UI_EVIDENCE.md`](../evidence/UI_EVIDENCE.md):
 core loop (Blocked/Passed) → Kafka → Flink → `sim.failure.stats.v1` (`duplicate_transaction_risk`)
 → ClickHouse → **Superset dashboard**; and services → OTel → Tempo → **Grafana traces**.
 
-### Stage D — Wrap-up (see §9)
+### Stage D - Wrap-up (see §9)
 
 ---
 
@@ -78,7 +78,7 @@ Monorepo (`packages/*`, `services/*`, `stream/*`); all Python 3.12 unless noted.
 | `packages/gate-engine` (`asc_gate_engine`) | Pure `evaluate(metrics, gate_set) → ReleaseDecision`; provisional gates |
 | `packages/simulation-kernel` (`asc_kernel`) | Deterministic WF-04 execution, seeded failure sampling, replay, harness runtime |
 | `packages/telemetry` (`asc_telemetry`) | Event envelope, Kafka/Null emitters, OTel tracing, redaction, artifact stores (MinIO/Null) |
-| `services/control-api` (`asc_control_api`) | FastAPI: experiments/runs/results/SSE/observability-links (in-memory store — see ASC-091) |
+| `services/control-api` (`asc_control_api`) | FastAPI: experiments/runs/results/SSE/observability-links (in-memory store - see ASC-091) |
 | `services/simulation-orchestrator` (`asc_orchestrator`) | Run expansion, state machine, Stop, aggregation |
 | `services/simulation-worker` (`asc_worker`) | Iteration executor → kernel + emitter + tracer + artifact store |
 | `services/mcp-simulator-proxy` (`asc_mcp_proxy`) | MCP tools, idempotency, tool authorization |
@@ -103,7 +103,7 @@ Monorepo (`packages/*`, `services/*`, `stream/*`); all Python 3.12 unless noted.
 | Orchestration | Deterministic kernel + queue/state-machine (no Temporal yet) | ADR-0006 |
 | Local/cloud | **k3d/k3s** local; **GCP VM + k3s** via Terraform | ADR-0007 |
 | Storage | PostgreSQL (planned), MinIO/GCS (artifacts) | ASC-091, ASC-093 |
-| Test/CI | pytest, ruff, GitHub Actions, syft/trivy/gitleaks/bandit | — |
+| Test/CI | pytest, ruff, GitHub Actions, syft/trivy/gitleaks/bandit | - |
 
 ---
 
@@ -154,7 +154,7 @@ _[placeholder]_ Deeper post-mortems per incident can link back to the PR that fi
 
 ---
 
-## 9. Next steps — production on GCP (M8 follow-up tickets)
+## 9. Next steps - production on GCP (M8 follow-up tickets)
 
 The local system is the reference; production requires managed services, persistence, identity, and
 CD. Each item is a tracked ticket (basis for automated SDLC); bodies contain _[placeholder]_ scopes.
@@ -195,7 +195,7 @@ _[placeholder]_ Attach a one-page exec summary and a demo script/recording for s
 
 ---
 
-## Appendix — index
+## Appendix - index
 
 - **PRs:** #45, #47, #49, #51, #52, #53, #54, #55, #56, #57, #58, #59, #66, #67, #69.
 - **Milestones:** M0–M7 (delivery, closed) · M8 (production/cloud, #70–#82).
