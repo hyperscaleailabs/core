@@ -465,6 +465,22 @@
     "draft": false
   },
   {
+    "title": "The build gate that could not fail",
+    "description": "A repository where every CI check was green, and a build gate that had never been capable of failing. What a pipe does to an exit status, and why a lesson codified in one module is not codified.",
+    "section": "lab",
+    "level": "advanced",
+    "tags": [
+      "lab-notes",
+      "sdlc",
+      "ci",
+      "process",
+      "testing"
+    ],
+    "url": "/lab/2026-07-30-local-gate-parity",
+    "aiGenerated": false,
+    "draft": false
+  },
+  {
     "title": "The pipeline that looked healthy and shipped nothing",
     "description": "Five findings from integrating an agent simulation control plane, all with the same shape: a green surface reporting health over plumbing that was producing nothing. Including an API that had emitted zero telemetry for three days behind a passing readiness probe.",
     "section": "lab",

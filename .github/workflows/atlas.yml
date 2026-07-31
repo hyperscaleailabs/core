@@ -63,7 +63,11 @@ jobs:
       - name: Type and content-schema check
         run: npm run check
 
+      # `shell: bash` for the pipefail it brings. GitHub's default shell is
+      # `bash -e {0}`, which has no pipefail, so this step reported the exit
+      # status of `tee` and a failing build passed the gate.
       - name: Build the site (validates every article's frontmatter)
+        shell: bash
         run: npm run build | tee build.txt
 
       - name: Job summary

@@ -42,30 +42,17 @@ jobs:
 
       - name: Shell syntax
         run: |
-          for f in deploy/scripts/*.sh; do bash -n "$f"; done
+          for f in deploy/scripts/*.sh scripts/*.sh; do [ -e "$f" ] || continue; bash -n "$f"; done
 
       # Was a Makefile target only, and had been failing unnoticed against a docs
       # layout that changed under it. A check nobody runs is not a check.
       - name: Handoff package intact
         run: python scripts/verify_package.py
 
+      # In scripts/check_yaml.py rather than inline, so `make -C prod yaml` is
+      # this same command.
       - name: YAML validity
-        run: |
-          python - <<'PY'
-          import sys
-          from pathlib import Path
-          import yaml
-          bad = 0
-          for p in sorted(Path(".").rglob("*.yaml")):
-              if "dashboards/superset" in str(p):
-                  continue  # Superset exports embed JSON blobs; validated by the import job
-              try:
-                  list(yaml.safe_load_all(p.read_text()))
-              except yaml.YAMLError as exc:
-                  print(f"::error file={p}::{exc}")
-                  bad = 1
-          sys.exit(bad)
-          PY
+        run: python scripts/check_yaml.py
 
   contracts:
     if: github.event_name == 'pull_request' || github.event_name == 'push'
@@ -110,19 +97,13 @@ jobs:
           python-version: "3.12"
       - run: pip install --quiet pydantic
 
-      - name: Run the golden Purchase Ambiguity workflow
-        run: python tests/e2e/golden_runner.py --iterations 1000 --out artifacts/golden | tee golden.txt
-
-      - name: Release decisions match the accepted baseline
-        run: |
-          if ! git diff --quiet -- artifacts/golden; then
-            echo "::error::the golden release decisions drifted from the committed baseline"
-            git diff -- artifacts/golden
-            echo ""
-            echo "If the change is intended, commit the regenerated decisions and say why in the PR."
-            exit 1
-          fi
-          echo "release decisions reproduce the accepted baseline exactly"
+      # Runner plus baseline diff, in scripts/check-golden-baseline.sh so that
+      # `make -C prod golden` is this same command. `shell: bash` for pipefail:
+      # without it the pipe into `tee` would report tee's exit status and drift
+      # would pass the gate.
+      - name: Golden release decisions reproduce the baseline
+        shell: bash
+        run: bash scripts/check-golden-baseline.sh 2>&1 | tee golden.txt
 
       - name: Job summary
         if: always()
@@ -142,51 +123,17 @@ jobs:
           path: prod/artifacts/golden/*.json
           if-no-files-found: error
 
+  # The guards live in prod/scripts/check-policy.sh, not inline here, so that
+  # `make -C prod policy` runs exactly what CI runs. Guards inline in YAML get
+  # their first execution on a hosted runner, after the handoff - see lesson L6
+  # in atlas/docs/lessons/2026-07-28-atlas-integration.md.
   prod-policy-guards:
     if: github.event_name == 'pull_request' || github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: No hardcoded org container registries
-        run: |
-          # registry references stay configurable; the k3d-local registry is the
-          # only concrete name allowed, and only in deploy scripts and manifests
-          if grep -rn --include='*.yaml' --include='*.py' --include='*.sh' --include='*.md' \
-               -e 'ghcr\.io/' -e '[a-z0-9-]*\.pkg\.dev/' -e 'docker\.io/hyperscale' . ; then
-            echo "::error::hardcoded container registry reference found; use a configurable registry"
-            exit 1
-          fi
-          echo "no hardcoded registries"
-
-      - name: No committed run artifacts, kubeconfigs, or archives
-        working-directory: .
-        run: |
-          if git ls-files prod | grep -E '\.(zip|tar|tgz|safetensors|ckpt|pt|pth)$|/\.kube/|^prod/\.venv/'; then
-            echo "::error::archive, checkpoint, or kubeconfig committed under prod/"
-            exit 1
-          fi
-          echo "clean"
-
-      - name: No absolute home-directory paths (PII guard)
-        run: |
-          if grep -rnE '/(Users|home)/[a-z0-9_-]+/' \
-               --include='*.md' --include='*.yaml' --include='*.py' --include='*.sh' --include='*.json' . ; then
-            echo "::error::absolute home-directory path committed; use repo-relative paths"
-            exit 1
-          fi
-          echo "no home paths"
-
-      - name: Exported dashboards carry no unmasked database password
-        run: |
-          # grep -E has no negative lookahead: match every credentialed URI, then drop
-          # the ones whose password is Superset's export mask.
-          if grep -rnE 'sqlalchemy_uri:.*://[^:/]+:[^@]+@' dashboards/ 2>/dev/null \
-               | grep -v ':XXXXXXXXXX@'; then
-            echo "::error::unmasked credential in an exported dashboard; re-export (Superset masks it)"
-            exit 1
-          fi
-          echo "dashboard credentials masked"
+      - name: Module policy guards
+        run: bash scripts/check-policy.sh
 
   terraform-validate:
     if: github.event_name == 'pull_request' || github.event_name == 'push'

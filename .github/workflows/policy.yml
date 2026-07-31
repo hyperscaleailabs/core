@@ -57,3 +57,18 @@ jobs:
 
       - name: relative markdown links and anchors resolve
         run: bash tools/policy/check_links.sh
+
+  # A gate is only worth what it costs to run before pushing. This job guards
+  # the shape of the other gates: piped steps must set pipefail (GitHub's
+  # default shell does not), module policy guards must live in a script rather
+  # than inline YAML, and every module Makefile must expose `verify`.
+  ci-hygiene:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet pyyaml
+      - name: Workflow hygiene guards
+        run: python tools/policy/check_ci_hygiene.py
