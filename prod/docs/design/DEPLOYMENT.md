@@ -1,4 +1,4 @@
-# Deployment — Local k3s now, GCP VM + k3s next
+# Deployment - Local k3s now, GCP VM + k3s next
 
 **Version:** 0.2.0-dev · **Companion to:** [`SYSTEM_DESIGN.md`](SYSTEM_DESIGN.md),
 [`CICD_STRATEGY.md`](CICD_STRATEGY.md)
@@ -27,13 +27,13 @@ phase runs.**
 - **Kustomize** for our own services (`deploy/k3s/apps/*`) with `base/` + overlays `local/` and
   `gcp/`.
 - **Helm** for heavy third-party components, values pinned in `deploy/helm-values/`:
-  - Kafka — Bitnami Kafka (KRaft, 1 broker locally).
-  - Flink — Flink Kubernetes Operator (JobManager + TaskManager) or `flink-kubernetes` session.
-  - Druid — Apache Druid Helm chart (micro-quickstart profile locally).
-  - Superset — Superset Helm chart (Postgres metadata db, Redis cache).
-  - Grafana / Prometheus / Tempo — kube-prometheus-stack + Tempo, or standalone charts.
-  - OTel Collector — opentelemetry-collector chart.
-  - PostgreSQL, MinIO — Bitnami charts.
+  - Kafka - Bitnami Kafka (KRaft, 1 broker locally).
+  - Flink - Flink Kubernetes Operator (JobManager + TaskManager) or `flink-kubernetes` session.
+  - Druid - Apache Druid Helm chart (micro-quickstart profile locally).
+  - Superset - Superset Helm chart (Postgres metadata db, Redis cache).
+  - Grafana / Prometheus / Tempo - kube-prometheus-stack + Tempo, or standalone charts.
+  - OTel Collector - opentelemetry-collector chart.
+  - PostgreSQL, MinIO - Bitnami charts.
 - Namespaces: `platform` (our services), `data` (Kafka/Flink/Druid/Superset/PG/MinIO),
   `observability` (OTel/Prometheus/Tempo/Grafana).
 - Storage: local `local-path` (k3s default) in phase 1; `pd-standard`/`pd-balanced` in GCP.
@@ -103,7 +103,7 @@ boot. No secrets in Terraform state or images.
 
 ---
 
-## 7. Phase 2 — GCP VM + k3s (Terraform)
+## 7. Phase 2 - GCP VM + k3s (Terraform)
 
 `infra/terraform/gcp/` provisions:
 - A **Compute Engine VM** (e.g., `e2-standard-8`, Ubuntu LTS) with a persistent disk sized for

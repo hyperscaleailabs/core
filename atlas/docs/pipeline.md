@@ -7,7 +7,7 @@ articles. This document explains how it works and how to operate it.
 
 The pipeline is an **idempotent producer of Markdown**. Run it as often as you
 like; it only does work for sources that are *new* or *changed* since last time,
-and it never publishes on its own — output is always a draft in Git awaiting
+and it never publishes on its own - output is always a draft in Git awaiting
 review.
 
 ```
@@ -60,7 +60,7 @@ record.
 ### 2. Fetch
 A conditional `GET` (sends `If-None-Match`/`If-Modified-Since` from the registry).
 A `304 Not Modified` short-circuits the source. **robots.txt is honored** when
-`respect_robots: true` — disallowed URLs are skipped and logged. A snapshot of
+`respect_robots: true` - disallowed URLs are skipped and logged. A snapshot of
 the extracted text is cached under `pipeline/cache/` for provenance.
 
 ### 3. Extract
@@ -77,13 +77,13 @@ heuristic plan.
 
 ### 5. Draft
 With `ANTHROPIC_API_KEY` set, the pipeline drafts the article body with the
-configured Claude model using [`prompts/draft.md`](../pipeline/prompts/draft.md) —
+configured Claude model using [`prompts/draft.md`](../pipeline/prompts/draft.md) -
 original prose that summarizes and analyzes the source (never copies it), sized
 to 5–15 minutes. Without a key, it writes a **structured outline stub** with the
 planned headings and TODOs for a human to complete.
 
 Every generated file gets frontmatter with `draft: true`, `aiGenerated: true`, a
-computed `readingTime`, and a `sources` block for attribution — so it validates
+computed `readingTime`, and a `sources` block for attribution - so it validates
 against the content schema and is clearly labeled in the UI.
 
 ### 6. Index + registry

@@ -1,4 +1,4 @@
-"""Agent Simulation Control Plane — MCP simulator/proxy."""
+"""Agent Simulation Control Plane - MCP simulator/proxy."""
 
 from asc_mcp_proxy.app import app, create_app
 

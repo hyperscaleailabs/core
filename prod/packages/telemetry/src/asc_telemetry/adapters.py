@@ -1,7 +1,7 @@
 """Event emitters.
 
-- ``InMemoryEmitter`` — test/in-process double used by the golden workflow (no broker).
-- ``KafkaEmitter`` — production path (ASC-021): serializes the redacted envelope and produces to
+- ``InMemoryEmitter`` - test/in-process double used by the golden workflow (no broker).
+- ``KafkaEmitter`` - production path (ASC-021): serializes the redacted envelope and produces to
   ``sim.iteration.events.v1`` keyed by ``runId``. The Kafka client is injected (or lazily built via
   ``from_bootstrap``) so the package imports and unit-tests without a broker or client library.
 """
@@ -37,7 +37,7 @@ class KafkaProducerLike(Protocol):
 
 class NullEmitter:
     """Drops events. Used by the deployed service when no Kafka is configured, so telemetry never
-    accumulates in RAM (analytics is derived and optional — the run's durable result is unaffected)."""
+    accumulates in RAM (analytics is derived and optional - the run's durable result is unaffected)."""
 
     def emit(self, event: IterationEventEnvelope) -> None:  # noqa: D401 - intentional no-op
         return None

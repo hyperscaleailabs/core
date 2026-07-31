@@ -1,5 +1,5 @@
 # =============================================================================
-# Agentic Atlas — ingestion pipeline configuration
+# Agentic Atlas - ingestion pipeline configuration
 # =============================================================================
 
 # Anthropic model used to plan and draft articles when ANTHROPIC_API_KEY is set.

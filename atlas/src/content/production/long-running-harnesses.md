@@ -1,6 +1,6 @@
 ---
 title: "Effective Harnesses for Long-Running Agents"
-description: "What changes when an agent runs for hours or days — durability, checkpointing, context compaction, and human-in-the-loop — and how to build a harness that survives it."
+description: "What changes when an agent runs for hours or days - durability, checkpointing, context compaction, and human-in-the-loop - and how to build a harness that survives it."
 level: advanced
 readingTime: 10
 updated: 2026-06-30
@@ -23,7 +23,7 @@ sources:
 A five-step agent and a five-hour agent are different engineering problems. Short
 agents can be stateless request/response; long-running agents accumulate context,
 outlive process lifetimes, and must survive failures without losing progress. The
-**harness** — the code around the model — is where that reliability is won or
+**harness** - the code around the model - is where that reliability is won or
 lost.
 
 ## What "long-running" breaks
@@ -42,7 +42,7 @@ As task horizon grows from seconds to hours or days, four things stop being free
 ## The pillars of a long-running harness
 
 ### Durability & checkpointing
-Persist agent state — plan, progress, key observations — to durable storage so a
+Persist agent state - plan, progress, key observations - to durable storage so a
 run can **pause and resume** across process restarts. The agent's state lives in
 a store, not in memory; the loop reads it back on resume. Frameworks like
 [LangGraph](/frameworks/langgraph) provide checkpointing primitives; the pattern
@@ -59,11 +59,11 @@ context.
 ### Idempotency & safe retries
 Assume any step may run more than once (after a crash, a retry, a resume). Make
 side-effecting tools **idempotent** or guard them so re-execution is safe. This
-is the same discipline distributed systems demand — agents are no exception.
+is the same discipline distributed systems demand - agents are no exception.
 
 ### Bounded autonomy
 Enforce global budgets: max steps, max cost, max wall-clock, and a top-level
-abort. Long-running does not mean unbounded — it means *checkpointed within
+abort. Long-running does not mean unbounded - it means *checkpointed within
 bounds*. Without this, a looping agent quietly runs up a bill
 ([failure modes](/production/failure-modes)).
 
@@ -94,7 +94,7 @@ resume(run_id):
   return finalize(state)
 ```
 
-Every line maps to a pillar. The shape is deliberately boring — durable,
+Every line maps to a pillar. The shape is deliberately boring - durable,
 bounded, observed. Boring is what survives a week in production.
 
 ## Where this shows up
@@ -115,8 +115,8 @@ tracing turn a capable-but-fragile agent into one you can trust to run unattende
 
 ## Next
 
-- [Context engineering](/patterns/context-engineering) — the compaction pillar in
+- [Context engineering](/patterns/context-engineering) - the compaction pillar in
   depth.
-- [Observability](/production/observability) — tracing long runs.
-- [Guardrails & safety](/production/guardrails-safety) — the HITL and permission
+- [Observability](/production/observability) - tracing long runs.
+- [Guardrails & safety](/production/guardrails-safety) - the HITL and permission
   pillars.

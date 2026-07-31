@@ -15,7 +15,7 @@ variable "zone" {
 
 variable "machine_type" {
   type        = string
-  default     = "e2-standard-8" # 8 vCPU / 32 GB — Druid+Flink+Superset+Kafka are the heavy tenants
+  default     = "e2-standard-8" # 8 vCPU / 32 GB - Druid+Flink+Superset+Kafka are the heavy tenants
   description = "Compute Engine machine type for the single-node k3s host."
 }
 

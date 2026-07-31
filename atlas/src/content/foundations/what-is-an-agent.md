@@ -1,6 +1,6 @@
 ---
 title: "What Is an AI Agent? A Definition That Survives Contact With Production"
-description: "A precise, engineering-first definition of an AI agent — the loop, autonomy, tools, and where the boundary sits between an agent and a plain LLM call."
+description: "A precise, engineering-first definition of an AI agent - the loop, autonomy, tools, and where the boundary sits between an agent and a plain LLM call."
 level: beginner
 readingTime: 8
 order: 1
@@ -11,7 +11,7 @@ sources:
     url: "https://www.anthropic.com/engineering/building-effective-agents"
     publisher: "Anthropic"
     accessed: "2026-06-30"
-  - title: "Model Context Protocol — Introduction"
+  - title: "Model Context Protocol - Introduction"
     url: "https://modelcontextprotocol.io/docs/getting-started/intro"
     publisher: "Anthropic / MCP"
     accessed: "2026-06-30"
@@ -24,9 +24,9 @@ need a definition you can actually build against.
 
 ## The one-sentence definition
 
-> An **AI agent** is a system where an LLM directs its own actions in a loop —
+> An **AI agent** is a system where an LLM directs its own actions in a loop -
 > deciding what to do next, taking an action against the world through tools, and
-> observing the result — in pursuit of a goal, rather than following a fixed,
+> observing the result - in pursuit of a goal, rather than following a fixed,
 > developer-specified path.
 
 The load-bearing phrase is *directs its own actions in a loop*. Everything else
@@ -40,7 +40,7 @@ because it changes how you architect and how you debug:
 - **Workflows** orchestrate LLMs and tools through **predefined code paths**. The
   control flow is written by you. The LLM fills in steps, but *you* decide the
   sequence. Prompt chaining, routing, and parallelization are workflows.
-- **Agents** let the **model decide the control flow** — which tools to call, in
+- **Agents** let the **model decide the control flow** - which tools to call, in
   what order, and when the task is done. The path is discovered at runtime.
 
 Neither is "better." Workflows are more predictable, cheaper, and easier to
@@ -79,13 +79,13 @@ the context each turn** (context engineering) and **what stops the loop safely**
 
 ## The four capabilities that make it an agent
 
-1. **Reasoning / planning** — decomposing a goal into next actions.
-2. **Tool use** — acting on the world: search, code execution, API calls, file
+1. **Reasoning / planning** - decomposing a goal into next actions.
+2. **Tool use** - acting on the world: search, code execution, API calls, file
    edits. Standardized increasingly through the [Model Context
    Protocol](/frameworks/model-context-protocol).
-3. **Memory** — carrying state across turns (context window) and across sessions
+3. **Memory** - carrying state across turns (context window) and across sessions
    (external stores).
-4. **Autonomy** — the model, not a fixed script, chooses the next step.
+4. **Autonomy** - the model, not a fixed script, chooses the next step.
 
 Remove autonomy and you have a pipeline. Remove tools and you have a chatbot.
 Remove memory and you have a stateless function. An agent is the combination.
@@ -94,16 +94,16 @@ Remove memory and you have a stateless function. An agent is the combination.
 
 When someone shows you an "agent," ask: *At runtime, does the model decide the
 next action, or did a developer hard-code the sequence?* If the answer is
-"hard-coded," it's a workflow — which may be exactly the right choice. If the
+"hard-coded," it's a workflow - which may be exactly the right choice. If the
 model decides, you have a genuine agent, with all the flexibility and all the
 failure modes that come with it.
 
 ## Where to go next
 
-- The [pre-agentic era](/foundations/pre-agentic-era) — why this isn't as new as
+- The [pre-agentic era](/foundations/pre-agentic-era) - why this isn't as new as
   it looks, and what we can reuse.
-- [From LLMs to agents](/foundations/llm-to-agent-evolution) — how we got the
+- [From LLMs to agents](/foundations/llm-to-agent-evolution) - how we got the
   reasoning + tool-calling that makes the loop work.
-- [Agent anatomy](/foundations/agent-anatomy) — the components in detail.
+- [Agent anatomy](/foundations/agent-anatomy) - the components in detail.
 - When you're ready to build: [tool use](/patterns/tool-use) and
   [multi-agent orchestration](/patterns/multi-agent-orchestration).

@@ -1,22 +1,22 @@
-# UI evidence — 2026-07-25
+# UI evidence - 2026-07-25
 
 Captured against the running services (local, no cluster): control-api via `uvicorn`, operator UI
 served statically. Both are testable today.
 
 ## 1. Operator UI (v0.1.0 clickable MVP)
 
-`app/agent_simulation_control_plane_mvp.html` — the operator shell: navigation, KPI tiles, reliability
+`app/agent_simulation_control_plane_mvp.html` - the operator shell: navigation, KPI tiles, reliability
 trend, gate-outcomes donut, failure-mode breakdown, cost-vs-reliability, and the Recent Experiments
 table showing Blocked / Passed / Manual-review decisions. Runs in-browser on deterministic data.
 
-![Operator UI — Overview](operator-ui-overview.png)
+![Operator UI - Overview](operator-ui-overview.png)
 
-## 2. Control API — live Swagger UI
+## 2. Control API - live Swagger UI
 
-`control-api` `/docs` — the real FastAPI surface wired to the deterministic engine (experiments,
+`control-api` `/docs` - the real FastAPI surface wired to the deterministic engine (experiments,
 versions, clone, runs, results, export, observability links).
 
-![Control API — Swagger UI](control-api-swagger.png)
+![Control API - Swagger UI](control-api-swagger.png)
 
 ## 3. Live golden workflow through the API (reproducible)
 
@@ -71,7 +71,7 @@ POST /experiments/seed-golden ; POST /runs {harness: basic_retry}  -> Blocked
 
 Full end-to-end on the `agentsim` k3d cluster (memory-trimmed lite stack):
 
-**Data plane** — control-api → worker → **Kafka** (`sim.iteration.events.v1`, 1852+ events) →
+**Data plane** - control-api → worker → **Kafka** (`sim.iteration.events.v1`, 1852+ events) →
 **Flink SQL session cluster** (JobManager + TaskManager, JVM) → **`sim.failure.stats.v1`**:
 
 ```
@@ -80,9 +80,9 @@ Full end-to-end on the `agentsim` k3d cluster (memory-trimmed lite stack):
 ```
 The Flink job (`insert-into ... failure_stats`) runs on the cluster (2 tasks, state RUNNING).
 
-![Flink UI — running failure-stats job](flink-ui.png)
+![Flink UI - running failure-stats job](flink-ui.png)
 
-**Observability plane** — services → **OTel Collector** (50 spans/run with `asc.run_id` /
+**Observability plane** - services → **OTel Collector** (50 spans/run with `asc.run_id` /
 `asc.iteration` / `asc.trajectory_id` / `asc.seed` correlation attributes) → **Tempo** →
 **Grafana** Explore (control-api `run_iteration` traces, drill-down waterfall). Verified via the
 Grafana→Tempo datasource proxy and in the Grafana UI.
@@ -92,7 +92,7 @@ Notes: PyFlink has no arm64 wheels, so the JVM **Flink SQL session cluster** is 
 Druid/Superset are deferred (memory). The failure-stats logic has tested parity with the Python
 reference (`asc_flink.compute_failure_stats`).
 
-## 6. OLAP analytics — ClickHouse + Superset on local k3s (2026-07-25)
+## 6. OLAP analytics - ClickHouse + Superset on local k3s (2026-07-25)
 
 Apache Druid ships no arm64 image (amd64-only/distroless; Helm subcharts on removed Bitnami images),
 so on this Apple Silicon host the OLAP store is **ClickHouse** (arm64-native, ADR-0004 alternative).

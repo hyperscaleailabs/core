@@ -1,6 +1,6 @@
 ---
 title: "Agent Anatomy: The Six Components Every System Has"
-description: "Model, instructions, tools, memory, orchestration, and the harness — the parts that make up any agent, and the design decisions each one forces."
+description: "Model, instructions, tools, memory, orchestration, and the harness - the parts that make up any agent, and the design decisions each one forces."
 level: intermediate
 readingTime: 11
 order: 4
@@ -15,7 +15,7 @@ sources:
     url: "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
     publisher: "Anthropic"
     accessed: "2026-06-30"
-  - title: "Claude Agent SDK — Overview"
+  - title: "Claude Agent SDK - Overview"
     url: "https://code.claude.com/docs/en/agent-sdk/overview"
     publisher: "Anthropic"
     accessed: "2026-06-30"
@@ -40,7 +40,7 @@ The LLM that decides the next action. Key decisions:
 The durable behavioral contract: role, objectives, constraints, tone, and
 *especially* what **not** to do. This is where you encode guardrails the model
 should self-enforce and the criteria for "done." Treat the system prompt as
-code — version it, review it, and evaluate changes. Vague instructions are the
+code - version it, review it, and evaluate changes. Vague instructions are the
 number-one cause of agents that "sort of work."
 
 ## 3. Tools (the action space)
@@ -80,20 +80,20 @@ and retrieve on demand.
 
 How control and work are arranged:
 
-- **Single agent** — one loop, one context. Simplest; start here.
-- **Manager / workers** — a coordinator delegates to specialists and synthesizes.
-- **Sequential / graph** — explicit stages with defined transitions
+- **Single agent** - one loop, one context. Simplest; start here.
+- **Manager / workers** - a coordinator delegates to specialists and synthesizes.
+- **Sequential / graph** - explicit stages with defined transitions
   ([LangGraph](/frameworks/langgraph) style).
-- **Swarm / peer-to-peer** — many agents coordinating with less central control
+- **Swarm / peer-to-peer** - many agents coordinating with less central control
   ([swarms](/patterns/agent-swarms)).
 
 Topology is a real architectural decision with cost, latency, and failure-mode
-consequences — cover it in [multi-agent
+consequences - cover it in [multi-agent
 orchestration](/patterns/multi-agent-orchestration).
 
 ## 6. The harness (the runtime)
 
-The code around the model that actually runs the loop — often 80% of the
+The code around the model that actually runs the loop - often 80% of the
 engineering and the least glamorous. It owns:
 
 - The action loop and **stopping conditions** (max steps, budget, goal checks).
@@ -127,18 +127,18 @@ harness so you don't rebuild this per project.
 
 When designing or reviewing an agent, answer one question per component:
 
-1. **Model** — which model(s), and why; is routing worth it?
-2. **Instructions** — is "done" defined? Are the don'ts explicit?
-3. **Tools** — are they narrow, well-described, and low-noise?
-4. **Memory** — what lives in context vs. retrieved on demand?
-5. **Orchestration** — is single-agent enough? If not, what topology?
-6. **Harness** — stopping conditions, retries, durability, tracing, guards?
+1. **Model** - which model(s), and why; is routing worth it?
+2. **Instructions** - is "done" defined? Are the don'ts explicit?
+3. **Tools** - are they narrow, well-described, and low-noise?
+4. **Memory** - what lives in context vs. retrieved on demand?
+5. **Orchestration** - is single-agent enough? If not, what topology?
+6. **Harness** - stopping conditions, retries, durability, tracing, guards?
 
 If you can't answer all six, you've found where the system will surprise you.
 
 ## Next
 
-- [Context engineering](/patterns/context-engineering) — managing component #4.
-- [Long-running harnesses](/production/long-running-harnesses) — component #6 at
+- [Context engineering](/patterns/context-engineering) - managing component #4.
+- [Long-running harnesses](/production/long-running-harnesses) - component #6 at
   scale.
-- [Glossary](/foundations/glossary) — precise definitions for the terms above.
+- [Glossary](/foundations/glossary) - precise definitions for the terms above.

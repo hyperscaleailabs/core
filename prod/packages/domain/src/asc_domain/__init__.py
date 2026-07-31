@@ -1,4 +1,4 @@
-"""Agent Simulation Control Plane — domain contracts."""
+"""Agent Simulation Control Plane - domain contracts."""
 
 from asc_domain.models import (
     SCHEMA_VERSION,

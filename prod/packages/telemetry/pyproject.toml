@@ -1,7 +1,7 @@
 [project]
 name = "asc-telemetry"
 version = "0.2.0"
-description = "Agent Simulation Control Plane — telemetry envelope, adapters, redaction"
+description = "Agent Simulation Control Plane - telemetry envelope, adapters, redaction"
 requires-python = ">=3.12"
 dependencies = ["pydantic>=2.6", "opentelemetry-sdk>=1.20"]
 

@@ -71,7 +71,7 @@ const created = data.created ? fmtDate(data.created) : null;
                 <li class="text-sm">
                   <a href={s.url} class="link-accent font-medium">{s.title}</a>
                   <span class="text-[var(--color-fog-400)]">
-                    {s.publisher ? ` — ${s.publisher}` : ''}
+                    {s.publisher ? ` - ${s.publisher}` : ''}
                     {s.license ? ` · ${s.license}` : ''}
                     {s.accessed ? ` · accessed ${s.accessed}` : ''}
                   </span>

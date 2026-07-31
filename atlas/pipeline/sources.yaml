@@ -1,5 +1,5 @@
 # =============================================================================
-# Agentic Atlas — source registry
+# Agentic Atlas - source registry
 # =============================================================================
 # This is the developer-facing input to the ingestion pipeline. Add reference
 # links here; on the next CI run, `ingest.py` will fetch anything new or changed
