@@ -135,15 +135,25 @@ refused, so a training run always names the image it ran.
 
 ## Not proven
 
-These `infra/ACCEPTANCE.md` criteria are **not** established by this record and
-their boxes stay unchecked:
+These criteria are **not** established by this record and their boxes stay
+unchecked:
 
-- Re-running provisioning converges without replacing healthy resources.
-- Cluster lifecycle tests cover one server and multiple agents *on real
-  targets*. The mocked equivalent
-  (`test_mock_provision_installs_server_then_agents`) passes; the physical run
-  has not happened.
+- `infra/ACCEPTANCE.md`, "re-running provisioning converges without replacing
+  healthy resources". Convergence is asserted nowhere in the suite: no test
+  provisions twice and compares. This is the one infra criterion that needs
+  either a second mocked pass or a physical target, and neither was run.
+- Every criterion in `models/ACCEPTANCE.md`. This project adds the JAX smoke
+  workload's **orchestration** (manifest, Dockerfile, entrypoint, deploy-time
+  refusals) and trains nothing. No training run, no benchmark, and no compact
+  regression against the accepted LoRA baseline was executed, so none of the
+  three models criteria are met and the module's product screenshot does not
+  exist.
 
-Physical validation needs a provisioned cluster and is tracked as follow-up
-work. Per the repository contract, no simulated result is reported as physical
-validation.
+`test_mock_provision_installs_server_then_agents` and
+`test_requires_exactly_one_server` do satisfy "cluster lifecycle tests cover
+one server and multiple agents": the coverage the criterion asks for exists.
+The tier of that coverage is mocked, which is what this section exists to keep
+visible.
+
+Physical validation needs a provisioned cluster and is follow-up work. Per the
+repository contract, no simulated result is reported as physical validation.
