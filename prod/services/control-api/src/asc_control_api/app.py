@@ -1,4 +1,4 @@
-"""Control API — FastAPI surface for experiments, runs, results, and observability links.
+"""Control API - FastAPI surface for experiments, runs, results, and observability links.
 
 Phase-1 implementation (ASC-010/011/015): in-memory store, synchronous run execution via the
 orchestrator, immutability + failure-profile validation enforced at the API boundary. Kafka-backed
@@ -57,7 +57,7 @@ def _default_gate_set() -> GateSet:
 def _build_emitter() -> EventEmitter:
     """Kafka emitter when KAFKA_BOOTSTRAP is set and reachable; in-memory fallback otherwise.
 
-    Analytics is derived — a broker problem must never block a run (SYSTEM_DESIGN §14, GW-11).
+    Analytics is derived - a broker problem must never block a run (SYSTEM_DESIGN §14, GW-11).
     """
     bootstrap = os.environ.get("KAFKA_BOOTSTRAP")
     if not bootstrap:

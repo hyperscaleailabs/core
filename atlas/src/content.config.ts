@@ -7,7 +7,7 @@ import { z } from 'astro/zod';
  *
  * The pipeline (pipeline/ingest.py) and human authors both write files that
  * conform to this schema. `astro check` / `astro build` will FAIL if any file
- * violates it — this is the guardrail that keeps content consistent.
+ * violates it - this is the guardrail that keeps content consistent.
  */
 
 const LEVELS = ['beginner', 'intermediate', 'advanced'] as const;
@@ -33,7 +33,7 @@ const baseArticle = z.object({
   created: z.coerce.date().optional(),
   updated: z.coerce.date(),
   draft: z.boolean().default(false),
-  // Where the knowledge came from — drives the "Sources & attribution" block.
+  // Where the knowledge came from - drives the "Sources & attribution" block.
   sources: z.array(source).default([]),
   // Content license for THIS article (defaults to repo content license).
   license: z.string().default('CC-BY-4.0'),

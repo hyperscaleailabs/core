@@ -1,4 +1,4 @@
-# Grafana Tempo (traces store) — ASC-041.
+# Grafana Tempo (traces store) - ASC-041.
 #   helm repo add grafana https://grafana.github.io/helm-charts
 #   helm upgrade --install tempo grafana/tempo -n observability -f deploy/helm-values/tempo.yaml
 tempo:

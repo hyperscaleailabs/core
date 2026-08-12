@@ -1,6 +1,6 @@
 {
   "uid": "asc-overview",
-  "title": "ASC — Service Health & Telemetry",
+  "title": "ASC - Service Health & Telemetry",
   "tags": ["agent-simulation"],
   "timezone": "browser",
   "schemaVersion": 39,
@@ -24,7 +24,7 @@
     {
       "id": 2,
       "type": "timeseries",
-      "title": "OTel Collector — spans accepted/sec",
+      "title": "OTel Collector - spans accepted/sec",
       "gridPos": { "h": 6, "w": 18, "x": 6, "y": 0 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "targets": [
@@ -34,7 +34,7 @@
     {
       "id": 3,
       "type": "timeseries",
-      "title": "OTel Collector — metric points exported/sec",
+      "title": "OTel Collector - metric points exported/sec",
       "gridPos": { "h": 7, "w": 24, "x": 0, "y": 6 },
       "datasource": { "type": "prometheus", "uid": "prometheus" },
       "targets": [

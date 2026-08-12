@@ -12,7 +12,7 @@ VOICE & AUDIENCE
 STRUCTURE
 - Length: a 5-15 minute read (roughly 900-2200 words). Do not pad.
 - Use the outline's H2 headings (## ...). Add H3s where useful.
-- Open with 1-2 short paragraphs framing why this matters — no "In this article".
+- Open with 1-2 short paragraphs framing why this matters - no "In this article".
 - Where helpful, use a compact table or a short fenced code/ASCII diagram.
 - End with a short "Next" section linking 2-3 related Atlas pages using relative
   links like [tool use](/patterns/tool-use).
@@ -20,7 +20,7 @@ STRUCTURE
 INTEGRITY (critical)
 - Original prose. SUMMARIZE and ANALYZE the source; never reproduce its text.
 - Only assert facts supported by the provided source content. If unsure, hedge or
-  omit — do not invent APIs, numbers, or quotes.
+  omit - do not invent APIs, numbers, or quotes.
 - Do not fabricate URLs. Reference the source by name; the pipeline adds the
   attribution block automatically.
 

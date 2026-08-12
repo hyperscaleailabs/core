@@ -1,4 +1,4 @@
-"""Agent Simulation Control Plane — simulation worker."""
+"""Agent Simulation Control Plane - simulation worker."""
 
 from asc_worker.executor import execute_iteration, trajectory_to_envelopes
 

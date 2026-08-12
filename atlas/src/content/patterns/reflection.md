@@ -1,6 +1,6 @@
 ---
 title: "Reflection: Agents That Check Their Own Work"
-description: "The pattern where an agent critiques and revises its output before finishing — how it works, when it pays off, and when it just burns tokens."
+description: "The pattern where an agent critiques and revises its output before finishing - how it works, when it pays off, and when it just burns tokens."
 level: intermediate
 readingTime: 6
 problem: "First-pass agent output is often almost-right; how do we catch and fix errors before returning it?"
@@ -15,7 +15,7 @@ sources:
 ---
 
 **Reflection** adds a critic step to the loop: the agent produces a candidate,
-evaluates it against criteria, and revises — iterating until it passes or a budget
+evaluates it against criteria, and revises - iterating until it passes or a budget
 runs out. It's one of the highest-leverage patterns because it converts a model's
 ability to *recognize* errors (often strong) into corrected *output* (the thing
 you actually ship).
@@ -37,7 +37,7 @@ The evaluator can be:
 - **The same model** with a critic prompt ("find errors in the above against
   these criteria").
 - **A different/cheaper model** specialized as a judge.
-- **A programmatic check** — tests, a compiler, a linter, a schema validator.
+- **A programmatic check** - tests, a compiler, a linter, a schema validator.
   When a ground-truth check exists, prefer it; it's cheaper and more reliable
   than an LLM judge.
 
@@ -45,16 +45,16 @@ The evaluator can be:
 
 - **There's a clear success criterion** the evaluator can apply (does the code
   compile? does the JSON validate? does the answer cite a source?).
-- **Errors are recognizable** even when generation is imperfect — writing, code,
+- **Errors are recognizable** even when generation is imperfect - writing, code,
   structured extraction.
 - **The cost of a wrong answer** exceeds the cost of extra iterations.
 
 ## When to skip it
 
-- **No meaningful evaluation signal** — reflection without a real criterion just
+- **No meaningful evaluation signal** - reflection without a real criterion just
   produces confident re-assertions and doubles cost.
-- **Latency-critical paths** — each cycle is another round trip.
-- **The model already one-shots the task** — measure before adding loops.
+- **Latency-critical paths** - each cycle is another round trip.
+- **The model already one-shots the task** - measure before adding loops.
 
 ## Design tips
 
@@ -75,5 +75,5 @@ agent is reflection expressed as [orchestration](/patterns/multi-agent-orchestra
 
 ## Next
 
-- [Planning](/patterns/planning) — decide the steps before executing them.
-- [Evaluation](/production/evaluation) — turn ad-hoc critique into measurement.
+- [Planning](/patterns/planning) - decide the steps before executing them.
+- [Evaluation](/production/evaluation) - turn ad-hoc critique into measurement.

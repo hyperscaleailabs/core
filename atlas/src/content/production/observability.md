@@ -1,6 +1,6 @@
 ---
 title: "Observability for Agents: If You Can't Trace It, You Can't Ship It"
-description: "Agents fail invisibly. What to instrument — traces, spans, token and cost accounting, tool telemetry — and why the trace is the primary debugging artifact."
+description: "Agents fail invisibly. What to instrument - traces, spans, token and cost accounting, tool telemetry - and why the trace is the primary debugging artifact."
 level: advanced
 readingTime: 8
 updated: 2026-06-30
@@ -10,13 +10,13 @@ sources:
     url: "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents"
     publisher: "Anthropic"
     accessed: "2026-06-30"
-  - title: "LangGraph — Overview"
+  - title: "LangGraph - Overview"
     url: "https://docs.langchain.com/oss/python/langgraph/overview"
     publisher: "LangChain"
     accessed: "2026-06-30"
 ---
 
-Traditional software fails loudly — an exception, a 500, a stack trace. Agents
+Traditional software fails loudly - an exception, a 500, a stack trace. Agents
 fail *quietly and plausibly*: a confident wrong answer, a subtly wrong tool call,
 a slow drift off task. There's often no error at all. That makes **observability
 non-optional**: the trace is not a debugging convenience, it's the only way to
@@ -26,11 +26,11 @@ know what your agent actually did.
 
 A **trace** is the complete, ordered record of one agent run:
 
-- Every **model call** — the full prompt/context in, the completion out.
-- Every **tool call** — name, arguments, result, latency, success/failure.
-- Every **decision point** — why the loop continued or stopped.
+- Every **model call** - the full prompt/context in, the completion out.
+- Every **tool call** - name, arguments, result, latency, success/failure.
+- Every **decision point** - why the loop continued or stopped.
 - **Token counts and cost** per step and per run.
-- **Timings** — latency of each step and the whole run.
+- **Timings** - latency of each step and the whole run.
 - A **run id** correlating all of it, including across sub-agents.
 
 If you can replay a run from its trace and understand every decision, you have
@@ -41,7 +41,7 @@ enough. If you're guessing, you don't.
 ### Spans and hierarchy
 Model the run as nested spans: run → step → (model call, tool call). For
 [multi-agent systems](/patterns/multi-agent-orchestration), child agents are
-child spans under the parent's run id — otherwise a distributed failure is
+child spans under the parent's run id - otherwise a distributed failure is
 impossible to reconstruct.
 
 ### Token & cost accounting
@@ -61,7 +61,7 @@ outcomes so [evaluation](/production/evaluation) can run on real traffic.
 
 ## Standards and tooling
 
-Prefer open standards — **OpenTelemetry**-style tracing generalizes agent
+Prefer open standards - **OpenTelemetry**-style tracing generalizes agent
 telemetry to the observability stack you already run. Framework-native tracing
 (e.g. the streaming/inspection built into
 [LangGraph](/frameworks/langgraph)) and agent-focused platforms (LangSmith,
@@ -73,7 +73,7 @@ it, and make it searchable.**
 
 Two capabilities depend entirely on observability:
 
-- **[Evaluation](/production/evaluation)** runs on traces — no traces, no
+- **[Evaluation](/production/evaluation)** runs on traces - no traces, no
   trajectory metrics.
 - **[Long-running harnesses](/production/long-running-harnesses)** are only
   debuggable if every checkpointed step was traced.
@@ -93,5 +93,5 @@ debug by re-running and hoping.
 
 ## Next
 
-- [Evaluation](/production/evaluation) — turn traces into measurement.
-- [Failure modes](/production/failure-modes) — what to look for in a trace.
+- [Evaluation](/production/evaluation) - turn traces into measurement.
+- [Failure modes](/production/failure-modes) - what to look for in a trace.

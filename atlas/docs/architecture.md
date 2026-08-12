@@ -7,7 +7,7 @@ How Agentic Atlas is put together, and why.
 1. **Content is Markdown in Git.** The source of truth is a hierarchy of `.md`
    files. Everything else (site, pipeline) is tooling around that.
 2. **Static, fast, cheap to host.** A content site should be a static build that
-   any CDN — Vercel here — can serve.
+   any CDN - Vercel here - can serve.
 3. **Self-extending.** Adding knowledge should be as easy as adding a link; a
    pipeline turns links into reviewable draft articles.
 4. **Human-reviewed.** Machine drafts never publish themselves. They land in Git
@@ -33,16 +33,16 @@ How Agentic Atlas is put together, and why.
 - One file per article under a collection directory (`foundations/`,
   `frameworks/`, …).
 - [`src/content.config.ts`](../src/content.config.ts) defines a glob loader and Zod schema per
-  collection. `astro build` fails if any file violates it — the guardrail that
+  collection. `astro build` fails if any file violates it - the guardrail that
   keeps `level`, `sources`, `tags`, reading-time, etc. consistent.
 - The URL of an article is `/{collection}/{slug}` where `slug` is the filename.
 
 ### 2. Site (Astro)
-- **Static output** (`output: 'static'`) — pure HTML/CSS/JS, no server.
+- **Static output** (`output: 'static'`) - pure HTML/CSS/JS, no server.
 - Dynamic routes generate one page per collection and per article:
-  - [`src/pages/[section]/index.astro`](../src/pages/%5Bsection%5D/index.astro) —
+  - [`src/pages/[section]/index.astro`](../src/pages/%5Bsection%5D/index.astro) -
     a section listing, grouped by level.
-  - [`src/pages/[section]/[slug].astro`](../src/pages/%5Bsection%5D/%5Bslug%5D.astro) —
+  - [`src/pages/[section]/[slug].astro`](../src/pages/%5Bsection%5D/%5Bslug%5D.astro) -
     an article, rendered through `ArticleLayout`.
 - [`src/lib/content.ts`](../src/lib/content.ts) centralizes collection access,
   reading-time computation, and section metadata.
@@ -79,7 +79,7 @@ body via `reading-time` at render.
 
 For a content-hierarchy site, Astro's content collections give type-safe
 frontmatter, first-class Markdown/MDX, near-zero client JS by default, and
-trivial static deployment to Vercel — a better fit here than a heavier app
+trivial static deployment to Vercel - a better fit here than a heavier app
 framework. The content is portable regardless: it's just Markdown, so the site
 layer could be swapped without touching a single article.
 
@@ -92,5 +92,5 @@ layer could be swapped without touching a single article.
   if only one of the two registrations lands - which happened, and whose only
   symptom was a wrong article count on the home page.
 - **New UI?** Components are plain Astro; add to `src/components/`.
-- **Search UI?** `public/search-index.json` is already generated — wire a
+- **Search UI?** `public/search-index.json` is already generated - wire a
   client-side filter or Pagefind over it.

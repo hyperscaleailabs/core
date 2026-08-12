@@ -1,4 +1,4 @@
-# Implementation Backlog — Agent Simulation Control Plane
+# Implementation Backlog - Agent Simulation Control Plane
 
 **Version:** 0.2.0-dev · **Companion to:** [`SYSTEM_DESIGN.md`](SYSTEM_DESIGN.md),
 [`IMPLEMENTATION_SPEC.md`](IMPLEMENTATION_SPEC.md)
@@ -11,18 +11,18 @@ same `ASC-###` id and grouped by milestone. Priorities: **P0** = required for ph
 Superset + OTel + Grafana) runs on a local k3d/k3s cluster and the Purchase Ambiguity golden
 workflow reproduces a **Blocked** run and a corrected **Passed** run end-to-end.
 
-**Phase-2 (human-gated):** M7 — GCP VM + k3s via Terraform. Blocked until a human enables GCP
+**Phase-2 (human-gated):** M7 - GCP VM + k3s via Terraform. Blocked until a human enables GCP
 access / keys.
 
 Legend: dep = depends on · GW = golden workflow test case in `docs/v0.1.0/08_…`.
 
 ---
 
-## Milestone M0 — Foundations & contracts  *(P0)*
+## Milestone M0 - Foundations & contracts  *(P0)*
 
 | ID | Title | Prio | Dep | Acceptance |
 |---|---|---|---|---|
-| ASC-001 | Repo scaffolding, workspace tooling, root Makefile | P0 | — | monorepo layout, ruff/mypy/pytest configured, `make help` works |
+| ASC-001 | Repo scaffolding, workspace tooling, root Makefile | P0 | - | monorepo layout, ruff/mypy/pytest configured, `make help` works |
 | ASC-002 | `packages/domain`: pydantic models + JSON-schema export for the 4 core contracts | P0 | 001 | `examples/*.json` validate round-trip; schemas exported + checked in |
 | ASC-003 | `packages/gate-engine`: `evaluate()` + decision rule | P0 | 002 | GW-12, GW-13 unit tests pass; pure function, no I/O |
 | ASC-004 | `packages/simulation-kernel`: deterministic WF-04 + failure sampling + replay | P0 | 002 | GW-01, GW-02, GW-03, GW-04 unit tests pass |
@@ -30,7 +30,7 @@ Legend: dep = depends on · GW = golden workflow test case in `docs/v0.1.0/08_�
 | ASC-006 | CI `ci.yml`: lint, type, test, schema-compat, security, container build | P0 | 001 | PR pipeline green on scaffold |
 | ASC-007 | Base Dockerfiles + `build-images.sh` | P0 | 001 | all service images build locally |
 
-## Milestone M1 — Golden workflow, API-driven (deterministic)  *(P0)*
+## Milestone M1 - Golden workflow, API-driven (deterministic)  *(P0)*
 
 | ID | Title | Prio | Dep | Acceptance |
 |---|---|---|---|---|
@@ -43,17 +43,17 @@ Legend: dep = depends on · GW = golden workflow test case in `docs/v0.1.0/08_�
 | ASC-016 | `tests/e2e`: Purchase Ambiguity Blocked→Passed (in-process) | P0 | 012,013,014,015 | GW-01 + GW-02 reproducible in CI |
 | ASC-017 | `aggregation-worker`: metrics fallback | P1 | 013 | GW-11 (results durable if analytics lags) |
 
-## Milestone M2 — Event backbone & telemetry  *(P1)*
+## Milestone M2 - Event backbone & telemetry  *(P1)*
 
 | ID | Title | Prio | Dep | Acceptance |
 |---|---|---|---|---|
-| ASC-020 | Kafka (KRaft) Helm values + topic bootstrap | P1 | — | 4 topics created; broker healthy on k3d |
+| ASC-020 | Kafka (KRaft) Helm values + topic bootstrap | P1 | - | 4 topics created; broker healthy on k3d |
 | ASC-021 | Worker → Kafka real emission of iteration events | P1 | 013,020 | events land on `sim.iteration.events.v1` |
 | ASC-022 | OTel instrumentation across services (traces + metrics) | P1 | 013 | one iteration traceable end-to-end by ids |
 | ASC-023 | MinIO + trajectory artifact storage + `rawOutputRef` | P1 | 013 | raw output in MinIO, redacted from stream |
 | ASC-024 | control-api SSE fed by Kafka bridge (control + failure.stats) | P1 | 020,015 | live monitor updates from real topics |
 
-## Milestone M3 — Streaming & analytics  *(P1)*
+## Milestone M3 - Streaming & analytics  *(P1)*
 
 | ID | Title | Prio | Dep | Acceptance |
 |---|---|---|---|---|
@@ -63,7 +63,7 @@ Legend: dep = depends on · GW = golden workflow test case in `docs/v0.1.0/08_�
 | ASC-033 | Superset: datasource + 5 dashboards export/import | P1 | 032 | dashboards render golden-run data |
 | ASC-034 | Provisional gates in live monitor from `failure.stats` | P2 | 030,024 | provisional gate values update during a run |
 
-## Milestone M4 — Observability (OTel + Grafana)  *(P1)*
+## Milestone M4 - Observability (OTel + Grafana)  *(P1)*
 
 | ID | Title | Prio | Dep | Acceptance |
 |---|---|---|---|---|
@@ -72,18 +72,18 @@ Legend: dep = depends on · GW = golden workflow test case in `docs/v0.1.0/08_�
 | ASC-042 | Grafana deploy + provisioned datasources + dashboards + alerts | P1 | 041 | 5 dashboards + alerts for stuck runs / lost telemetry / gate errors |
 | ASC-043 | operator-web: Observability tabs (Grafana/Superset iframes) + per-run deep links | P1 | 033,042 | tabs render; "Open in Grafana/Superset" deep-links per `runId` |
 
-## Milestone M5 — Local k3s deployment (full stack e2e)  *(P0 for phase-1 done)*
+## Milestone M5 - Local k3s deployment (full stack e2e)  *(P0 for phase-1 done)*
 
 | ID | Title | Prio | Dep | Acceptance |
 |---|---|---|---|---|
-| ASC-050 | `cluster-up.sh`: k3d cluster + local registry | P0 | — | `make cluster-up` yields a ready cluster |
+| ASC-050 | `cluster-up.sh`: k3d cluster + local registry | P0 | - | `make cluster-up` yields a ready cluster |
 | ASC-051 | Kustomize base + `local`/`lite` overlays for our services | P0 | 007 | `kubectl apply -k` deploys services |
 | ASC-052 | `deploy-local.sh`: wave orchestration + readiness gates | P0 | 020,031,032,033,040,051 | `make deploy-local` brings the full stack up idempotently |
 | ASC-053 | `print-urls.sh` + Traefik ingress host rules | P0 | 052 | operator-web/Grafana/Superset reachable |
 | ASC-054 | Deployed golden workflow e2e on k3d | P0 | 052,016 | full deployed Blocked→Passed run passes |
 | ASC-055 | `.env.example` + secret bootstrap | P0 | 052 | no secrets in repo; deploy creates them |
 
-## Milestone M6 — CI/CD hardening  *(P2)*
+## Milestone M6 - CI/CD hardening  *(P2)*
 
 | ID | Title | Prio | Dep | Acceptance |
 |---|---|---|---|---|
@@ -91,9 +91,9 @@ Legend: dep = depends on · GW = golden workflow test case in `docs/v0.1.0/08_�
 | ASC-061 | `e2e-k3d.yml`: nightly deployed golden workflow | P2 | 054 | ephemeral k3d run green nightly |
 | ASC-062 | Simulator-as-a-check: `release-decision.json` artifact + PR comment | P1 | 016 | PR shows the golden run's release decision |
 | ASC-063 | Security scans (pip-audit, gitleaks, trivy, bandit/semgrep) | P2 | 006 | scans wired into CI |
-| ASC-064 | Issue/PR templates + CODEOWNERS + branch-protection docs | P2 | — | templates + CODEOWNERS present |
+| ASC-064 | Issue/PR templates + CODEOWNERS + branch-protection docs | P2 | - | templates + CODEOWNERS present |
 
-## Milestone M7 — GCP provisioning (phase 2, human-gated)  *(P2)*
+## Milestone M7 - GCP provisioning (phase 2, human-gated)  *(P2)*
 
 > **Blocked** until a human enables the GCP project, billing, APIs, and provides credentials.
 

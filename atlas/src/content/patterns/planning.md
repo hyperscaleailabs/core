@@ -1,6 +1,6 @@
 ---
 title: "Planning: From Goal to Ordered Action"
-description: "How agents decompose goals into steps — plan-then-execute vs. interleaved planning, multi-agent planning, and why plans must be revisable."
+description: "How agents decompose goals into steps - plan-then-execute vs. interleaved planning, multi-agent planning, and why plans must be revisable."
 level: intermediate
 readingTime: 8
 problem: "Open-ended goals require a sequence of dependent steps the agent must derive, order, and adapt as it learns."
@@ -52,19 +52,19 @@ graph you can checkpoint and resume.
 ## Multi-agent planning
 
 When several agents act in a shared environment, planning becomes **multi-agent
-planning** — a mature subfield with problems that predate LLMs:
+planning** - a mature subfield with problems that predate LLMs:
 
-- **Coordination** — ordering actions so agents don't conflict or duplicate work.
-- **Conflict resolution** — reconciling agents with incompatible sub-goals or
+- **Coordination** - ordering actions so agents don't conflict or duplicate work.
+- **Conflict resolution** - reconciling agents with incompatible sub-goals or
   contended resources.
-- **Centralized vs. distributed** — a planner that assigns everyone's actions
+- **Centralized vs. distributed** - a planner that assigns everyone's actions
   (simpler to reason about, a bottleneck) vs. agents that plan locally and
   negotiate (scalable, harder to guarantee).
-- **Communication cost** — more coordination messages mean more latency and
+- **Communication cost** - more coordination messages mean more latency and
   tokens; over-communication is its own failure.
 
-These are the same problems classical distributed AI studied — see
-[the pre-agentic era](/foundations/pre-agentic-era) — now instantiated with LLM
+These are the same problems classical distributed AI studied - see
+[the pre-agentic era](/foundations/pre-agentic-era) - now instantiated with LLM
 agents. The [GeeksforGeeks overview of multi-agent
 planning](https://www.geeksforgeeks.org/artificial-intelligence/multiagent-planning-in-ai/)
 is a concise primer on the taxonomy.
@@ -72,18 +72,18 @@ is a concise primer on the taxonomy.
 ## Design tips
 
 - **Externalize the plan.** Keep it in state/memory the agent can read and edit,
-  not buried in a single context turn — so it survives compaction and can be
+  not buried in a single context turn - so it survives compaction and can be
   audited.
 - **Make steps checkable.** A step with a success criterion enables
   [reflection](/patterns/reflection) and clean retries.
 - **Bound the horizon.** Cap steps and cost; require re-planning at checkpoints
   for long tasks ([long-running harnesses](/production/long-running-harnesses)).
 - **Prefer the simplest topology.** Add multi-agent planning only when a single
-  planner genuinely can't cope — coordination overhead is not free.
+  planner genuinely can't cope - coordination overhead is not free.
 
 ## Next
 
-- [Multi-agent orchestration](/patterns/multi-agent-orchestration) — turning
+- [Multi-agent orchestration](/patterns/multi-agent-orchestration) - turning
   plans into delegated work.
-- [Long-running harnesses](/production/long-running-harnesses) — planning across
+- [Long-running harnesses](/production/long-running-harnesses) - planning across
   hours or days.

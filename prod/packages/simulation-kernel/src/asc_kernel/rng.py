@@ -2,7 +2,7 @@
 
 All stochastic choices in the kernel derive from this so that same-seed replay reproduces
 dependency outcomes (GW-03) and new-seed replay may differ (GW-04). It is a hash-based uniform
-in [0, 1) — reproducible across processes and Python versions (unlike ``random``'s internal state).
+in [0, 1) - reproducible across processes and Python versions (unlike ``random``'s internal state).
 """
 
 from __future__ import annotations

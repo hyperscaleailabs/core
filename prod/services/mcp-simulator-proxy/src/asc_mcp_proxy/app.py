@@ -1,4 +1,4 @@
-"""MCP simulator/proxy — MCP-compatible tools with deterministic failure injection (ASC-014).
+"""MCP simulator/proxy - MCP-compatible tools with deterministic failure injection (ASC-014).
 
 Outcomes are sampled deterministically from the run's failure profile keyed by (seed, tool,
 callIndex), so replay is stable (GW-03). Transactional tools honor idempotency keys (a repeated

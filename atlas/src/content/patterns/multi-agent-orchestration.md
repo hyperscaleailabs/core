@@ -1,6 +1,6 @@
 ---
 title: "Multi-Agent Orchestration: Topologies and Tradeoffs"
-description: "Orchestrator-worker, sequential, and graph topologies for coordinating multiple agents — when multi-agent beats single-agent, and the overhead you're signing up for."
+description: "Orchestrator-worker, sequential, and graph topologies for coordinating multiple agents - when multi-agent beats single-agent, and the overhead you're signing up for."
 level: advanced
 readingTime: 10
 problem: "A task is too broad, too parallel, or too specialized for one agent and one context window."
@@ -16,7 +16,7 @@ sources:
     url: "https://codelabs.developers.google.com/codelabs/production-ready-ai-roadshow/1-building-a-multi-agent-system/building-a-multi-agent-system#0"
     publisher: "Google Developers"
     accessed: "2026-06-30"
-  - title: "LangGraph — Overview"
+  - title: "LangGraph - Overview"
     url: "https://docs.langchain.com/oss/python/langgraph/overview"
     publisher: "LangChain"
     accessed: "2026-06-30"
@@ -25,19 +25,19 @@ sources:
 Multi-agent systems are seductive: split the problem, give each part a specialist,
 compose the results. Sometimes that's exactly right. Often a single well-designed
 agent with good tools is simpler and more reliable. This page is about choosing
-deliberately — and knowing what coordination costs.
+deliberately - and knowing what coordination costs.
 
 ## Start with the question: do you need more than one?
 
 A second agent earns its keep when at least one is true:
 
-- **Specialization** — subtasks need genuinely different tools, instructions, or
+- **Specialization** - subtasks need genuinely different tools, instructions, or
   even models (a coding agent vs. a research agent).
-- **Parallelism** — independent subtasks can run concurrently to cut wall-clock
+- **Parallelism** - independent subtasks can run concurrently to cut wall-clock
   time (search N sources at once).
-- **Context isolation** — each subtask needs its own clean context window, and
+- **Context isolation** - each subtask needs its own clean context window, and
   merging them into one would cause [context rot](/patterns/context-engineering).
-- **Separation of duties** — a reviewer agent that must not share the author's
+- **Separation of duties** - a reviewer agent that must not share the author's
   context (a [reflection](/patterns/reflection) boundary).
 
 If none apply, prefer a [single agent](/foundations/agent-anatomy). Every extra
@@ -70,14 +70,14 @@ easy to evaluate stage-by-stage; effectively a [workflow](/foundations/what-is-a
 of agents. Good when stages are stable.
 
 ### Graph / state machine
-Agents and steps are nodes with explicit transitions over shared state — the
+Agents and steps are nodes with explicit transitions over shared state - the
 [LangGraph](/frameworks/langgraph) model. Supports cycles, conditional routing,
 checkpointing, and human-in-the-loop. The right choice when control flow is
 complex but must remain auditable and resumable.
 
 ### Swarm / peer-to-peer
 Many agents coordinate with limited central control. Powerful for exploration and
-resilience, hardest to keep reliable — covered in [agent
+resilience, hardest to keep reliable - covered in [agent
 swarms](/patterns/agent-swarms).
 
 ## The overhead you're signing up for
@@ -85,15 +85,15 @@ swarms](/patterns/agent-swarms).
 Multi-agent is a distributed system; the classic problems return (see
 [the pre-agentic era](/foundations/pre-agentic-era)):
 
-- **Cascading errors** — one worker's wrong output silently corrupts the
+- **Cascading errors** - one worker's wrong output silently corrupts the
   synthesis. Validate at boundaries.
-- **Coordination cost** — every handoff is tokens, latency, and a place for
+- **Coordination cost** - every handoff is tokens, latency, and a place for
   context to be lost or garbled.
-- **Context handoff** — deciding *what* context to pass is a real design problem;
+- **Context handoff** - deciding *what* context to pass is a real design problem;
   pass too little and the worker flails, too much and it drowns.
-- **Debuggability** — traces span multiple agents; you need
+- **Debuggability** - traces span multiple agents; you need
   [observability](/production/observability) that stitches them together.
-- **Cost multiplication** — N agents, each looping, each calling models.
+- **Cost multiplication** - N agents, each looping, each calling models.
 
 ## A decision heuristic
 
@@ -106,6 +106,6 @@ Multi-agent is a distributed system; the classic problems return (see
 
 ## Next
 
-- [Agent swarms](/patterns/agent-swarms) — the far end of the spectrum.
-- [Failure modes](/production/failure-modes) — what breaks, and how to catch it.
+- [Agent swarms](/patterns/agent-swarms) - the far end of the spectrum.
+- [Failure modes](/production/failure-modes) - what breaks, and how to catch it.
 - [Framework comparison matrix](/comparisons/framework-matrix)

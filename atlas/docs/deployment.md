@@ -22,7 +22,7 @@ directory rather than to the repository root. Everything below assumes that.
    - **Build:** `npm run index && npm run build`
    - **Output:** `dist`
 4. (Optional) **Environment variables:**
-   - `SITE_URL` — your production URL (e.g. `https://agentic-atlas.vercel.app` or
+   - `SITE_URL` - your production URL (e.g. `https://agentic-atlas.vercel.app` or
      a custom domain). Drives canonical URLs, sitemap, and RSS.
 5. **Deploy.** Every merge to `main` that touches `atlas/` triggers a production
    build; pull requests get preview deployments automatically.
@@ -38,7 +38,7 @@ Then set `SITE_URL` to the custom domain and redeploy so metadata matches.
 ## How content reaches the site
 
 The Markdown in `src/content/` is read **at build time** by Astro's content
-collections. There is no runtime database and no external content fetch — the repo
+collections. There is no runtime database and no external content fetch - the repo
 *is* the CMS. To publish an edit: commit Markdown to `main`, and Vercel rebuilds.
 
 The ingestion pipeline fits in cleanly: it opens PRs that add/modify Markdown;
@@ -46,7 +46,7 @@ merging a PR to `main` is what publishes that content, via the same rebuild.
 
 ## Secrets
 
-- `ANTHROPIC_API_KEY` — **only** needed for the ingestion GitHub Action to draft
+- `ANTHROPIC_API_KEY` - **only** needed for the ingestion GitHub Action to draft
   articles with a model. Add it as a **repository secret** (Settings → Secrets and
   variables → Actions), *not* as a Vercel env var. The site build itself needs no
   secrets.
@@ -69,11 +69,11 @@ is configured out of the box via `vercel.json`.
 
 ## Troubleshooting
 
-- **Build fails on a content error** — a frontmatter field is missing or the wrong
+- **Build fails on a content error** - a frontmatter field is missing or the wrong
   type. The error names the file and field; fix per
   [content-guide.md](content-guide.md).
-- **Links 404 in production but work locally** — check `trailingSlash`
+- **Links 404 in production but work locally** - check `trailingSlash`
   (`ignore` in `astro.config.mjs`, `cleanUrls` in `vercel.json`) and that
   internal links are root-relative (`/section/slug`).
-- **RSS/sitemap URLs wrong** — set `SITE_URL` (or `site` in `astro.config.mjs`) to
+- **RSS/sitemap URLs wrong** - set `SITE_URL` (or `site` in `astro.config.mjs`) to
   the real production URL.

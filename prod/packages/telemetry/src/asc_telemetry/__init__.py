@@ -1,4 +1,4 @@
-"""Agent Simulation Control Plane — telemetry (event envelope, adapters, redaction, tracing)."""
+"""Agent Simulation Control Plane - telemetry (event envelope, adapters, redaction, tracing)."""
 
 from asc_telemetry.adapters import (
     ITERATION_EVENTS_TOPIC,

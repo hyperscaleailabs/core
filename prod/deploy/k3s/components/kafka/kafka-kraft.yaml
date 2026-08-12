@@ -1,4 +1,4 @@
-# Single-node Apache Kafka in KRaft mode (ADR-0002) using the official image — avoids the Bitnami
+# Single-node Apache Kafka in KRaft mode (ADR-0002) using the official image - avoids the Bitnami
 # image-availability churn and keeps the footprint small for constrained hosts. Ephemeral storage
 # (emptyDir) is fine for the demo; use a StatefulSet + PVC for durability.
 apiVersion: v1

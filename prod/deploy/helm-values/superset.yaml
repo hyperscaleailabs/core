@@ -1,4 +1,4 @@
-# Apache Superset (analytics UI over Druid) — ASC-033 (ADR-0004).
+# Apache Superset (analytics UI over Druid) - ASC-033 (ADR-0004).
 #   helm repo add superset https://apache.github.io/superset
 #   helm upgrade --install superset superset/superset -n data -f deploy/helm-values/superset.yaml
 # Adds the Druid database connection on init; dashboards are imported by deploy-analytics.sh.

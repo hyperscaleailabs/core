@@ -32,7 +32,7 @@ from asc_gate_engine import evaluate  # noqa: E402
 from asc_kernel import HarnessMode, has_policy_violation, run_batch  # noqa: E402
 
 # The unsafe variant uses the experiment's own basic-retry harness; the safe variant swaps in the
-# transaction-safety harness (examples/transaction_safety_harness.json) — modeled here as the
+# transaction-safety harness (examples/transaction_safety_harness.json) - modeled here as the
 # kernel HarnessMode. Baseline mean cost anchors cost_change_percent for the demo.
 BASELINE_MEAN_COST = 0.15
 

@@ -22,7 +22,7 @@ Use **Apache Druid** with a Kafka indexing supervisor on the iteration/failure-s
 Apache Druid ships **no arm64 container image** (amd64-only, distroless), so on Apple Silicon it can
 only run under slow qemu emulation, and the single-process launcher needs `perl` the distroless base
 lacks; the community Helm chart also depends on now-unavailable Bitnami postgres/zookeeper images.
-For the local (arm64) deployment we therefore use **ClickHouse** as the OLAP store — the alternative
+For the local (arm64) deployment we therefore use **ClickHouse** as the OLAP store - the alternative
 this ADR already anticipated. It is arm64-native and light, ingests directly from Kafka via the
 Kafka table engine + a materialized view (`sim.failure.stats.v1` → MergeTree), and Superset connects
 via `clickhouse-connect`. Druid remains the choice for x86 clusters (manifests + ingestion specs are
