@@ -15,7 +15,7 @@
 PYTHON ?= python3
 
 # Modules that carry their own Makefile and therefore their own `verify`.
-MODULES := atlas models prod
+MODULES := atlas infra models prod
 
 .DEFAULT_GOAL := help
 

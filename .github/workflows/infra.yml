@@ -22,19 +22,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Compile
-        run: python -m compileall -q infra/hsai/src infra/hsai/tests
-      - name: Unit and mocked integration tests
-        run: |
-          PYTHONPATH=infra/hsai/src \
-            python -m unittest discover -s infra/hsai/tests -v
-      - name: Example inventory loads
-        run: |
-          HSAI_CONFIG=infra/hsai/config.example.json \
-            PYTHONPATH=infra/hsai/src python -m hsai.cli target list
-      - name: No private deployment state
-        run: |
-          if git ls-files infra | grep -E '(^|/)(config\.json|kubeconfigs?/|id_[a-z0-9]+$)'; then
-            echo "::error::private deployment state is committed"
-            exit 1
-          fi
+      # Compile, tests, the example inventory, and the committed-state guard
+      # live in infra/scripts/check-hsai.sh so `make -C infra verify` runs
+      # exactly this.
+      - name: HSAI console gates
+        run: bash infra/scripts/check-hsai.sh

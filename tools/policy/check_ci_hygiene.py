@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Workflow hygiene guards: keep CI checks runnable locally and honest.
 
-Three rules, each one a defect this repository actually shipped:
+Four rules, each one a defect this repository actually shipped:
 
 1. **Piped steps set pipefail.** GitHub's default shell is ``bash -e {0}``,
    which does *not* set ``pipefail``. A step written ``npm run build | tee
@@ -20,6 +20,13 @@ Three rules, each one a defect this repository actually shipped:
    contract that one command runs the module's gates; without it a contributor
    has to read the workflow to find out what will fail.
 
+4. **Every module workflow is runnable locally.** Rule 3 only inspects the
+   Makefiles that exist, so a module that ships a workflow and no Makefile
+   satisfies it while nothing local runs its gates. The ``infra`` workflow
+   arrived exactly that way, gating a test suite ``make verify`` never ran. A
+   workflow that path-filters ``<module>/**`` must have ``<module>/Makefile``
+   with a ``verify`` target, and the root ``MODULES`` must list it.
+
 Requires: pyyaml. Exit 1 on any violation.
 """
 
@@ -35,6 +42,7 @@ import yaml
 WORKFLOWS = Path(".github/workflows")
 POLICY_JOB_SUFFIX = "-policy-guards"
 POLICY_SCRIPT_CALL = re.compile(r"^bash\s+\S*check-policy\.sh\s*$")
+MODULE_PATH_FILTER = re.compile(r"^([a-z0-9][a-z0-9-]*)/\*\*$")
 
 
 def steps_of(job: dict) -> list[dict]:
@@ -96,6 +104,66 @@ def check_makefiles_have_verify() -> list[str]:
     return problems
 
 
+def triggers_of(doc: dict) -> dict:
+    """The workflow's `on:` block.
+
+    YAML 1.1 resolves a bare ``on`` key to the boolean ``True``, so the block
+    is looked up under both spellings.
+    """
+    for key in ("on", True):
+        block = doc.get(key)
+        if isinstance(block, dict):
+            return block
+    return {}
+
+
+def module_paths_of(doc: dict) -> set[str]:
+    """Root directories a workflow path-filters as ``<module>/**``."""
+    modules = set()
+    for event in triggers_of(doc).values():
+        if not isinstance(event, dict):
+            continue
+        for pattern in event.get("paths") or []:
+            if not isinstance(pattern, str):
+                continue
+            match = MODULE_PATH_FILTER.match(pattern)
+            if match and Path(match.group(1)).is_dir():
+                modules.add(match.group(1))
+    return modules
+
+
+def check_module_workflows_are_runnable(workflows: dict[Path, dict]) -> list[str]:
+    """A module with its own workflow must be reachable from `make verify`.
+
+    Rule 3 only inspects the Makefiles that exist. A module that ships a CI
+    workflow and no Makefile passes it while nothing local runs its gates -
+    which is how the `infra` workflow arrived, gating a test suite that
+    `make verify` never executed.
+    """
+    problems = []
+    root = Path("Makefile")
+    listed: set[str] = set()
+    if root.is_file():
+        declared = re.search(r"^MODULES\s*:?=\s*(.*)$", root.read_text(), re.MULTILINE)
+        if declared:
+            listed = set(declared.group(1).split())
+
+    for path, doc in workflows.items():
+        for module in sorted(module_paths_of(doc)):
+            makefile = Path(module) / "Makefile"
+            if not makefile.is_file():
+                problems.append(
+                    f"{path}: gates {module}/** but {makefile} does not exist; "
+                    f"a module workflow must be runnable before pushing"
+                )
+            elif module not in listed:
+                problems.append(
+                    f"Makefile: MODULES does not list '{module}', so "
+                    f"`make verify` skips the gates in {path}"
+                )
+    return problems
+
+
 def main() -> int:
     os.chdir(Path(__file__).resolve().parents[2])
 
@@ -113,6 +181,10 @@ def main() -> int:
         ("piped steps set pipefail", check_pipefail(workflows)),
         ("policy guards live in a script", check_policy_jobs_are_scripts(workflows)),
         ("every module Makefile has a verify target", check_makefiles_have_verify()),
+        (
+            "every module workflow is runnable locally",
+            check_module_workflows_are_runnable(workflows),
+        ),
     ]
 
     status = 0
