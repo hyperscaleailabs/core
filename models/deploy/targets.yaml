@@ -1,27 +1,23 @@
-# Deployment targets for `hsm --target <name>` and deploy scripts.
-# Phase 1: only `local` is real. Remote entries are placeholders until real
-# GPU boxes are provided (see docs/PLAN.md phase gate).
+# Public target-shape example. Real target identities, addresses, users, and
+# cluster membership live in HSAI's external inventory, never in this file.
 targets:
   local:
     kind: k3d
     context: k3d-hyperswarm
     notes: CPU-only; pipeline smoke scale. See docs/local-k3s-macbook.md.
 
-  gpu-box-1:
+  gpu-server-example:
     kind: ssh
-    host: PLACEHOLDER.example.com
-    user: PLACEHOLDER
+    host: server.example.invalid
     port: 22
     gpu: true
-    provision: deploy/scripts/provision-k3s-ssh.sh
-    notes: single cloud GPU VM, spun up per task. To be provided in phase 2.
+    provision: infra/hsai
+    notes: example only; one server in a named HSAI cluster.
 
-  gpu-pool:
+  gpu-cluster-example:
     kind: ssh-list
     hosts:
-      - PLACEHOLDER-a.example.com
-      - PLACEHOLDER-b.example.com
-    user: PLACEHOLDER
+      - server.example.invalid
+      - worker.example.invalid
     gpu: true
-    notes: multi-node K3s (first host = server, rest join as agents) for the
-      JAX multi-host track. To be provided in phase 2.
+    notes: example only; first host is the server and remaining hosts are agents.

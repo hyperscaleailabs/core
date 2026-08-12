@@ -18,6 +18,7 @@ spec:
       labels:
         app: ultravox-vllm
     spec:
+      runtimeClassName: nvidia
       containers:
         - name: vllm
           image: vllm/vllm-openai:v0.8.5

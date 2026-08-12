@@ -1,0 +1,29 @@
+name: infra
+
+on:
+  pull_request:
+    paths:
+      - "infra/**"
+      - ".github/workflows/infra.yml"
+  push:
+    branches: [main]
+    paths:
+      - "infra/**"
+      - ".github/workflows/infra.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  hsai:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      # Compile, tests, the example inventory, and the committed-state guard
+      # live in infra/scripts/check-hsai.sh so `make -C infra verify` runs
+      # exactly this.
+      - name: HSAI console gates
+        run: bash infra/scripts/check-hsai.sh

@@ -25,41 +25,40 @@ config and reproducible from it.
 
 ## CLI (target interface)
 
-> **Status: `hsm` does not exist yet.** This section is the design contract
-> for the orchestrator CLI; the tool itself lands with PR4 (pull + train) and
-> is completed by PR8a (end-to-end run) per docs/PLAN.md. Until then, use the
-> individual scripts (`goldens/pull.py`, `train/finetune_lora.py`,
-> `benchmark/run_benchmark.py`) directly.
+> **Status:** the `hsai` cluster, model-deploy, model-smoke, and JAX-smoke
+> commands are implemented in [`infra/hsai`](../../infra/hsai/README.md).
+> The data pull, full fine-tune, benchmark, report, and publish commands below
+> remain the target interface and are implemented incrementally per
+> [PLAN.md](PLAN.md). Until then, use the individual model scripts directly.
 
-The orchestrator is `hsm` (hyperswarm-model). Target interface, implemented
+The orchestrator is `hsai` (HSAILabs). Target interface, implemented
 incrementally per docs/PLAN.md:
 
 ```bash
-# step 0: pull data (also implicit in `hsm run`)
-hsm pull --golden ecommerce-ecinstruct --split train --limit 100
+# step 0: pull data (also implicit in `hsai run`)
+hsai pull --golden ecommerce-ecinstruct --split train --limit 100
 
 # steps 1-4 in one shot: fine-tune on 100 items, benchmark on 50 held-out items
-hsm run --model gemma-2-2b-it --method lora \
+hsai run --model gemma-2-2b-it --method lora \
         --golden ecommerce-ecinstruct --train-limit 100 --eval-limit 50 \
         --target local
 
 # inspect the article
-hsm report <run-id>
+hsai report <run-id>
 
 # step 5: serve the checkpoint through vLLM + gateway
-hsm serve <run-id> --target local
+hsai serve <run-id> --target local
 
 # step 6: commit run config + report to the repo
-hsm publish <run-id>
+hsai publish <run-id>
 ```
 
 `--target` selects an entry in `deploy/targets.yaml`:
 
 - `local` - the K3s/k3d cluster on this machine (phase 1)
-- `ssh:<name>` - a remote box or list of boxes; `hsm` provisions K3s over SSH
-  (`deploy/scripts/provision-k3s-ssh.sh`), points kubectl at it, starts the
-  containers, and runs the same pipeline there (phase 2; placeholders until
-  real GPU boxes are provided)
+- `<cluster>` - a named cluster in HSAI's external inventory. HSAI provisions
+  its K3s server and agents over SSH/Tailscale, points kubectl at its private
+  kubeconfig, and runs the same workload pipeline there.
 
 ## Run layout
 
@@ -77,9 +76,9 @@ runs/<run-id>/                # run-id: <date>-<model>-<method>-<golden>-<n>
 > "Take the e-commerce golden, first 100 items, LoRA on Gemma, benchmark it."
 
 ```bash
-hsm run --model gemma-2-2b-it --method lora \
+hsai run --model gemma-2-2b-it --method lora \
         --golden ecommerce-ecinstruct --train-limit 100 --eval-limit 50
-hsm report 20260726-gemma-2-2b-it-lora-ecommerce-ecinstruct-100   # read metrics
-hsm serve  20260726-gemma-2-2b-it-lora-ecommerce-ecinstruct-100   # OpenAI API up
-hsm publish 20260726-gemma-2-2b-it-lora-ecommerce-ecinstruct-100  # config+article to git
+hsai report 20260726-gemma-2-2b-it-lora-ecommerce-ecinstruct-100   # read metrics
+hsai serve  20260726-gemma-2-2b-it-lora-ecommerce-ecinstruct-100   # OpenAI API up
+hsai publish 20260726-gemma-2-2b-it-lora-ecommerce-ecinstruct-100  # config+article to git
 ```

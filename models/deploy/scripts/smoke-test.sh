@@ -3,10 +3,16 @@
 #
 # Usage:
 #   ./deploy/scripts/smoke-test.sh [node-ip]
+#   ./deploy/scripts/smoke-test.sh --model <deployment> [node-ip]
 #
 # Defaults to the first node's InternalIP from the current kubectl context.
 set -euo pipefail
 
+MODEL=""
+if [[ "${1:-}" == "--model" ]]; then
+  MODEL="${2:?--model requires a deployment name}"
+  shift 2
+fi
 NODE_IP="${1:-$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}')}"
 echo "==> Testing against node $NODE_IP"
 FAILED=0
@@ -58,8 +64,14 @@ PY
   rm -f "$wav"
 }
 
-check_vllm "gemma-vllm" 30800 "gemma-2-2b-it"
-check_vllm "ultravox-vllm" 30801 "ultravox"
-check_whisper 30802
+case "$MODEL" in
+  "") check_vllm "gemma-vllm" 30800 "gemma-2-2b-it"
+      check_vllm "ultravox-vllm" 30801 "ultravox"
+      check_whisper 30802 ;;
+  gemma-vllm) check_vllm "gemma-vllm" 30800 "gemma-2-2b-it" ;;
+  ultravox-vllm) check_vllm "ultravox-vllm" 30801 "ultravox" ;;
+  faster-whisper) check_whisper 30802 ;;
+  *) echo "unknown model deployment: $MODEL" >&2; exit 2 ;;
+esac
 
 exit "$FAILED"

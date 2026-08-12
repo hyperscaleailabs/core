@@ -32,8 +32,8 @@ All command examples in this subproject's docs are written relative to
 | `benchmark/` | Benchmark runner: latency, throughput, and failure-mode probes |
 | `datasets/` | Domain packs: hand-curated failure-mode demonstrations |
 | `deploy/k3s/` | Kubernetes manifests (kustomize) for K3s |
-| `deploy/scripts/` | Provision K3s on a remote Debian box over SSH, deploy, smoke-test |
-| `deploy/targets.yaml` | Deployment targets: local k3d now, SSH GPU boxes in phase 2 |
+| `deploy/scripts/` | Deploy and smoke-test model workloads |
+| `deploy/targets.yaml` | Public target-shape example; real inventory is external |
 | `docs/` | Workflow spec, implementation plan, JAX-on-K8s guide, local K3s setup |
 
 ## Initial models
@@ -51,7 +51,8 @@ talk to every model the same way.
 ## Quick start (local K3s)
 
 Requirements: a K3s cluster (local or remote), `kubectl` pointed at it.
-GPU nodes need the NVIDIA device plugin; faster-whisper runs fine on CPU.
+GPU nodes need a working NVIDIA driver, NVIDIA Container Toolkit, and NVIDIA
+device plugin; faster-whisper and the JAX pipeline smoke run on CPU.
 
 ```bash
 # deploy everything into namespace "hyperswarm-models"
@@ -65,20 +66,20 @@ kubectl apply -f deploy/k3s/models/faster-whisper.yaml
 ./deploy/scripts/smoke-test.sh
 ```
 
-## Remote deployment over SSH
+## Remote deployment with HSAI
 
-Spin up a throwaway Debian VM anywhere, then:
+Generic cluster lifecycle belongs to [`infra/hsai`](../infra/hsai/README.md).
+Create or select a named cluster, then deploy one model workload:
 
 ```bash
-# install K3s on the box and fetch a working kubeconfig locally
-./deploy/scripts/provision-k3s-ssh.sh user@1.2.3.4
-
-# deploy to it using the fetched kubeconfig
-KUBECONFIG=.kube/remote-config ./deploy/scripts/deploy.sh
+hsai cluster plan <cluster>
+hsai cluster provision <cluster>
+hsai model deploy gemma-vllm --target <cluster>
+hsai model smoke gemma-vllm --target <cluster>
 ```
 
-`provision-k3s-ssh.sh` is idempotent: re-running it upgrades K3s in place and
-re-fetches the kubeconfig.
+Real target identities and addresses remain outside this public repository.
+On a single-GPU cluster, HSAI activates only one vLLM deployment at a time.
 
 ## Goldens
 
