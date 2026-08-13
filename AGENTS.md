@@ -57,7 +57,6 @@ defer to `pr-flow` rather than replacing it.
 
 ## Writing
 
-- Plain dash, never an em dash.
 - No agent name as commit co-author.
 - Never hand-edit `CHANGELOG.md` or any file marked auto-generated.
 - Prefer quality, simplicity, robustness, and long-term maintainability over
