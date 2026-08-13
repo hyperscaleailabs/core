@@ -59,6 +59,7 @@ description = "Repo-wide allowlist (enforcement files reference the patterns the
 paths = [
   '''\.gitleaks\.toml$''',
   '''tools/policy/check_pii\.sh$''',
+  '''tools/policy/check_commit_identity\.sh$''',
   '''\.github/workflows/policy\.yml$''',
   # Redaction test fixtures. This file's entire purpose is to hold values that
   # *look* like live secrets - a Stripe-style key, a test card number, an SSN -

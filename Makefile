@@ -35,12 +35,16 @@ pii: ## No PII anywhere in the working tree
 links: ## Relative markdown links and heading anchors resolve
 	bash tools/policy/check_links.sh
 
+.PHONY: commit-identity
+commit-identity: ## No co-author trailers, emails, or non-noreply authors in commits
+	bash tools/policy/check_commit_identity.sh
+
 .PHONY: ci-hygiene
 ci-hygiene: ## Workflow hygiene: pipefail, extracted policy guards, module verify targets
 	$(PYTHON) tools/policy/check_ci_hygiene.py
 
 .PHONY: policy
-policy: pii links ci-hygiene ## Every repository-wide guard
+policy: pii links commit-identity ci-hygiene ## Every repository-wide guard
 
 ## ---- Modules ----
 .PHONY: verify-modules

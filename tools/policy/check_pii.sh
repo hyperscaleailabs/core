@@ -26,7 +26,12 @@ PATTERNS=(
   'private-key-block|-----BEGIN [A-Z ]*PRIVATE KEY-----'
 )
 
-SELF_PATHS='^(tools/policy/check_pii\.sh|\.gitleaks\.toml|\.github/workflows/policy\.yml)$'
+# Files that must contain the patterns this script hunts for, because detecting
+# a pattern means naming it. The exemption is per path, so extracting a guard
+# out of an exempted file into a new one drops the exemption with it: that is
+# how check_commit_identity.sh arrived here, having carried the co-author
+# pattern out of policy.yml.
+SELF_PATHS='^(tools/policy/check_pii\.sh|tools/policy/check_commit_identity\.sh|\.gitleaks\.toml|\.github/workflows/policy\.yml)$'
 
 fail=0
 
