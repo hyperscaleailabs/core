@@ -58,10 +58,6 @@ jobs:
       - name: relative markdown links and anchors resolve
         run: bash tools/policy/check_links.sh
 
-      # Stdlib only, so no setup-python step is needed on ubuntu-latest.
-      - name: writing rules (AGENTS.md)
-        run: python3 tools/policy/check_writing.py
-
   # A gate is only worth what it costs to run before pushing. This job guards
   # the shape of the other gates: piped steps must set pipefail (GitHub's
   # default shell does not), module policy guards must live in a script rather

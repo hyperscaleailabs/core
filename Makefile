@@ -35,16 +35,12 @@ pii: ## No PII anywhere in the working tree
 links: ## Relative markdown links and heading anchors resolve
 	bash tools/policy/check_links.sh
 
-.PHONY: writing
-writing: ## Writing rules from AGENTS.md (plain dash, never an em dash)
-	$(PYTHON) tools/policy/check_writing.py
-
 .PHONY: ci-hygiene
 ci-hygiene: ## Workflow hygiene: pipefail, extracted policy guards, module verify targets
 	$(PYTHON) tools/policy/check_ci_hygiene.py
 
 .PHONY: policy
-policy: pii links writing ci-hygiene ## Every repository-wide guard
+policy: pii links ci-hygiene ## Every repository-wide guard
 
 ## ---- Modules ----
 .PHONY: verify-modules

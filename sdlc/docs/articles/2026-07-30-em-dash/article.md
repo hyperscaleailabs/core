@@ -1,5 +1,9 @@
 # 766 em dashes and the rule nobody could see breaking
 
+> **Superseded by [ADR 0001](../../../../docs/adr/0001-repo-retire-the-em-dash-guard.md).**
+> The rule and its guard were retired on 2026-08-12. This document is kept as
+> the record of what was tried and why, not as current policy.
+
 Audience: Architect, PM. Project trail:
 [issue #20](https://github.com/hyperscaleailabs/core/issues/20) ->
 [PR #21](https://github.com/hyperscaleailabs/core/pull/21).
