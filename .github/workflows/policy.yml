@@ -24,31 +24,18 @@ jobs:
       - name: PII scan (working tree)
         run: bash tools/policy/check_pii.sh tree
 
+      # The range is passed explicitly so CI scans exactly the pushed commits;
+      # a local `make commit-identity` defaults to origin/main..HEAD. The body
+      # lives in the script so it can be run before pushing.
       - name: PII scan (commit messages and authors)
         run: |
           set -euo pipefail
           range="${{ github.event.pull_request.base.sha || github.event.before }}..${{ github.sha }}"
-          if ! git rev-list "$range" >/dev/null 2>&1; then
-            range="${{ github.sha }} -n 20"
+          if git rev-list "$range" >/dev/null 2>&1; then
+            bash tools/policy/check_commit_identity.sh "$range"
+          else
+            bash tools/policy/check_commit_identity.sh "${{ github.sha }}" -n 20
           fi
-          bad=0
-          while IFS= read -r c; do
-            msg=$(git log -1 --format='%B' "$c")
-            ident=$(git log -1 --format='%an <%ae>' "$c")
-            # GitHub injects noreply co-author trailers on squash merges when the
-            # branch author differs from the merging account; only trailers with
-            # non-noreply identities are policy violations
-            if printf '%s\n' "$msg" | grep -iE 'co-authored-by:' | grep -vqiE '@users\.noreply\.github\.com|<noreply@github\.com>'; then
-              echo "Commit $c: co-author trailer with non-noreply identity"; bad=1
-            fi
-            if printf '%s\n' "$msg" | grep -E '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}' | grep -vqE 'example\.(com|org|net)|users\.noreply\.github\.com'; then
-              echo "Commit $c: email address in commit message"; bad=1
-            fi
-            if printf '%s\n' "$ident" | grep -vqE '@users\.noreply\.github\.com|<noreply@github\.com>|@example\.(com|org|net)'; then
-              echo "Commit $c: author identity must use a noreply email"; bad=1
-            fi
-          done < <(git rev-list --no-merges $range)
-          exit $bad
 
   docs-links:
     runs-on: ubuntu-latest
